@@ -65,9 +65,9 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			return isWithinRange;
 		}
 
-		public Dictionary<string, string> ParseOutputLine(string outputLine)
+		public Dictionary<string, int> ParseOutputLine(string outputLine)
 		{
-			var dictionary = new Dictionary<string, string> ();
+			var dictionary = new Dictionary<string, int> ();
 
 			if (IsValidOutputLine (outputLine)) {
 				foreach (var pair in outputLine.Split(';')) {
@@ -75,8 +75,14 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 
 					if (parts.Length == 2) {
 						var key = parts [0];
-						var value = parts [1];
-						dictionary [key] = value;
+						var value = 0;
+						try {
+							value = Convert.ToInt32 (parts [1]);
+
+							dictionary [key] = value;
+						} catch {
+							Console.WriteLine ("Warning: Invalid key/value pair '" + pair + "'");
+						}
 					}
 				}
 			}

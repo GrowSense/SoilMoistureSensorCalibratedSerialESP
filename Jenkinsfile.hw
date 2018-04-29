@@ -15,7 +15,8 @@ pipeline {
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
-                sh 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerial.git &> /dev/null'
+                sh 'cp /usr/local/jenkins/set-soilmoisturesensorcalibratedserial-git-credentials.sh set-soilmoisturesensorcalibratedserial-git-credentials.sh'
+                sh 'sh set-soilmoisturesensorcalibratedserial-git-credentials.sh'
                 sh 'git config --global user.email "compulsivecoder@gmail.com"'
                 sh 'git config --global user.name "CompulsiveCoder CI"'
             }

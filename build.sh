@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pio run
+pio run --environment esp12e
