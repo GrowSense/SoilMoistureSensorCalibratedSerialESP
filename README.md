@@ -1,5 +1,5 @@
 # SoilMoistureSensorCalibratedSerialESP
-A sketch for a calibrated arduino soil moisture sensor which outputs data via serial.
+An ESP8266 WiFi sketch for a calibrated soil moisture sensor which outputs data via serial.
 
 ## Status
 
