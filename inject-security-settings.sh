@@ -7,10 +7,10 @@ MQTT_PORT=$(cat mqtt-port.security)
 
 echo "Injecting security settings..."
 
-echo $WIFI_NAME
-echo $MQTT_HOST
-echo $MQTT_USERNAME
-echo $MQTT_PORT
+echo "WiFi Name: $WIFI_NAME"
+echo "MQTT Host: $MQTT_HOST"
+echo "MQTT Username: $MQTT_USERNAME"
+echo "MQTT Port: $MQTT_PORT"
 
 SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/SoilMoistureSensorCalibratedSerialESP.ino"
 
