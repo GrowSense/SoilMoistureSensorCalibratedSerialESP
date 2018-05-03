@@ -2,7 +2,7 @@
 
 # Note: You may need to run this script with sudo
 
-echo "Preparing for SoilMoistureSensorCalibratedSerial project"
+echo "Preparing for SoilMoistureSensorCalibratedSerialESP project"
 
 DIR=$PWD
 
