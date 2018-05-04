@@ -23,7 +23,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			SerialClient soilMoistureMonitor = null;
 
 			try {
-				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetSerialBaudRate());
+				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");

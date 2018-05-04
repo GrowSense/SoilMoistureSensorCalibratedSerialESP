@@ -52,9 +52,36 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			return simulatorPort;
 		}
 
-		public int GetSerialBaudRate()
+		public int GetDeviceSerialBaudRate()
 		{
-			return 9600;
+			var baudRateString = Environment.GetEnvironmentVariable ("MONITOR_ESP_BAUD_RATE");
+			
+			var baudRate = 0;
+			
+			if (String.IsNullOrEmpty(baudRateString))
+				baudRate = 9600;
+			else
+				baudRate = Convert.ToInt32(baudRateString);
+			
+			Console.WriteLine ("Device baud rate: " + baudRate);
+			
+			return baudRate;
+		}
+
+		public int GetSimulatorSerialBaudRate()
+		{
+			var baudRateString = Environment.GetEnvironmentVariable ("MONITOR_ESP_SIMULATOR_BAUD_RATE");
+			
+			var baudRate = 0;
+			
+			if (String.IsNullOrEmpty(baudRateString))
+				baudRate = 9600;
+			else
+				baudRate = Convert.ToInt32(baudRateString);
+			
+			Console.WriteLine ("Simulator baud rate: " + baudRate);
+			
+			return baudRate;
 		}
 		
 		public bool IsWithinRange(int expectedValue, int actualValue, int allowableMarginOfError)

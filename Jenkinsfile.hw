@@ -18,7 +18,9 @@ pipeline {
                 sh 'git config --global user.email "compulsivecoder@gmail.com"'
                 sh 'git config --global user.name "CompulsiveCoder CI"'
                 sh 'echo "Device Port: ${MONITOR_ESP_PORT}"'
+                sh 'echo "Device Baud Rate: ${MONITOR_ESP_BAUD_RATE}"'
                 sh 'echo "Simulator Port: ${MONITOR_ESP_SIMULATOR_PORT}"'
+                sh 'echo "Simulator Baud Rate: ${MONITOR_ESP_SIMULATOR_BAUD_RATE}"'
             }
         }
         stage('Init') {
