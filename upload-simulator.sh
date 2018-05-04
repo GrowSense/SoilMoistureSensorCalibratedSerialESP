@@ -4,6 +4,14 @@ echo ""
 echo "Uploading simulator sketch"
 echo ""
 
+PORT_NAME=$MONITOR_SIMULATOR_PORT
+
+if [ ! $PORT_NAME ]; then
+  PORT_NAME="/dev/ttyUSB1"
+fi
+
+echo "Port: $PORT_NAME"
+
 # Specify a temporary directory name
 SIMULATOR_TMP_DIR="_simulatortmp"
 
@@ -23,8 +31,8 @@ git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git
 
 cd ArduinoSerialController
 
-# Upload to USB1
-sh upload-to-port.sh "/dev/ttyUSB1"
+# Upload
+sh upload-to-port.sh $PORT
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR
