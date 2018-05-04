@@ -32,7 +32,7 @@ git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git
 cd ArduinoSerialController
 
 # Upload
-sh upload-to-port.sh $PORT
+sh upload-to-port.sh $PORT_NAME
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR
