@@ -8,7 +8,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 	public class BaseTestFixture
 	{
 		public int PwmHigh = 255;
-		public int AnalogHigh = 1023;
+		public int AnalogHigh = 1024;
 		
 		public bool CalibrationIsReversedByDefault = true; // Reversed by default to matches common soil moisture sensors
 		
@@ -26,14 +26,30 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 		{
 		}
 
+		
 		public string GetDevicePort()
 		{
-			return "/dev/ttyUSB0";
+			var devicePort = Environment.GetEnvironmentVariable ("MONITOR_ESP_PORT");
+			
+			if (String.IsNullOrEmpty(devicePort))
+				devicePort = "/dev/ttyUSB0";
+			
+			Console.WriteLine ("Device port: " + devicePort);
+			
+			return devicePort;
 		}
+
 
 		public string GetSimulatorPort()
 		{
-			return "/dev/ttyUSB1";
+			var simulatorPort = Environment.GetEnvironmentVariable ("MONITOR_ESP_SIMULATOR_PORT");
+			
+			if (String.IsNullOrEmpty(simulatorPort))
+				simulatorPort = "/dev/ttyUSB1";
+			
+			Console.WriteLine ("Simulator port: " + simulatorPort);
+			
+			return simulatorPort;
 		}
 
 		public int GetSerialBaudRate()
