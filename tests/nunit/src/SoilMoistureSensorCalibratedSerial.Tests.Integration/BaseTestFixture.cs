@@ -12,6 +12,8 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 		
 		public bool CalibrationIsReversedByDefault = true; // Reversed by default to matches common soil moisture sensors
 		
+		public int DelayAfterConnecting = 10 * 1000;
+		
 		public BaseTestFixture ()
 		{
 		}
@@ -38,7 +40,6 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			
 			return devicePort;
 		}
-
 
 		public string GetSimulatorPort()
 		{

@@ -1,5 +1,3 @@
-# May need be run as sudo
-
 echo ""
 echo "Uploading simulator sketch"
 echo ""

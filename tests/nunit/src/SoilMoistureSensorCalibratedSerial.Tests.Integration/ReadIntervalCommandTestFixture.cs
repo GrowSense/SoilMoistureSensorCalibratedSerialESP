@@ -31,7 +31,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 
 				soilMoistureMonitor.Open ();
 
-				Thread.Sleep (1000);
+				Thread.Sleep (DelayAfterConnecting);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
