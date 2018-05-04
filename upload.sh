@@ -1,7 +1,7 @@
 PORT_NAME=$1
 
 if [ ! $PORT_NAME ]; then
-  PORT_NAME=$MONITOR_PORT
+  PORT_NAME=$MONITOR_ESP_PORT
 fi
 
 if [ ! $PORT_NAME ]; then
