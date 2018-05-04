@@ -21,51 +21,61 @@ pipeline {
             }
         }
         stage('Init') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh init.sh'
             }
         }
         stage('Inject Version') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh inject-version.sh'
             }
         }
         stage('Build') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh build-all.sh'
             }
         }
         stage('Upload') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh upload.sh'
             }
         }
         stage('Upload simulator') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
             }
         }
         stage('Test') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh test.sh'
             }
         }
         stage('Clean') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'git checkout src/SoilMoistureSensorCalibratedSerial/SoilMoistureSensorCalibratedSerial.ino'
             }
         }
         stage('Graduate') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh graduate.sh'
             }
         }
         stage('Increment Version') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh increment-version.sh'
             }
         } 
         stage('Push Version') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh push-version.sh'
             }
@@ -93,4 +103,6 @@ pipeline {
         }
     }
 }
-
+Boolean shouldSkipBuild() {
+    return sh( script: 'sh check-ci-skip.sh', returnStatus: true )
+}
