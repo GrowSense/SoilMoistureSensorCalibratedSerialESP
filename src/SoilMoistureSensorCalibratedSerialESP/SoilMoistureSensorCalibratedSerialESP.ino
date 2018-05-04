@@ -80,6 +80,10 @@ void setupMqtt()
 
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
+    Serial.print("Device name: ");
+    Serial.println(MQTT_DEVICE_NAME);
+    Serial.print("MQTT Username: ");
+    Serial.println(MQTT_USERNAME);
  
     if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
  
