@@ -170,12 +170,5 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 		  
 			return dictionary;
 		}
-		
-		public bool IsValidOutputLine(string outputLine)
-		{
-		  var dataPrefix = "D;";
-		  
-		  return outputLine.StartsWith(dataPrefix);
-		}
 	}
 }
