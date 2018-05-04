@@ -4,7 +4,7 @@ echo ""
 echo "Uploading simulator sketch"
 echo ""
 
-PORT_NAME=$MONITOR_SIMULATOR_PORT
+PORT_NAME=$MONITOR_ESP_SIMULATOR_PORT
 
 if [ ! $PORT_NAME ]; then
   PORT_NAME="/dev/ttyUSB1"
