@@ -187,7 +187,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine(""); 
 
 				// Ensure the calibration value is in the valid range
-				Assert.IsTrue(IsWithinRange(calibrationValue, rawIn, 20), "Calibration value is outside the valid range: " + calibrationValue);
+				Assert.IsTrue(IsWithinRange(rawIn, calibrationValue, 20), "Calibration value is outside the valid range: " + calibrationValue);
 
 			} catch (Exception ex) {
 				Console.WriteLine (ex.ToString ());
