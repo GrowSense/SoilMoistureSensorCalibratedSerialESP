@@ -48,7 +48,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			TestCalibrateToCurrentCommand ("wet", "W", -1, raw);
 		}
 
-		public void TestCalibrateToCurrentCommand(string label, string command, int percentageIn, int expectedRaw)
+		public void TestCalibrateToCurrentCommand(string label, string letter, int percentageIn, int rawIn)
 		{
 
 			Console.WriteLine ("");
