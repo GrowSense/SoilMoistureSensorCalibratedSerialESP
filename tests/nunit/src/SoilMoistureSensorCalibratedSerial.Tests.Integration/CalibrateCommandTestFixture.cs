@@ -140,7 +140,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 					Console.WriteLine("");
 
 					// Ensure the raw value is in the valid range
-					Assert.IsTrue(IsWithinRange(rawValue, rawIn, 20), "Raw value is outside the valid range: " + rawValue);
+					Assert.IsTrue(IsWithinRange(rawIn, rawValue, 20), "Raw value is outside the valid range: " + rawValue);
 				}
 
 				var command = letter;

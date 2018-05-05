@@ -106,7 +106,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
       
 			soilMoistureSimulator.AnalogWritePercentage (9, percentageValue);
       
-			Thread.Sleep (2000);
+			Thread.Sleep (4000);
       
 			Console.WriteLine ("");
 			Console.WriteLine ("Reading data from soil moisture monitor");
@@ -127,7 +127,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			if (calibrationIsReversed)
 				expectedCalibratedValue = ArduinoConvert.ReversePercentage (percentageValue);
       
-			var calibratedValueIsWithinRange = IsWithinRange (expectedCalibratedValue, data ["C"], 8);
+			var calibratedValueIsWithinRange = IsWithinRange (expectedCalibratedValue, Convert.ToInt32(data ["C"]), 8);
       
 			Assert.IsTrue (calibratedValueIsWithinRange, "Invalid value for 'C' (calibrated value).");
       
@@ -136,7 +136,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
       
 			var expectedRawValue = ArduinoConvert.PercentageToAnalog (percentageValue);
       
-			var rawValueIsWithinRange = IsWithinRange (expectedRawValue, data ["R"], 80);
+			var rawValueIsWithinRange = IsWithinRange (expectedRawValue, Convert.ToInt32(data ["R"]), 80);
       
 			Assert.IsTrue (rawValueIsWithinRange, "Invalid value for 'R' (raw value).");
       
@@ -144,31 +144,6 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			Console.WriteLine ("Finished calibration test");
 			Console.WriteLine ("==============================");
 			Console.WriteLine ("");
-		}
-		
-		public Dictionary<string, int> ParseOutputLine(string outputLine)
-		{
-			var dictionary = new Dictionary<string, int> ();
-		  
-			if (IsValidOutputLine (outputLine)) {
-				foreach (var pair in outputLine.Split(';')) {
-					var parts = pair.Split (':');
-  		    
-					if (parts.Length == 2) {
-						var key = parts [0];
-						var value = 0;
-						try {
-							value = Convert.ToInt32 (parts [1]);
-  		      
-							dictionary [key] = value;
-						} catch {
-							Console.WriteLine ("Warning: Invalid key/value pair '" + pair + "'");
-						}
-					}
-				}
-			}
-		  
-			return dictionary;
 		}
 	}
 }
