@@ -92,7 +92,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				var data = ParseOutputLine(GetLastDataLine(output));
 
 				// Ensure the calibration value is in the valid range
-				Assert.AreEqual(readInterval, data["V"], "Invalid read interval: " + data["V"]);
+				Assert.AreEqual(readInterval, Convert.ToInt32(data["V"]), "Invalid read interval: " + data["V"]);
 
 			} catch (IOException ex) {
 				Console.WriteLine (ex.ToString ());
