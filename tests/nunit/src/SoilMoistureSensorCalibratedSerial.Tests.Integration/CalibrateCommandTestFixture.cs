@@ -207,9 +207,10 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			Thread.Sleep(5000);
 		}
 		
+		[TestFixtureSetUp]
 		public override void Initialize()
 		{
-			base.Initialize();
+			//base.Initialize();
 
 			SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
 			SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
@@ -224,6 +225,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			Thread.Sleep (DelayAfterConnecting);
 		}
 		
+		[TestFixtureTearDown]
 		public override void Finish()
 		{
 			if (SoilMoistureMonitor != null)
@@ -232,7 +234,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			if (SoilMoistureSimulator != null)
 				SoilMoistureSimulator.Disconnect ();
 					
-			base.Finish();
+			//base.Finish();
 		}
 	}
 }
