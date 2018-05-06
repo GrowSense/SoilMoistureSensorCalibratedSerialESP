@@ -68,14 +68,14 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			//	SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
 		//		SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
-				Console.WriteLine("");
+		/*		Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
 				SoilMoistureMonitor.Open ();
 				SoilMoistureSimulator.Connect ();
 
-				Thread.Sleep (DelayAfterConnecting);
+				Thread.Sleep (DelayAfterConnecting);*/
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
@@ -214,6 +214,14 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
 			SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
+			Console.WriteLine("");
+			Console.WriteLine("Connecting to serial devices...");
+			Console.WriteLine("");
+
+			SoilMoistureMonitor.Open ();
+			SoilMoistureSimulator.Connect ();
+
+			Thread.Sleep (DelayAfterConnecting);
 		}
 		
 		public override void Finish()
