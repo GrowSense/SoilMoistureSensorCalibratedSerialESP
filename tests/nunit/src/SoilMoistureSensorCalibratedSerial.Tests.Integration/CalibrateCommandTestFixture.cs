@@ -118,7 +118,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 					// Set the simulated soil moisture
 					soilMoistureSimulator.AnalogWritePercentage (9, percentageIn);
 
-					Thread.Sleep(4000);
+					Thread.Sleep(6000);
 
 					Console.WriteLine("");
 					Console.WriteLine("Reading output from the monitor device...");
@@ -140,7 +140,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 					Console.WriteLine("");
 
 					// Ensure the raw value is in the valid range
-					Assert.IsTrue(IsWithinRange(rawIn, rawValue, 20), "Raw value is outside the valid range: " + rawValue);
+					Assert.IsTrue(IsWithinRange(rawValue, rawIn, 20), "Raw value is outside the valid range: " + rawValue);
 				}
 
 				var command = letter;
