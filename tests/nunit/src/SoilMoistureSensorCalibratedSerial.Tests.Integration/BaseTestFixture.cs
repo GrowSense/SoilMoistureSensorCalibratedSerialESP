@@ -19,12 +19,12 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 		}
 
 		[SetUp]
-		public void Initialize()
+		public virtual void Initialize()
 		{
 		}
 
 		[TearDown]
-		public void Finish()
+		public virtual void Finish()
 		{
 		}
 

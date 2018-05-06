@@ -12,6 +12,9 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 	[TestFixture(Category="Integration")]
 	public class CalibrateCommandTestFixture : BaseTestFixture
 	{
+		public SerialClient SoilMoistureMonitor = null;
+		public ArduinoSerialDevice SoilMoistureSimulator = null;
+			
 		[Test]
 		public void Test_CalibrateDryToCurrentValueCommand()
 		{
@@ -58,19 +61,19 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			Console.WriteLine ("Percentage in: " + percentageIn);
 			Console.WriteLine ("Expected raw: " + rawIn);
 
-			SerialClient soilMoistureMonitor = null;
-			ArduinoSerialDevice soilMoistureSimulator = null;
+			//SerialClient SoilMoistureMonitor = null;
+			//ArduinoSerialDevice SoilMoistureSimulator = null;
 
 			try {
-				soilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
-				soilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
+			//	SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+		//		SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
 
 				Console.WriteLine("");
 				Console.WriteLine("Connecting to serial devices...");
 				Console.WriteLine("");
 
-				soilMoistureMonitor.Open ();
-				soilMoistureSimulator.Connect ();
+				SoilMoistureMonitor.Open ();
+				SoilMoistureSimulator.Connect ();
 
 				Thread.Sleep (DelayAfterConnecting);
 
@@ -79,7 +82,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				var output = soilMoistureMonitor.Read ();
+				var output = SoilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -89,12 +92,12 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine("");
 
 				// Reset defaults
-				soilMoistureMonitor.WriteLine ("X");
+				SoilMoistureMonitor.WriteLine ("X");
 
 				Thread.Sleep(1000);
 
 				// Set output interval to 1
-				soilMoistureMonitor.WriteLine ("V1");
+				SoilMoistureMonitor.WriteLine ("V1");
 
 				Thread.Sleep(2000);
 
@@ -103,7 +106,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = SoilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -118,7 +121,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 					Console.WriteLine("");
 
 					// Set the simulated soil moisture
-					soilMoistureSimulator.AnalogWritePercentage (9, percentageIn);
+					SoilMoistureSimulator.AnalogWritePercentage (9, percentageIn);
 
 					Thread.Sleep(6000);
 
@@ -126,7 +129,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 					Console.WriteLine("Reading output from the monitor device...");
 					Console.WriteLine("");
 					// Read the output
-					output = soilMoistureMonitor.Read ();
+					output = SoilMoistureMonitor.Read ();
 
 					Console.WriteLine (output);
 					Console.WriteLine ("");
@@ -156,7 +159,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine("");
 
 				// Send the command
-				soilMoistureMonitor.WriteLine (command);
+				SoilMoistureMonitor.WriteLine (command);
 
 				Thread.Sleep(5000);
 
@@ -165,7 +168,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine("");
 
 				// Read the output
-				output = soilMoistureMonitor.Read ();
+				output = SoilMoistureMonitor.Read ();
 
 				Console.WriteLine (output);
 				Console.WriteLine ("");
@@ -195,13 +198,33 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				Console.WriteLine (ex.ToString ());
 				Assert.Fail ();
 			} finally {
-				if (soilMoistureMonitor != null)
-					soilMoistureMonitor.Close ();
+			//	if (SoilMoistureMonitor != null)
+			//		SoilMoistureMonitor.Close ();
 
-				if (soilMoistureSimulator != null)
-					soilMoistureSimulator.Disconnect ();
+			//	if (SoilMoistureSimulator != null)
+			//		SoilMoistureSimulator.Disconnect ();
 			}
 			Thread.Sleep(5000);
+		}
+		
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			SoilMoistureMonitor = new SerialClient (GetDevicePort(), GetDeviceSerialBaudRate());
+			SoilMoistureSimulator = new ArduinoSerialDevice (GetSimulatorPort(), GetSimulatorSerialBaudRate());
+
+		}
+		
+		public override void Finish()
+		{
+			if (SoilMoistureMonitor != null)
+				SoilMoistureMonitor.Close ();
+
+			if (SoilMoistureSimulator != null)
+				SoilMoistureSimulator.Disconnect ();
+					
+			base.Finish();
 		}
 	}
 }
