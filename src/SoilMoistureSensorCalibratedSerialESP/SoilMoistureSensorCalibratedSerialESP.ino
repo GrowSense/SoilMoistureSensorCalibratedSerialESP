@@ -43,10 +43,9 @@ void setup()
 {
   
   Serial.begin(115200);
-  //Serial.begin(115200);
 
-  if (isDebugMode)
-    Serial.println("Starting soil moisture sensor");
+//  if (isDebugMode)
+    Serial.println("Starting soil moisture monitor ESP");
 
   setupWiFi();
 

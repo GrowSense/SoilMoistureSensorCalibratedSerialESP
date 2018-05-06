@@ -91,6 +91,8 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				// Reset defaults
 				soilMoistureMonitor.WriteLine ("X");
 
+				Thread.Sleep(1000);
+
 				// Set output interval to 1
 				soilMoistureMonitor.WriteLine ("V1");
 
@@ -156,7 +158,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				// Send the command
 				soilMoistureMonitor.WriteLine (command);
 
-				Thread.Sleep(3000);
+				Thread.Sleep(5000);
 
 				Console.WriteLine("");
 				Console.WriteLine("Reading the output from the monitor device...");
@@ -199,6 +201,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 				if (soilMoistureSimulator != null)
 					soilMoistureSimulator.Disconnect ();
 			}
+			Thread.Sleep(5000);
 		}
 	}
 }
