@@ -63,7 +63,7 @@ pipeline {
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
+                sh 'sh upload-simulator.sh'
             }
         }
         stage('Test') {
