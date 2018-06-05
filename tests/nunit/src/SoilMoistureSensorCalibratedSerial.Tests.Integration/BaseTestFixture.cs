@@ -34,7 +34,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			var devicePort = Environment.GetEnvironmentVariable ("MONITOR_ESP_PORT");
 			
 			if (String.IsNullOrEmpty(devicePort))
-				devicePort = "/dev/ttyUSB0";
+				devicePort = "/dev/ttyUSB2";
 			
 			Console.WriteLine ("Device port: " + devicePort);
 			
@@ -46,7 +46,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			var simulatorPort = Environment.GetEnvironmentVariable ("MONITOR_ESP_SIMULATOR_PORT");
 			
 			if (String.IsNullOrEmpty(simulatorPort))
-				simulatorPort = "/dev/ttyUSB1";
+				simulatorPort = "/dev/ttyUSB3";
 			
 			Console.WriteLine ("Simulator port: " + simulatorPort);
 			
@@ -60,7 +60,7 @@ namespace SoilMoistureSensorCalibratedSerial.Tests.Integration
 			var baudRate = 0;
 			
 			if (String.IsNullOrEmpty(baudRateString))
-				baudRate = 9600;
+				baudRate = 115200;
 			else
 				baudRate = Convert.ToInt32(baudRateString);
 			
