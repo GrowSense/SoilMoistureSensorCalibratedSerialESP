@@ -75,7 +75,7 @@ pipeline {
         stage('Clean') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'git checkout src/SoilMoistureSensorCalibratedSerial/SoilMoistureSensorCalibratedSerial.ino'
+                sh 'git checkout src/SoilMoistureSensorCalibratedSerialESP/SoilMoistureSensorCalibratedSerialESP.ino'
             }
         }
         stage('Graduate') {
