@@ -77,6 +77,10 @@ void setupMqtt()
 
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
+    Serial.print("Host: ");
+    Serial.println(MQTT_HOST);
+    Serial.print("Port: ");
+    Serial.println(MQTT_PORT);
     Serial.print("Device name: ");
     Serial.println(MQTT_DEVICE_NAME);
     Serial.print("MQTT Username: ");
@@ -179,12 +183,16 @@ void loop()
   loopNumber++;
 
   serialPrintLoopHeader();
+    
+  loopWiFi();
 
   checkCommand();
 
   takeSoilMoistureSensorReading();
 
   serialPrintData();
+  
+  mqttPublishData();
 
   // Reset flag for this loop
   soilMoistureSensorReadingHasBeenTaken = false;
