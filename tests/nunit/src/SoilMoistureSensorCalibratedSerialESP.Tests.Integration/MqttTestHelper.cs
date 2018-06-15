@@ -56,12 +56,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Client.Connect(clientId, user, pass);
 
 			Client.Subscribe(new string[] { "/" + DeviceName + "/#" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-
-			// TODO: Remove if not needed. Shouldnt be because this is for a dev setup not a live setup
-			//WaitForAccess();
-
-			//PublishStatusMessage("Testing");
-
 		}
 
 		public string GetSecurityValue(string key, string environmentVariable)
