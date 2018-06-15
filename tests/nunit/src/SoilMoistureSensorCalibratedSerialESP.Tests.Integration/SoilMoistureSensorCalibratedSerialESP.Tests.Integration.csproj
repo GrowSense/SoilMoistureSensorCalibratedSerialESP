@@ -39,6 +39,9 @@
     <Reference Include="duinocom.core">
       <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.9\lib\net40\duinocom.core.dll</HintPath>
     </Reference>
+    <Reference Include="M2Mqtt.Net">
+      <HintPath>..\..\lib\M2Mqtt.4.3.0.0\lib\net45\M2Mqtt.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
@@ -53,6 +56,12 @@
     <Compile Include="ReadIntervalCommandTestHelper.cs" />
     <Compile Include="SoilMoistureSensorPowerTestFixture.cs" />
     <Compile Include="SoilMoistureSensorPowerTestHelper.cs" />
+    <Compile Include="GreenSenseMqttHardwareTestHelper.cs" />
+    <Compile Include="MqttTestHelper.cs" />
+    <Compile Include="ReadIntervalMqttCommandTestFixture.cs" />
+    <Compile Include="ReadIntervalMqttCommandTestHelper.cs" />
+    <Compile Include="CalibrateMqttCommandTestFixture.cs" />
+    <Compile Include="CalibrateMqttCommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

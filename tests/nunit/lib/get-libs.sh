@@ -25,3 +25,7 @@ fi
 if [ ! -d "ArduinoSerialControllerClient.1.0.9" ]; then
     mono nuget.exe install ArduinoSerialControllerClient -version 1.0.9
 fi
+
+if [ ! -d "M2Mqtt.4.3.0.0" ]; then
+    mono nuget.exe install M2Mqtt
+fi

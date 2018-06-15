@@ -3,12 +3,12 @@
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class ReadIntervalCommandTestFixture : BaseTestFixture
+	public class ReadIntervalMqttCommandTestFixture : BaseTestFixture
 	{
 		[Test]
 		public void Test_SetReadIntervalCommand_1Second()
 		{
-			using (var helper = new ReadIntervalCommandTestHelper())
+			using (var helper = new ReadIntervalMqttCommandTestHelper())
 			{
 				helper.ReadInterval = 1;
 
@@ -25,7 +25,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		[Test]
 		public void Test_SetReadIntervalCommand_5Seconds()
 		{
-			using (var helper = new ReadIntervalCommandTestHelper())
+			using (var helper = new ReadIntervalMqttCommandTestHelper())
 			{
 				helper.ReadInterval = 5;
 
