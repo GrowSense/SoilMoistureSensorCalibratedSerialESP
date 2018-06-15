@@ -11,9 +11,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			Console.WriteLine("Read interval: " + ReadInterval);
 
-			EnableMqtt();
-
 			EnableDevices(false);
+
+			EnableMqtt();
 
 			// MQTT version
 			Mqtt.SendCommand("V", ReadInterval);

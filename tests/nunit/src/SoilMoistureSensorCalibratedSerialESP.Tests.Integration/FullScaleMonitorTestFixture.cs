@@ -9,7 +9,7 @@ using System.IO;
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
 	[TestFixture(Category = "Integration")]
-	public class FullScaleTestFixture : BaseTestFixture
+	public class FullScaleMonitorTestFixture : BaseTestFixture
 	{
 		[Test]
 		public void Test_FullScaleTest()

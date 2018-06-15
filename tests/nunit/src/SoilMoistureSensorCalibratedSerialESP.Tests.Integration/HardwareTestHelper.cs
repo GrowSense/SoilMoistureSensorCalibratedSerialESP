@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 3000;
+		public int DelayAfterConnectingToHardware = 2000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
@@ -134,7 +134,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		{
 			Thread.Sleep(DelayAfterConnectingToHardware);
 
-			//WaitForText();
+			WaitForText(DataPrefix);
 		}
 
 		public void HandleConnectionIOException(string deviceLabel, string devicePort, int deviceBaudRate, Exception exception)
@@ -156,6 +156,22 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#endregion
 
 		#region Read From Device Functions
+		public string ReadLineFromDevice()
+		{
+			Console.WriteLine("");
+			Console.WriteLine("Reading a line of the output from the device...");
+			Console.WriteLine("");
+
+			// Read the output
+			var output = DeviceClient.ReadLine();
+
+			FullDeviceOutput += output;
+
+			ConsoleWriteSerialOutput(output);
+			Console.WriteLine("");
+			return output;
+		}
+
 		public void ReadFromDeviceAndOutputToConsole()
 		{
 			Console.WriteLine("");
@@ -211,6 +227,38 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			}
 
 			return list.ToArray();
+		}
+
+		public string WaitForText(string text)
+		{
+			Console.WriteLine("Waiting for text: " + text);
+
+			var output = String.Empty;
+			var containsText = false;
+
+			var startTime = DateTime.Now;
+
+			while (!containsText)
+			{
+				output += ReadLineFromDevice();
+
+				if (output.Contains(text))
+				{
+					Console.WriteLine("  Found text");
+
+					containsText = true;
+				}
+
+				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
+				if (hasTimedOut && !containsText)
+				{
+					ConsoleWriteSerialOutput(output);
+
+					Assert.Fail("Timed out waiting for text (" + TimeoutWaitingForResponse + " seconds)");
+				}
+			}
+
+			return output;
 		}
 
 		public string WaitForDataLine()

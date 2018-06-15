@@ -220,8 +220,6 @@ void checkCommand()
     char* msg = getMsg();
        
     handleCommand(msg);
-
-    forceSerialOutput();
   }
   delay(1);
 }
@@ -257,6 +255,8 @@ void handleCommand(char* msg)
       isDebugMode = !isDebugMode;
       break;
   }
+  
+  forceSerialOutput();
 }
 
 /* Settings */
