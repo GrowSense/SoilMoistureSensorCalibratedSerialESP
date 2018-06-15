@@ -36,15 +36,17 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Console.WriteLine("Starting MQTT test");
 			Console.WriteLine("");
 
-			DeviceName = GetSecurityValue("mqtt-device-name", "MQTT_DEVICE_NAME");
-			var host = GetSecurityValue("mqtt-host", "MOSQUITTO_HOST");
-			var user = GetSecurityValue("mqtt-username", "MOSQUITTO_USERNAME");
-			var pass = GetSecurityValue("mqtt-password", "MOSQUITTO_PASSWORD");
+			DeviceName = GetSecurityValue("mqtt-device-name", "MONITOR_ESP_DEVICE_NAME");
+			var host = GetSecurityValue("mqtt-host", "MQTT_HOST");
+			var user = GetSecurityValue("mqtt-username", "MQTT_USERNAME");
+			var pass = GetSecurityValue("mqtt-password", "MQTT_PASSWORD");
 
-			Assert.IsNotNullOrEmpty(host, "MOSQUITTO_HOST environment variable is not set.");
-			Assert.IsNotNullOrEmpty(user, "MOSQUITTO_USERNAME environment variable is not set.");
-			Assert.IsNotNullOrEmpty(pass, "MOSQUITTO_PASSWORD environment variable is not set.");
+			Assert.IsNotNullOrEmpty(DeviceName, "MONITOR_ESP_DEVICE_NAME environment variable is not set.");
+			Assert.IsNotNullOrEmpty(host, "MQTT_HOST environment variable is not set.");
+			Assert.IsNotNullOrEmpty(user, "MQTT_USERNAME environment variable is not set.");
+			Assert.IsNotNullOrEmpty(pass, "MQTT_PASSWORD environment variable is not set.");
 
+			Console.WriteLine("Device name: " + DeviceName);
 			Console.WriteLine("Host: " + host);
 			Console.WriteLine("Username: " + user);
 
