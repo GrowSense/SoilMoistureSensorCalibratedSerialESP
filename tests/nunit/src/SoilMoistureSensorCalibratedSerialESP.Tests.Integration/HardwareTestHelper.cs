@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 8000;
+		public int DelayAfterConnectingToHardware = 3000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
