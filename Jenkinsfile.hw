@@ -14,7 +14,7 @@ pipeline {
                 sh 'git checkout $BRANCH_NAME'
                 shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git' )
                 shHide( 'sh set-wifi-credentials.sh ${WIFI_NAME} ${WIFI_PASSWORD}' )
-                'sh set-mqtt-device-name.sh ${MONITOR_ESP_DEVICE_NAME}'
+                sh 'sh set-mqtt-device-name.sh ${MONITOR_ESP_DEVICE_NAME}'
                 shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
                 sh 'git config --global user.email "compulsivecoder@gmail.com"'
                 sh 'git config --global user.name "CompulsiveCoder CI"'
