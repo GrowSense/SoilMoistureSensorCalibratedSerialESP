@@ -18,6 +18,7 @@ pipeline {
                 shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
                 sh 'git config --global user.email "compulsivecoder@gmail.com"'
                 sh 'git config --global user.name "CompulsiveCoder CI"'
+                sh 'echo "Device Name: ${MONITOR_ESP_DEVICE_NAME}"'
                 sh 'echo "Device Port: ${MONITOR_ESP_PORT}"'
                 sh 'echo "Device Baud Rate: ${MONITOR_ESP_BAUD_RATE}"'
                 sh 'echo "Simulator Port: ${MONITOR_ESP_SIMULATOR_PORT}"'
@@ -41,14 +42,7 @@ pipeline {
             steps {
                 sh 'sh inject-security-settings.sh'
             }
-        }
-        stage('Inject Device Name') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                shHide( 'sh inject-device-name.sh TestMonitorESP' )
-            }
-        }
-                
+        }                
         stage('Build') {
             when { expression { !shouldSkipBuild() } }
             steps {
