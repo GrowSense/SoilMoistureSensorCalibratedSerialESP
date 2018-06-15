@@ -27,7 +27,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "j"
 #define MQTT_PASSWORD "ywgtpJ8gdnm!"
-#define MQTT_DEVICE_NAME "MyDevice"
+#define MQTT_DEVICE_NAME "WiFiMonitor1"
 
 int totalSubscribeTopics = 3;
 String subscribeTopics[] = {"D", "W", "V"};

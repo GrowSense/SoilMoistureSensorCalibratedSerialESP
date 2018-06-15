@@ -158,9 +158,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#region Read From Device Functions
 		public string ReadLineFromDevice()
 		{
-			Console.WriteLine("");
 			Console.WriteLine("Reading a line of the output from the device...");
-			Console.WriteLine("");
 
 			// Read the output
 			var output = DeviceClient.ReadLine();
@@ -168,7 +166,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			FullDeviceOutput += output;
 
 			ConsoleWriteSerialOutput(output);
-			Console.WriteLine("");
 			return output;
 		}
 
@@ -244,7 +241,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 				if (output.Contains(text))
 				{
-					Console.WriteLine("  Found text");
+					Console.WriteLine("  Found text: " + text);
 
 					containsText = true;
 				}
