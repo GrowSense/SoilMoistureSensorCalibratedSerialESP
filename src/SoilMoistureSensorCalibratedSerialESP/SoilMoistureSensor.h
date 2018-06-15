@@ -5,7 +5,7 @@ extern int soilMoistureLevelCalibrated;
 extern int soilMoistureLevelRaw;
 
 extern long lastSoilMoistureSensorReadingTime;
-extern long soilMoistureSensorReadingInterval;
+extern long soilMoistureSensorReadingIntervalInSeconds;
 extern int soilMoistureSensorReadIntervalIsSetFlagAddress;
 
 extern int drySoilMoistureCalibrationValue;

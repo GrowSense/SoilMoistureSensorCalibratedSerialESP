@@ -3,10 +3,41 @@
 
 #include "Common.h"
 
+const int ANALOG_MAX = 1024;
+
 long lastSerialOutputTime = 0;
-long serialOutputInterval = 1;
+long serialOutputIntervalInSeconds = 1;
 
 bool isDebugMode = false;
+
+int loopNumber = 0;
+
+void serialPrintLoopHeader()
+{
+  if (isDebugMode)
+  {
+    Serial.println("==============================");
+    Serial.print("===== Start Loop: ");
+    Serial.println(loopNumber);
+    Serial.println("==============================");
+    Serial.print("Time: ");
+    Serial.print(millisecondsToSecondsWithDecimal(millis()));
+    Serial.println(" seconds");
+    Serial.println("");
+  }
+}
+
+void serialPrintLoopFooter()
+{
+  if (isDebugMode)
+  {
+    Serial.println("==============================");
+    Serial.print("===== End Loop: ");
+    Serial.println(loopNumber);
+    Serial.println("==============================");
+    Serial.println("");
+  }
+}
 
 void EEPROMWriteLong(int address, long value)
 {
@@ -41,9 +72,14 @@ long secondsToMilliseconds(int seconds)
   return seconds * 1000;
 }
 
+float millisecondsToSecondsWithDecimal(int milliseconds)
+{
+  return float(milliseconds) / float(1000);
+}
+
 void forceSerialOutput()
 {
     // Reset the last serial output time 
-    lastSerialOutputTime = millis()-secondsToMilliseconds(serialOutputInterval);
+    lastSerialOutputTime = millis()-secondsToMilliseconds(serialOutputIntervalInSeconds);
 }
 

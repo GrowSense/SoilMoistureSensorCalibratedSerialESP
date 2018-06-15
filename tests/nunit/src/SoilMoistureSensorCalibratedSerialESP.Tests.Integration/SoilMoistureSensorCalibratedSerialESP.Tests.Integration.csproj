@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2ACA9D2F-CD6C-4D41-941E-A9A0496826AB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SoilMoistureSensorCalibratedSerial.Tests.Integration</RootNamespace>
+    <RootNamespace>SoilMoistureSensorCalibratedSerialESP.Tests.Integration</RootNamespace>
     <AssemblyName>SoilMoistureSensorCalibratedSerial.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseMSBuildEngine>False</UseMSBuildEngine>
@@ -34,18 +34,25 @@
       <HintPath>..\..\lib\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="ArduinoSerialControllerClient">
-      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.7\lib\net40\ArduinoSerialControllerClient.dll</HintPath>
+      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.9\lib\net40\ArduinoSerialControllerClient.dll</HintPath>
     </Reference>
     <Reference Include="duinocom.core">
-      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.7\lib\net40\duinocom.core.dll</HintPath>
+      <HintPath>..\..\lib\ArduinoSerialControllerClient.1.0.9\lib\net40\duinocom.core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
-    <Compile Include="FullScaleTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CalibrateCommandTestFixture.cs" />
     <Compile Include="ReadIntervalCommandTestFixture.cs" />
+    <Compile Include="CalibrateCommandTestHelper.cs" />
+    <Compile Include="FullScaleMonitorTestFixture.cs" />
+    <Compile Include="FullScaleMonitorTestHelper.cs" />
+    <Compile Include="GreenSenseHardwareTestHelper.cs" />
+    <Compile Include="HardwareTestHelper.cs" />
+    <Compile Include="ReadIntervalCommandTestHelper.cs" />
+    <Compile Include="SoilMoistureSensorPowerTestFixture.cs" />
+    <Compile Include="SoilMoistureSensorPowerTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
