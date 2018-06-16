@@ -145,6 +145,10 @@ void takeSoilMoistureSensorReading()
         Serial.println("Preparing to take reading");
 
       lastSoilMoistureSensorReadingTime = millis();
+      
+      // Remove the delay (after turning soil moisture sensor on) from the last reading time to get more accurate timing
+      if (sensorGetsTurnedOff)
+        lastSoilMoistureSensorReadingTime = lastSoilMoistureSensorReadingTime - delayAfterTurningSoilMoistureSensorOn;
 
       soilMoistureLevelRaw = getAverageSoilMoistureSensorReading();
 

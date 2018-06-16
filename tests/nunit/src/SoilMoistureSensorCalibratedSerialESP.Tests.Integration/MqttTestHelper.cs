@@ -133,6 +133,20 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			}
 		}
 
+		public double WaitUntilData(int numberOfEntries)
+		{
+			Console.WriteLine("Waiting for data...");
+			ResetData();
+			var startTime = DateTime.Now;
+			while (Data.Count < numberOfEntries)
+			{
+				Console.Write(".");
+				Thread.Sleep(500);
+			}
+			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
+			return totalTimeInSeconds;
+		}
+
 		public void CheckDataEntryTimes(int expectedInterval)
 		{
 			Assert.IsTrue(Data.Count >= 2, "More data entries are needed");

@@ -14,7 +14,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		// conversion from 5v (of the soil moisture simulator) to 3.3v (of the ESP8266 board) in the test system
 		public int RawValueMarginOfError = 70;
 		public int CalibratedValueMarginOfError = 5;
-		public double TimeErrorMargin = 0.2;
+		public double TimeErrorMargin = 0.3;
 
 		public bool CalibrationIsReversedByDefault = true;
 
@@ -72,7 +72,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			while (!wasMessageReceived)
 			{
-				output += DeviceClient.ReadLine();
+				output += ReadLineFromDevice();
 
 				var expectedText = "Received message: " + message;
 				if (output.Contains(expectedText))

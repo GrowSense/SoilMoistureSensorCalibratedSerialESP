@@ -280,6 +280,7 @@ void mqttPublishData()
     publishMqttValue("D", drySoilMoistureCalibrationValue);
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
     publishMqttValue("Z", VERSION);
+    publishMqttValue("Time", millis());
     publishMqttPush(soilMoistureLevelCalibrated);
   }
 }
