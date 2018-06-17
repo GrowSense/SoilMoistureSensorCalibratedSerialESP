@@ -118,7 +118,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 				}
 
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -129,7 +129,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			while (Data.Count < numberOfEntries)
 			{
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			while (Data.Count < numberOfEntries)
 			{
 				Console.Write(".");
-				Thread.Sleep(500);
+				Thread.Sleep(10);
 			}
 			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 			return totalTimeInSeconds;
@@ -246,7 +246,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			if (key == "Time" && !IsDuplicateEntry(DataEntry))
 			{
 				Data.Add(DataEntry);
-				PrintDataEntry(DataEntry);
+				//PrintDataEntry(DataEntry);
 				DataEntry = new Dictionary<string, string>();
 			}
 		}
