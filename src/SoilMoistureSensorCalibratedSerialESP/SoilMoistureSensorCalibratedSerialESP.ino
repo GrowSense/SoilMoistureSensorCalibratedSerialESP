@@ -20,14 +20,14 @@
 
 int serialMode = SERIAL_MODE_CSV;
 
-#define WIFI_NAME "Telstra995578"
-#define WIFI_PASSWORD "3ym9j8hrwhcf"
+#define WIFI_NAME "accesspoint"
+#define WIFI_PASSWORD "password"
 
-#define MQTT_HOST "10.0.0.94"
+#define MQTT_HOST "garden"
 #define MQTT_PORT 1883
-#define MQTT_USERNAME "j"
-#define MQTT_PASSWORD "ywgtpJ8gdnm!"
-#define MQTT_DEVICE_NAME "WiFiMonitor1"
+#define MQTT_USERNAME "username"
+#define MQTT_PASSWORD "password"
+#define MQTT_DEVICE_NAME "wifiMonitor1"
 
 int totalSubscribeTopics = 3;
 String subscribeTopics[] = {"D", "W", "V"};
