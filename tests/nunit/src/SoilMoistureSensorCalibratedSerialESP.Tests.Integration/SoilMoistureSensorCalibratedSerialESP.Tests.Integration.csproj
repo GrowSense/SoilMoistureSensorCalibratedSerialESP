@@ -66,6 +66,8 @@
     <Compile Include="SerialOutputTimeTestHelper.cs" />
     <Compile Include="MqttOutputTimeTestFixture.cs" />
     <Compile Include="MqttOutputTimeTestHelper.cs" />
+    <Compile Include="MqttOutputTestFixture.cs" />
+    <Compile Include="MqttOutputTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

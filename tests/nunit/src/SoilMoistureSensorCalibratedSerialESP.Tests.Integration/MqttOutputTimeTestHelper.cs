@@ -7,7 +7,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public void TestMqttOutputTime()
 		{
-			WriteTitleText("Starting read interval test");
+			WriteTitleText("Starting MQTT output time test");
 
 			Console.WriteLine("Read interval: " + ReadInterval);
 
