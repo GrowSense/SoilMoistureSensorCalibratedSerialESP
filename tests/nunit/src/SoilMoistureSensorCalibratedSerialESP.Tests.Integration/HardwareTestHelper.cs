@@ -384,6 +384,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			{
 				Console.Write(".");
 				powerPinValue = SimulatorDigitalRead(simulatorDigitalPin);
+
 				if (startTime == DateTime.MinValue && powerPinValue == expectedValue)
 				{
 					startTime = DateTime.Now;

@@ -7,7 +7,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public void TestSerialOutputTime()
 		{
-			WriteTitleText("Starting read interval test");
+			WriteTitleText("Starting serial output time test");
 
 			Console.WriteLine("Read interval: " + ReadInterval);
 
