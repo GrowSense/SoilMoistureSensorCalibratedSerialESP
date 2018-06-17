@@ -22,11 +22,21 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			if (SimulatedSoilMoistureSensorValue > -1)
 				SimulateSoilMoisture(SimulatedSoilMoistureSensorValue);
 
+			Console.WriteLine("Waiting for MQTT data...");
+
 			Mqtt.WaitForData(3);
 
 			var latestEntry = Mqtt.Data[Mqtt.Data.Count - 1];
 
+			Mqtt.PrintDataEntry(latestEntry);
+
 			var valueString = latestEntry["C"];
+
+			Console.WriteLine("Calibrated value string: \"" + valueString + "\"");
+
+			var containsWhitespace = valueString.Trim().Length != valueString.Length;
+
+			Assert.IsFalse(containsWhitespace, "The calibrated value contains whitespace: \"" + valueString + "\"");
 
 			var isDecimal = valueString.Contains(".");
 
