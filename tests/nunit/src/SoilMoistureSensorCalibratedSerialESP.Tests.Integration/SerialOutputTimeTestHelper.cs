@@ -18,7 +18,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			ReadFromDeviceAndOutputToConsole();
 
 			// Wait for the first bunch of data lines to come out before timing tem
-			WaitForData(10); // TODO: See if this can be reduced
+			WaitForData(4); // TODO: See if this can be reduced
 
 			// Get the time until the next data line
 			var secondsBetweenDataLines = WaitUntilDataLine();
