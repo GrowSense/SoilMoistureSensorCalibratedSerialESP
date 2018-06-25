@@ -12,6 +12,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			WriteTitleText("Starting MQTT output test");
 
 			Console.WriteLine("Read interval: " + ReadInterval);
+			Console.WriteLine("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
 
 			EnableDevices(SimulatedSoilMoistureSensorValue > -1);
 
@@ -24,11 +25,19 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			Console.WriteLine("Waiting for MQTT data...");
 
-			Mqtt.WaitForData(3);
+			var numberOfEntriesToWaitFor = 5; // TODO: See if this can be reduced
+
+			Mqtt.WaitForData(numberOfEntriesToWaitFor);
+
+			Assert.AreEqual(numberOfEntriesToWaitFor, Mqtt.Data.Count, "Incorrect number of entries returned.");
 
 			var latestEntry = Mqtt.Data[Mqtt.Data.Count - 1];
 
+			Assert.IsNotNull(latestEntry, "The latest MQTT entry is null.");
+
 			Mqtt.PrintDataEntry(latestEntry);
+
+			Assert.IsTrue(latestEntry.ContainsKey("C"), "The latest MQTT entry doesn't contain a 'C' key/value.");
 
 			var valueString = latestEntry["C"];
 

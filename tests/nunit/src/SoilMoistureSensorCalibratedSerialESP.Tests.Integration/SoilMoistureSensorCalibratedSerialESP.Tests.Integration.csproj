@@ -68,6 +68,7 @@
     <Compile Include="MqttOutputTimeTestHelper.cs" />
     <Compile Include="MqttOutputTestFixture.cs" />
     <Compile Include="MqttOutputTestHelper.cs" />
+    <Compile Include="TimeoutHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

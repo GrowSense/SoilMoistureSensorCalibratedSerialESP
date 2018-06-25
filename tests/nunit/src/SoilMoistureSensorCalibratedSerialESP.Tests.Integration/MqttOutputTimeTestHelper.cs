@@ -17,8 +17,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			SetDeviceReadInterval(ReadInterval);
 
-			// Wait for the first data line before starting
-			Mqtt.WaitForData(1);
+			// Wait for a few lines of data before starting
+			Mqtt.WaitForData(3);
 
 			var secondsBetweenData = Mqtt.WaitUntilData(1);
 

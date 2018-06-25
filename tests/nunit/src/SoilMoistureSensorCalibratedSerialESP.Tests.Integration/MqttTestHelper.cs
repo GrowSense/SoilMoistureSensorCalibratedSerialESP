@@ -21,6 +21,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public string ExistingStatusMessage;
 
+		public int TimeoutWaitingForMqttData = 20 * 1000;
+
+		public TimeoutHelper Timeout = new TimeoutHelper();
+
 		public MqttTestHelper(string deviceName)
 		{
 			DeviceName = deviceName;
@@ -126,10 +130,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		{
 			Console.WriteLine("Waiting for data...");
 			ResetData();
+			Timeout.Start();
 			while (Data.Count < numberOfEntries)
 			{
-				Console.Write(".");
-				Thread.Sleep(10);
+				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
 			}
 		}
 
@@ -138,10 +142,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Console.WriteLine("Waiting for data...");
 			ResetData();
 			var startTime = DateTime.Now;
+			Timeout.Start();
 			while (Data.Count < numberOfEntries)
 			{
-				Console.Write(".");
-				Thread.Sleep(10);
+				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
 			}
 			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 			return totalTimeInSeconds;
@@ -246,7 +250,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			if (key == "Time" && !IsDuplicateEntry(DataEntry))
 			{
 				Data.Add(DataEntry);
-				//PrintDataEntry(DataEntry);
 				DataEntry = new Dictionary<string, string>();
 			}
 		}
@@ -264,15 +267,18 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public void PrintDataEntry(Dictionary<string, string> dataEntry)
 		{
-			Console.WriteLine("");
-			Console.WriteLine("===== Data");
-			foreach (var key in dataEntry.Keys)
+			if (dataEntry != null)
 			{
-				Console.Write(key + ":" + dataEntry[key] + ";");
+				Console.WriteLine("");
+				Console.WriteLine("----- MQTT Data Start");
+				foreach (var key in dataEntry.Keys)
+				{
+					Console.Write(key + ":" + dataEntry[key] + ";");
+				}
+				Console.WriteLine(";");
+				Console.WriteLine("----- MQTT Data End");
+				Console.WriteLine("");
 			}
-			Console.WriteLine(";");
-			Console.WriteLine("=====");
-			Console.WriteLine("");
 		}
 
 		public string GetTopicKey(string topic)

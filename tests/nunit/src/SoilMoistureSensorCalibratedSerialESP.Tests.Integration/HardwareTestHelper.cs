@@ -22,12 +22,13 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		public string SimulatorPort;
 		public int SimulatorBaudRate = 0;
 
-		public int DelayAfterConnectingToHardware = 8000;
+		public int DelayAfterConnectingToHardware = 2 * 1000;
+		public int DelayAfterDisconnectingFromHardware = 1 * 1000;
 
 		public string DataPrefix = "D;";
 		public string DataPostFix = ";;";
 
-		public int TimeoutWaitingForResponse = 20;
+		public int TimeoutWaitingForResponse = 20 * 1000;
 
 		public int AnalogPinMaxValue = 1024;
 
@@ -35,6 +36,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		public bool Off = false;
 
 		public string FullDeviceOutput;
+
+		public TimeoutHelper Timeout = new TimeoutHelper();
 
 		public HardwareTestHelper()
 		{
@@ -135,6 +138,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Thread.Sleep(DelayAfterConnectingToHardware);
 
 			WaitForText(DataPrefix);
+
+			ReadFromDeviceAndOutputToConsole();
 		}
 
 		public void HandleConnectionIOException(string deviceLabel, string devicePort, int deviceBaudRate, Exception exception)
@@ -158,9 +163,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#region Read From Device Functions
 		public string ReadLineFromDevice()
 		{
-			Console.WriteLine("Reading a line of the output from the device...");
-
-			// Read the output
 			var output = DeviceClient.ReadLine();
 
 			FullDeviceOutput += output;
@@ -188,9 +190,12 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#region Console Write Functions
 		public void ConsoleWriteSerialOutput(string output)
 		{
-			Console.WriteLine("---------- Serial Output From Device -----------");
-			Console.WriteLine(output);
-			Console.WriteLine("------------------------------------------------");
+			if (!String.IsNullOrEmpty(output))
+			{
+				Console.WriteLine("----- Serial Output From Device");
+				Console.WriteLine(output);
+				Console.WriteLine("-------------------------------");
+			}
 		}
 		#endregion
 
@@ -233,7 +238,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			var output = String.Empty;
 			var containsText = false;
 
-			var startTime = DateTime.Now;
+			Timeout.Start();
 
 			while (!containsText)
 			{
@@ -245,14 +250,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 					containsText = true;
 				}
-
-				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
-				if (hasTimedOut && !containsText)
-				{
-					ConsoleWriteSerialOutput(output);
-
-					Assert.Fail("Timed out waiting for text (" + TimeoutWaitingForResponse + " seconds)");
-				}
+				else
+					Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
 			}
 
 			return output;
@@ -268,6 +267,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			var startTime = DateTime.Now;
 
+			Timeout.Start();
+
 			while (!containsData)
 			{
 				output += ReadLineFromDevice();
@@ -282,13 +283,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 					containsData = true;
 					dataLine = lastLine;
 				}
-
-				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
-				if (hasTimedOut && !containsData)
+				else
 				{
-					ConsoleWriteSerialOutput(output);
-
-					Assert.Fail("Timed out waiting for data (" + TimeoutWaitingForResponse + " seconds)");
+					Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for data");
 				}
 			}
 
@@ -353,8 +350,11 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			var startTime = DateTime.Now;
 
+			Timeout.Start();
+
 			while (powerPinValue != expectedValue)
 			{
+				Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for simulator pin to switch to " + GetOnOffString(expectedValue));
 				Console.Write(".");
 				powerPinValue = SimulatorDigitalRead(simulatorDigitalPin);
 			}
@@ -554,6 +554,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 					if (SimulatorClient != null)
 						SimulatorClient.Disconnect();
+
+					Thread.Sleep(DelayAfterDisconnectingFromHardware);
 				}
 
 				// TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.

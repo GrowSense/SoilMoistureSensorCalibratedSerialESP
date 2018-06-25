@@ -14,11 +14,17 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		[SetUp]
 		public virtual void Initialize()
 		{
+			Console.WriteLine("");
+			Console.WriteLine("====================");
+			Console.WriteLine("Preparing test");
 		}
 
 		[TearDown]
 		public virtual void Finish()
 		{
+			Console.WriteLine("Finished test");
+			Console.WriteLine("====================");
+			Console.WriteLine("");
 		}
 
 		public string GetDevicePort()
