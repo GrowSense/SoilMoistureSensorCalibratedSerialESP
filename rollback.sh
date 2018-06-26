@@ -6,17 +6,11 @@ if [ "$BRANCH" = "master" ]
 then
   echo "Rolling back the master branch to previous revision"
 
-  echo "Pulling from origin/master" && \
-  git pull origin master && \
+  echo "Reverting to previous revision" && \
+  git reset --hard HEAD~1 && \
 
-  echo "Resetting to previous revision" && \
-  git reset --hard HEAD~1
-  
-  echo "Committing rollback"
-  git commit -am "Rolling back"
-  
-  echo "Pushing back to origin/master"
-  git push --force origin master
+  echo "Pushing back to origin/master" && \
+  git push --force origin master && \
 
   echo "The 'master' branch has been rolled back"  || \
 
@@ -24,4 +18,3 @@ then
 else
   echo "You must be in the 'master' branch to perform a rollback. The 'dev' branch doesn't get rolled back automatically."
 fi
-
