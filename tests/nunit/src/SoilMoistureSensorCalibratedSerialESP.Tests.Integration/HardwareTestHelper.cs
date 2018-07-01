@@ -303,6 +303,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			var startTime = DateTime.Now;
 			var timeInSeconds = 0.0;
 
+			Timeout.Start();
+
 			while (!containsData)
 			{
 				output += ReadLineFromDevice();
@@ -318,14 +320,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 					dataLine = lastLine;
 					timeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
 				}
-
-				var hasTimedOut = DateTime.Now.Subtract(startTime).TotalSeconds > TimeoutWaitingForResponse;
-				if (hasTimedOut && !containsData)
-				{
-					ConsoleWriteSerialOutput(output);
-
-					Assert.Fail("Timed out waiting for data (" + TimeoutWaitingForResponse + " seconds)");
-				}
+				else
+					Timeout.Check(TimeoutWaitingForResponse, "Timed out waiting for data (" + TimeoutWaitingForResponse + " seconds)");
 			}
 
 			return timeInSeconds;
