@@ -35,18 +35,19 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		{
 			var failuresDir = Path.GetFullPath("../../failures");
 
-			Console.WriteLine(failuresDir);
-
 			var fixtureName = TestContext.CurrentContext.Test.FullName;
 
 			var failureFile = Path.Combine(failuresDir, fixtureName + ".txt");
 
-			Console.WriteLine(fixtureName);
-			Console.WriteLine(failureFile);
-
 			if (TestContext.CurrentContext.Result.State == TestState.Error
 			  || TestContext.CurrentContext.Result.State == TestState.Failure)
 			{
+				Console.WriteLine("Test failed.");
+
+				Console.WriteLine(failuresDir);
+				Console.WriteLine(fixtureName);
+				Console.WriteLine(failureFile);
+
 				if (!Directory.Exists(failuresDir))
 					Directory.CreateDirectory(failuresDir);
 
@@ -54,6 +55,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			}
 			else
 			{
+				Console.WriteLine("Test passed.");
 				if (File.Exists(failureFile))
 					File.Delete(failureFile);
 			}
