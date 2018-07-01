@@ -5,6 +5,6 @@ if [ ! $PORT ]; then
   exit 1
 fi
 
-build.sh && \
-upload.sh $PORT && \
+sh build-all.sh && \
+sh upload.sh $PORT && \
 sh test.sh
