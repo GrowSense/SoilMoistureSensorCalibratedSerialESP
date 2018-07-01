@@ -2,6 +2,8 @@ using System;
 using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
@@ -22,9 +24,39 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		[TearDown]
 		public virtual void Finish()
 		{
+			HandleFailureFile();
+
 			Console.WriteLine("Finished test");
 			Console.WriteLine("====================");
 			Console.WriteLine("");
+		}
+
+		public void HandleFailureFile()
+		{
+			var failuresDir = Path.GetFullPath("../../failures");
+
+			Console.WriteLine(failuresDir);
+
+			var fixtureName = TestContext.CurrentContext.Test.FullName;
+
+			var failureFile = Path.Combine(failuresDir, fixtureName + ".txt");
+
+			Console.WriteLine(fixtureName);
+			Console.WriteLine(failureFile);
+
+			if (TestContext.CurrentContext.Result.State == TestState.Error
+			  || TestContext.CurrentContext.Result.State == TestState.Failure)
+			{
+				if (!Directory.Exists(failuresDir))
+					Directory.CreateDirectory(failuresDir);
+
+				File.WriteAllText(failureFile, fixtureName);
+			}
+			else
+			{
+				if (File.Exists(failureFile))
+					File.Delete(failureFile);
+			}
 		}
 
 		public string GetDevicePort()
