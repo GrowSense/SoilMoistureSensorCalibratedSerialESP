@@ -17,9 +17,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			SetDeviceReadInterval(ReadInterval);
 
-			// Wait for a few lines of data before starting
-			//Mqtt.WaitForData(3);
-
 			Console.WriteLine("Waiting for the first response...");
 
 			var secondsUntilResponse = Mqtt.WaitUntilData(1);
@@ -29,6 +26,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			var expectedMqttResponseTime = 0.1;
 
 			AssertIsWithinRange("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
+
+			Console.WriteLine("Skipping next data entries...");
+
+			Mqtt.WaitUntilData(3); // TODO: See if this can be reduced or removed
 
 			Console.WriteLine("Waiting for the next data entry...");
 
