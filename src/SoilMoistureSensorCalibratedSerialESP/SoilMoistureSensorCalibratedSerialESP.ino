@@ -29,14 +29,14 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 
 int serialMode = SERIAL_MODE_CSV;
 
-#define WIFI_NAME "Telstra995578"
-#define WIFI_PASSWORD "3ym9j8hrwhcf"
+#define WIFI_NAME "accesspoint"
+#define WIFI_PASSWORD "password"
 
-#define MQTT_HOST "10.0.0.93"
+#define MQTT_HOST "garden"
 #define MQTT_PORT 1883
-#define MQTT_USERNAME "j"
-#define MQTT_PASSWORD "ywgtpJ8gdnm!"
-#define MQTT_DEVICE_NAME "WiFiMonitor1"
+#define MQTT_USERNAME "username"
+#define MQTT_PASSWORD "password"
+#define MQTT_DEVICE_NAME "WifiMonitor1"
 
 int totalSubscribeTopics = 4;
 String subscribeTopics[] = {"D", "W", "V", "F"};
@@ -270,6 +270,7 @@ void handleCommand(char* msg)
   }
   
   forceSerialOutput();
+  forceMqttOutput();
 }
 
 /* Settings */
@@ -438,4 +439,9 @@ void serialPrintData()
 
     }
   }
+}
+
+void forceMqttOutput()
+{
+  soilMoistureSensorReadingHasBeenTaken = true;
 }
