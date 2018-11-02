@@ -1,7 +1,5 @@
 DIR=$PWD
 
-echo "Initializing project"
+echo "Initializing SoilMoistureSensorCalibratedSerial project"
 
-pio lib install ntpclient
-
-sh init-testing.sh
+sh init-tests.sh

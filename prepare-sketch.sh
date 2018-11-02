@@ -1,0 +1,1 @@
+sh install-platformio.sh
