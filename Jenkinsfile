@@ -42,24 +42,6 @@ pipeline {
                 sh 'sh build-all.sh'
             }
         }
-        stage('Upload') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh upload.sh'
-            }
-        }
-        stage('Upload simulator') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
-            }
-        }
-        stage('Test') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh test.sh'
-            }
-        }
         stage('Clean') {
             when { expression { !shouldSkipBuild() } }
             steps {
@@ -67,24 +49,6 @@ pipeline {
                 sh 'git checkout src/SoilMoistureSensorCalibratedSerial/SoilMoistureSensorCalibratedSerial.ino'
             }
         }
-        stage('Graduate') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh graduate.sh'
-            }
-        }
-        stage('Increment Version') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh increment-version.sh'
-            }
-        } 
-        stage('Push Version') {
-            when { expression { !shouldSkipBuild() } }
-            steps {
-                sh 'sh push-version.sh'
-            }
-        } 
     }
     post {
         success() {
@@ -96,7 +60,6 @@ pipeline {
             )
         }
         failure() {
-          sh 'sh rollback.sh'
           emailext (
               subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
               body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
