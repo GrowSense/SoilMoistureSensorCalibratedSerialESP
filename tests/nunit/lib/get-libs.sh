@@ -1,31 +1,15 @@
-echo "Getting library files"
+echo "Getting library files..."
 echo "  Dir: $PWD"
 
-LIB_DIR=$PWD
 
-NUGET_FILE="nuget.exe"
+# Nuget is disabled because it's not currently required
+#sh get-nuget.sh
+#sh nuget-update-self.sh
 
-if [ ! -f "$NUGET_FILE" ];
-then
-    echo "Getting nuget.exe..."
-    wget http://nuget.org/nuget.exe -q
-fi
-    
-echo "Updating nuget.exe..."
-mono nuget.exe update -self
+sh nuget-install.sh NUnit 2.6.4
+sh nuget-install.sh NUnit.Runners 2.6.4
+sh nuget-install.sh Newtonsoft.Json 11.0.2
+sh nuget-install.sh ArduinoSerialControllerClient 1.0.9
+sh nuget-install.sh duinocom.core 1.0.6
 
-if [ ! -d "NUnit.2.6.4" ]; then
-    mono nuget.exe install nunit -version 2.6.4
-fi
-
-if [ ! -d "NUnit.Runners.2.6.4" ]; then
-    mono nuget.exe install nunit.runners -version 2.6.4
-fi
-
-if [ ! -d "ArduinoSerialControllerClient.1.0.9" ]; then
-    mono nuget.exe install ArduinoSerialControllerClient -version 1.0.9
-fi
-
-if [ ! -d "M2Mqtt.4.3.0.0" ]; then
-    mono nuget.exe install M2Mqtt
-fi
+echo "Finished getting library files."
