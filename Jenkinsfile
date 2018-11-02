@@ -1,24 +1,92 @@
 pipeline {
     agent any
     triggers {
-        pollSCM 'H/2 * * * *'
+       pollSCM('*/10 * * * *')
+    }
+    options {
+        disableConcurrentBuilds();
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                
+                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git' )
+                sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
+                sh "git fetch --no-tags"
+                sh 'git checkout $BRANCH_NAME'
+                sh 'git pull origin $BRANCH_NAME'
+            }
+        }
+        stage('Prepare') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh prepare.sh'
+            }
+        }
         stage('Init') {
+            when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh init.sh'
             }
         }
-        stage('Build') {
+        stage('Inject Version') {
+            when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh build.sh'
+                sh 'sh inject-version.sh'
             }
         }
+        stage('Build') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh build-all.sh'
+            }
+        }
+        stage('Upload') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh upload.sh'
+            }
+        }
+        stage('Upload simulator') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
+            }
+        }
+        stage('Test') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh test.sh'
+            }
+        }
+        stage('Clean') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh clean.sh'
+                sh 'git checkout src/SoilMoistureSensorCalibratedSerial/SoilMoistureSensorCalibratedSerial.ino'
+            }
+        }
+        stage('Graduate') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh graduate.sh'
+            }
+        }
+        stage('Increment Version') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh increment-version.sh'
+            }
+        } 
+        stage('Push Version') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'sh push-version.sh'
+            }
+        } 
     }
     post {
-        always {
-            cleanWs()
-        }
         success() {
           emailext (
               subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
@@ -28,6 +96,7 @@ pipeline {
             )
         }
         failure() {
+          sh 'sh rollback.sh'
           emailext (
               subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
               body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
@@ -37,3 +106,17 @@ pipeline {
         }
     }
 }
+Boolean shouldSkipBuild() {
+    return sh( script: 'sh check-ci-skip.sh', returnStatus: true )
+}
+def shHide(cmd) {
+    sh('#!/bin/sh -e\n' + cmd)
+}
+
+
+ 
+ 
+ 
+ 
+ 
+ 
