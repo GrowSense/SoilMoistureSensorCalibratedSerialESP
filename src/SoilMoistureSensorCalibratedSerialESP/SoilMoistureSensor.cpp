@@ -242,12 +242,14 @@ void setSoilMoistureSensorReadingInterval(long newValue)
 {
   if (isDebugMode)
   {
-    Serial.print("Setting soil moisture sensor reading interval: ");
+    Serial.print("Set sensor reading interval: ");
     Serial.println(newValue);
   }
 
   EEPROMWriteLong(soilMoistureSensorReadingIntervalAddress, newValue);
 
+  EEPROM.commit();
+    
   setEEPROMSoilMoistureSensorReadingIntervalIsSetFlag();
 
   soilMoistureSensorReadingIntervalInSeconds = newValue; 
@@ -281,11 +283,15 @@ void setEEPROMSoilMoistureSensorReadingIntervalIsSetFlag()
 {
   if (EEPROM.read(soilMoistureSensorReadIntervalIsSetFlagAddress) != 99)
     EEPROM.write(soilMoistureSensorReadIntervalIsSetFlagAddress, 99);
+    
+  EEPROM.commit();
 }
 
 void removeEEPROMSoilMoistureSensorReadingIntervalIsSetFlag()
 {
-    EEPROM.write(soilMoistureSensorReadIntervalIsSetFlagAddress, 0);
+  EEPROM.write(soilMoistureSensorReadIntervalIsSetFlagAddress, 0);
+    
+  EEPROM.commit();
 }
 
 /* Calibration */
@@ -347,6 +353,8 @@ void setDrySoilMoistureCalibrationValue(int newValue)
   
   EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue); // Must divide by 4 to make it fit in eeprom
 
+  EEPROM.commit();
+
   setEEPROMIsCalibratedFlag();
 }
 
@@ -385,6 +393,8 @@ void setWetSoilMoistureCalibrationValue(int newValue)
   wetSoilMoistureCalibrationValue = newValue;
 
   EEPROMWriteLong(wetSoilMoistureCalibrationValueAddress, newValue);
+  
+  EEPROM.commit();
   
   setEEPROMIsCalibratedFlag();
 }
@@ -432,7 +442,7 @@ int getWetSoilMoistureCalibrationValue()
 {
   int value = EEPROMReadLong(wetSoilMoistureCalibrationValueAddress);
 
-  if (value < 0
+  if (value <= 0
       || value > ANALOG_MAX)
     return wetSoilMoistureCalibrationValue;
   else
@@ -451,11 +461,15 @@ void setEEPROMIsCalibratedFlag()
 {
   if (EEPROM.read(soilMoistureSensorIsCalibratedFlagAddress) != 99)
     EEPROM.write(soilMoistureSensorIsCalibratedFlagAddress, 99);
+    
+  EEPROM.commit();
 }
 
 void removeEEPROMIsCalibratedFlag()
 {
     EEPROM.write(soilMoistureSensorIsCalibratedFlagAddress, 0);
+    
+    EEPROM.commit();
 }
 
 void restoreDefaultSoilMoistureSensorSettings()

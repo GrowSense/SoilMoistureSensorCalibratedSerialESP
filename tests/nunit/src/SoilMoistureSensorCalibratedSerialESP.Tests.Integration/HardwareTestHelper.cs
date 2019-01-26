@@ -37,6 +37,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public string FullDeviceOutput;
 
+		public int ResetTriggerPin = 4;
+
+		public string IrrigatorStartText = "Starting WiFi soil moisture monitor";
+
 		public TimeoutHelper Timeout = new TimeoutHelper();
 
 		public HardwareTestHelper()
@@ -66,22 +70,22 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#endregion
 
 		#region Enable Device/Simulator Functions
-		public void EnableDevices()
+		public void ConnectDevices()
 		{
-			EnableDevices(true);
+			ConnectDevices(true);
 		}
 
-		public virtual void EnableDevices(bool enableSimulator)
+		public virtual void ConnectDevices(bool enableSimulator)
 		{
 			if (enableSimulator)
-				EnableSimulator();
+				ConnectSimulator();
 
-			EnableDevice();
+			ConnectDevice();
 
-			WaitForDevicesToEnable();
+			WaitForDevicesToConnect();
 		}
 
-		public void EnableDevice()
+		public void ConnectDevice()
 		{
 			if (String.IsNullOrEmpty(DevicePort))
 				throw new Exception("The 'DevicePort' property has not been set.");
@@ -107,7 +111,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Console.WriteLine("");
 		}
 
-		public void EnableSimulator()
+		public void ConnectSimulator()
 		{
 			if (String.IsNullOrEmpty(SimulatorPort))
 				throw new Exception("The 'SimulatorPort' property has not been set.");
@@ -133,7 +137,24 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			Console.WriteLine("");
 		}
 
-		public void WaitForDevicesToEnable()
+		public void DisconnectDevice()
+		{
+			DeviceClient.Close ();
+		}
+
+		public void DisconnectSimulator()
+		{
+			SimulatorClient.Disconnect ();
+		}
+
+		public void DisconnectDevices()
+		{
+			DisconnectDevice ();
+
+			DisconnectSimulator ();
+		}
+
+		public void WaitForDevicesToConnect()
 		{
 			Thread.Sleep(DelayAfterConnectingToHardware);
 
@@ -147,9 +168,35 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			if (exception.Message == "No such file or directory")
 				throw new Exception("The " + deviceLabel + " device not found on port: " + devicePort + ". Please ensure it's connected via USB and that the port name is set correctly.", exception);
 			else if (exception.Message == "Inappropriate ioctl for device")
-				throw new Exception("The device serial baud rate appears to be incorrect: " + deviceBaudRate, exception);
+				throw new Exception ("The device serial baud rate appears to be incorrect: " + deviceBaudRate, exception);
+			else if (exception.Message == "No such device or address")
+				throw new Exception ("The " + deviceLabel + " device not found on port: " + devicePort + ". Please ensure it's connected via USB and that the port name is set correctly.", exception);
 			else
 				throw exception;
+		}
+		#endregion
+
+		#region Reset Functions
+		public virtual void ResetDeviceViaPin()
+		{
+			// Close the connection to the device
+			DisconnectDevice();
+
+			// Set the reset trigger pin LOW (false) to begin a reset
+			SimulatorClient.DigitalWrite (ResetTriggerPin, false);
+
+			// Give the pin some time at LOW to ensure reset
+			Thread.Sleep (10);
+
+			// Change the reset trigger pin to an input to go back to normal
+			// TODO: Implement a cleaner way to do this
+			SimulatorClient.DigitalRead (ResetTriggerPin);
+
+			// Re-open the connection to the device
+			ConnectDevice ();
+
+			// Ensure the irrigator restarted
+			WaitForText (IrrigatorStartText);
 		}
 		#endregion
 
@@ -414,6 +461,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		#region Data Value Assert Functions
 		public void AssertDataValueEquals(Dictionary<string, string> dataEntry, string dataKey, int expectedValue)
 		{
+			Assert.IsTrue (dataEntry.ContainsKey (dataKey), "The key '" + dataKey + "' is not found in the data entry.");
+
 			var value = Convert.ToInt32(dataEntry[dataKey]);
 
 			Assert.AreEqual(expectedValue, value, "Data value for '" + dataKey + "' key is incorrect: " + value);

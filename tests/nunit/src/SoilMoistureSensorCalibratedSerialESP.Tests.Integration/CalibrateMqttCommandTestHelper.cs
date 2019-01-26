@@ -18,7 +18,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 			EnableMqtt();
 
-			EnableDevices(false);
+			ConnectDevices(false);
 
 			SendMqttCalibrationCommand();
 		}

@@ -16,10 +16,9 @@ void serialPrintLoopHeader()
 {
   if (isDebugMode)
   {
-    Serial.println("==============================");
-    Serial.print("===== Start Loop: ");
+    Serial.println("==========");
+    Serial.print("Start Loop: ");
     Serial.println(loopNumber);
-    Serial.println("==============================");
     Serial.print("Time: ");
     Serial.print(millisecondsToSecondsWithDecimal(millis()));
     Serial.println(" seconds");
@@ -31,10 +30,9 @@ void serialPrintLoopFooter()
 {
   if (isDebugMode)
   {
-    Serial.println("==============================");
-    Serial.print("===== End Loop: ");
+    Serial.print("End Loop: ");
     Serial.println(loopNumber);
-    Serial.println("==============================");
+    Serial.println("==========");
     Serial.println("");
   }
 }

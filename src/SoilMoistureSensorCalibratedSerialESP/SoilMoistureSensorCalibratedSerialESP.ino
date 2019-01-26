@@ -39,7 +39,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_DEVICE_NAME "WifiMonitor1"
 
 int totalSubscribeTopics = 4;
-String subscribeTopics[] = {"D", "W", "V", "F"};
+String subscribeTopics[] = {"D", "W", "I", "F"};
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -49,8 +49,9 @@ void setup()
   
   Serial.begin(115200);
 
-  if (isDebugMode)
-    Serial.println("Starting soil moisture monitor ESP");
+  EEPROM.begin(512);
+  
+  Serial.println("Starting WiFi soil moisture monitor");
 
   setupWiFi();
 
@@ -254,7 +255,7 @@ void handleCommand(char* msg)
     case 'W':
       setWetSoilMoistureCalibrationValue(msg);
       break;
-    case 'V':
+    case 'I':
       setSoilMoistureSensorReadingInterval(msg);
       break;
     case 'X':
@@ -290,7 +291,7 @@ void mqttPublishData()
       Serial.println("Publishing");
     publishMqttValue("R", soilMoistureLevelRaw);
     publishMqttValue("C", soilMoistureLevelCalibrated);
-    publishMqttValue("V", soilMoistureSensorReadingIntervalInSeconds);
+    publishMqttValue("I", soilMoistureSensorReadingIntervalInSeconds);
     publishMqttValue("D", drySoilMoistureCalibrationValue);
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
     publishMqttValue("Z", VERSION);
@@ -372,7 +373,7 @@ void serialPrintData()
       Serial.print("C:");
       Serial.print(soilMoistureLevelCalibrated);
       Serial.print(";");
-      Serial.print("V:");
+      Serial.print("I:");
       Serial.print(soilMoistureSensorReadingIntervalInSeconds);
       Serial.print(";");
       Serial.print("D:");

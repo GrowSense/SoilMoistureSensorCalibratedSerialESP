@@ -23,9 +23,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		}
 
 		#region Enable Devices Functions
-		public override void EnableDevices(bool enableSimulator)
+		public override void ConnectDevices(bool enableSimulator)
 		{
-			base.EnableDevices(enableSimulator);
+			base.ConnectDevices(enableSimulator);
 
 			PrepareDeviceForTest();
 		}
@@ -110,7 +110,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
 		public void SetDeviceReadInterval(int numberOfSeconds)
 		{
-			var cmd = "V" + numberOfSeconds;
+			var cmd = "I" + numberOfSeconds;
 
 			Console.WriteLine("");
 			Console.WriteLine("Setting device read interval to " + numberOfSeconds + " second(s)...");

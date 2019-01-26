@@ -11,13 +11,13 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 		{
 			WriteTitleText("Starting soil moisture sensor power test");
 
-			EnableDevices();
+			ConnectDevices();
 
 			SetDeviceReadInterval(ReadInterval);
 
 			var data = WaitForDataEntry();
 
-			AssertDataValueEquals(data, "V", ReadInterval);
+			AssertDataValueEquals(data, "I", ReadInterval);
 
 			var sensorDoesTurnOff = ReadInterval > DelayAfterTurningSoilMoistureSensorOn;
 

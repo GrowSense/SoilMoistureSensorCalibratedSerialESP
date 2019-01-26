@@ -66,7 +66,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			var devicePort = Environment.GetEnvironmentVariable("MONITOR_ESP_PORT");
 
 			if (String.IsNullOrEmpty(devicePort))
-				devicePort = "/dev/ttyUSB2";
+				devicePort = "/dev/ttyUSB0";
 
 			Console.WriteLine("Device port: " + devicePort);
 
@@ -78,7 +78,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 			var simulatorPort = Environment.GetEnvironmentVariable("MONITOR_ESP_SIMULATOR_PORT");
 
 			if (String.IsNullOrEmpty(simulatorPort))
-				simulatorPort = "/dev/ttyUSB3";
+				simulatorPort = "/dev/ttyUSB1";
 
 			Console.WriteLine("Simulator port: " + simulatorPort);
 
