@@ -59,13 +59,13 @@ pipeline {
         stage('Upload') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload.sh'
+                sh 'sh upload.sh ${MONITOR_ESP_PORT}'
             }
         }
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
+                sh 'sh upload-simulator.sh ${MONITOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Test') {
