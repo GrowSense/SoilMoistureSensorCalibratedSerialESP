@@ -1,12 +1,14 @@
 pipeline {
     agent any
-    triggers {
-       pollSCM('*/30 * * * *')
-    }
     options {
         disableConcurrentBuilds();
     }
     stages {
+        stage('CleanWS') {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
