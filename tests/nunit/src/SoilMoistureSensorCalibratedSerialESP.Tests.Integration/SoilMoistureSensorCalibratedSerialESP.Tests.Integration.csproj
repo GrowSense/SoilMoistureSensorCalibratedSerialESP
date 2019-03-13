@@ -46,14 +46,10 @@
   <ItemGroup>
     <Compile Include="BaseTestFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CalibrateCommandTestFixture.cs" />
-    <Compile Include="ReadIntervalCommandTestFixture.cs" />
-    <Compile Include="CalibrateCommandTestHelper.cs" />
     <Compile Include="FullScaleMonitorTestFixture.cs" />
     <Compile Include="FullScaleMonitorTestHelper.cs" />
     <Compile Include="GreenSenseHardwareTestHelper.cs" />
     <Compile Include="HardwareTestHelper.cs" />
-    <Compile Include="ReadIntervalCommandTestHelper.cs" />
     <Compile Include="SoilMoistureSensorPowerTestFixture.cs" />
     <Compile Include="SoilMoistureSensorPowerTestHelper.cs" />
     <Compile Include="GreenSenseMqttHardwareTestHelper.cs" />
