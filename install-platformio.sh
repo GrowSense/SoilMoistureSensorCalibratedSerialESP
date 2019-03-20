@@ -1,6 +1,6 @@
 # python
 if ! type "python" > /dev/null; then
-  sudo apt-get install -y python python-pip
+  sudo apt-get -qq install -y python python-pip
 fi
 
 # platform.io

@@ -1,33 +1,34 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-	public class SerialOutputTimeTestHelper : GreenSenseHardwareTestHelper
-	{
-		public int ReadInterval = 1;
+    public class SerialOutputTimeTestHelper : GreenSenseHardwareTestHelper
+    {
+        public int ReadInterval = 1;
 
-		public void TestSerialOutputTime()
-		{
-			WriteTitleText("Starting serial output time test");
+        public void TestSerialOutputTime ()
+        {
+            WriteTitleText ("Starting serial output time test");
 
-			Console.WriteLine("Read interval: " + ReadInterval);
+            Console.WriteLine ("Read interval: " + ReadInterval);
 
-			ConnectDevices(false);
+            ConnectDevices (false);
 
-			SetDeviceReadInterval(ReadInterval);
+            SetDeviceReadInterval (ReadInterval);
 
-			ReadFromDeviceAndOutputToConsole();
+            ReadFromDeviceAndOutputToConsole ();
 
-			// Wait for the first bunch of data lines to come out before timing tem
-			WaitForData(4); // TODO: See if this can be reduced
+            // Skip some data
+            WaitForData (2);
 
-			// Get the time until the next data line
-			var secondsBetweenDataLines = WaitUntilDataLine();
+            // Get the time until the next data line
+            var secondsBetweenDataLines = WaitUntilDataLine ();
 
-			var expectedTimeBetweenDataLines = ReadInterval;
+            var expectedTimeBetweenDataLines = ReadInterval;
 
-			Console.WriteLine("Time between data lines: " + secondsBetweenDataLines + " seconds");
+            Console.WriteLine ("Time between data lines: " + secondsBetweenDataLines + " seconds");
 
-			AssertIsWithinRange("serial output time", expectedTimeBetweenDataLines, secondsBetweenDataLines, TimeErrorMargin);
-		}
-	}
+            AssertIsWithinRange ("serial output time", expectedTimeBetweenDataLines, secondsBetweenDataLines, TimeErrorMargin);
+        }
+    }
 }

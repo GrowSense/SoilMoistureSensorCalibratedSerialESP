@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pio run --environment esp12e
+sh build-all.sh

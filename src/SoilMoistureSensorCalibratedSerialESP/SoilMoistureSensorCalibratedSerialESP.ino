@@ -26,6 +26,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 #define SERIAL_MODE_QUERYSTRING 4
 
 #define VERSION "1-0-0-0"
+#define BOARD_TYPE "esp"
 
 int serialMode = SERIAL_MODE_CSV;
 
@@ -36,7 +37,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "username"
 #define MQTT_PASSWORD "password"
-#define MQTT_DEVICE_NAME "WifiMonitor1"
+#define MQTT_DEVICE_NAME "WiFiMonitor1"
 
 int totalSubscribeTopics = 4;
 String subscribeTopics[] = {"D", "W", "I", "F"};
@@ -46,12 +47,19 @@ PubSubClient client(espClient);
 
 void setup()
 {
-  
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   EEPROM.begin(512);
   
   Serial.println("Starting WiFi soil moisture monitor");
+  Serial.println("");
+  Serial.println("Family: GreenSense");
+  Serial.println("Group: irrigator");
+  Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
+  Serial.print("Board: ");
+  Serial.println(BOARD_TYPE);
+  Serial.print("Version: ");
+  Serial.println(VERSION);
 
   setupWiFi();
 

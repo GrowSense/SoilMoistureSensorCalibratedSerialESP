@@ -69,6 +69,10 @@
     <Compile Include="ReadIntervalEEPROMTestHelper.cs" />
     <Compile Include="CalibrationEEPROMTestFixture.cs" />
     <Compile Include="CalibrationEEPROMTestHelper.cs" />
+    <Compile Include="CalibrateCommandTestFixture.cs" />
+    <Compile Include="CalibrateCommandTestHelper.cs" />
+    <Compile Include="ReadIntervalCommandTestFixture.cs" />
+    <Compile Include="ReadIntervalCommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

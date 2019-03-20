@@ -1,1 +1,1 @@
-pio lib install ntpclient
+pio lib install -s ntpclient

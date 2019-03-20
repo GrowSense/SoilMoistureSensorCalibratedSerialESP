@@ -5,9 +5,10 @@ if [ ! $PORT_NAME ]; then
 fi
 
 if [ ! $PORT_NAME ]; then
-  PORT_NAME="/dev/ttyUSB0"
+  echo "Provide an upload port as an argument."
+  exit 1
 fi
 
 echo "Port: $PORT_NAME"
 
-pio run --target upload --environment=esp12e --upload-port=$PORT_NAME
+pio run -s --target upload --environment=esp12e --upload-port=$PORT_NAME

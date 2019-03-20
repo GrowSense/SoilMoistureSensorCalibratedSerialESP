@@ -7,4 +7,4 @@ fi
 
 echo "Port: $PORT_NAME"
 
-pio device monitor --baud=115200 --port=$PORT_NAME
+pio device monitor --port=$PORT_NAME

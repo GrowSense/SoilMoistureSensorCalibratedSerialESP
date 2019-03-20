@@ -1,14 +1,15 @@
-echo ""
-echo "Uploading simulator sketch"
-echo ""
+#!/bin/bash
 
-PORT_NAME=$MONITOR_ESP_SIMULATOR_PORT
+DIR=$PWD
 
-if [ ! $PORT_NAME ]; then
-  PORT_NAME="/dev/ttyUSB1"
+SIMULATOR_PORT=$1
+
+if [ ! $SIMULATOR_PORT ]; then
+  echo "Specify a port as an argument"
+  exit 1
 fi
 
-echo "Port: $PORT_NAME"
+echo "Uploading simulator to port $SIMULATOR_PORT"
 
 # Specify a temporary directory name
 SIMULATOR_TMP_DIR="_simulatortmp"
@@ -20,17 +21,17 @@ rm -rf $SIMULATOR_TMP_DIR
 mkdir -p $SIMULATOR_TMP_DIR
 cd $SIMULATOR_TMP_DIR
 
-echo "Preparing to clone ArduinoSerialController"
-echo "Dir:"
-echo "  $PWD"
+echo "Cloning ArduinoSerialController"
 
 # Clone the latest version
-git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git
+git clone https://github.com/CompulsiveCoder/ArduinoSerialController.git && \
 
-cd ArduinoSerialController
+cd ArduinoSerialController && \
 
 # Upload
-sh upload-to-port.sh $PORT_NAME
+sh upload-to-port.sh "$SIMULATOR_PORT" && \
+
+cd $DIR
 
 # Remove the temporary directory
 rm -rf $SIMULATOR_TMP_DIR

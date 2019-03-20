@@ -1,45 +1,46 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-	public class MqttOutputTimeTestHelper : GreenSenseMqttHardwareTestHelper
-	{
-		public int ReadInterval = 1;
+    public class MqttOutputTimeTestHelper : GreenSenseMqttHardwareTestHelper
+    {
+        public int ReadInterval = 1;
 
-		public void TestMqttOutputTime()
-		{
-			WriteTitleText("Starting MQTT output time test");
+        public void TestMqttOutputTime ()
+        {
+            WriteTitleText ("Starting MQTT output time test");
 
-			Console.WriteLine("Read interval: " + ReadInterval);
+            Console.WriteLine ("Read interval: " + ReadInterval);
 
-			ConnectDevices(false);
+            ConnectDevices (false);
 
-			EnableMqtt();
+            EnableMqtt ();
 
-			SetDeviceReadInterval(ReadInterval);
+            SetDeviceReadInterval (ReadInterval);
 
-			Console.WriteLine("Waiting for the first response...");
+            Console.WriteLine ("Waiting for the first response...");
 
-			var secondsUntilResponse = Mqtt.WaitUntilData(1);
+            var secondsUntilResponse = Mqtt.WaitUntilData (1);
 
-			Console.WriteLine("Time to first response: " + secondsUntilResponse + " seconds");
+            Console.WriteLine ("Time to first response: " + secondsUntilResponse + " seconds");
 
-			var expectedMqttResponseTime = 0.1;
+            var expectedMqttResponseTime = 0.1;
 
-			AssertIsWithinRange("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
+            AssertIsWithinRange ("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
 
-			Console.WriteLine("Skipping next data entries...");
+            Console.WriteLine ("Skipping next data entries...");
 
-			Mqtt.WaitUntilData(3); // TODO: See if this can be reduced or removed
+            Mqtt.WaitUntilData (1);
 
-			Console.WriteLine("Waiting for the next data entry...");
+            Console.WriteLine ("Waiting for the next data entry...");
 
-			var secondsBetweenData = Mqtt.WaitUntilData(1);
+            var secondsBetweenData = Mqtt.WaitUntilData (1);
 
-			Console.WriteLine("Time between data entries: " + secondsBetweenData + " seconds");
+            Console.WriteLine ("Time between data entries: " + secondsBetweenData + " seconds");
 
-			var expectedMqttOutputTime = ReadInterval;
+            var expectedMqttOutputTime = ReadInterval;
 
-			AssertIsWithinRange("mqtt output time", expectedMqttOutputTime, secondsBetweenData, TimeErrorMargin);
-		}
-	}
+            AssertIsWithinRange ("mqtt output time", expectedMqttOutputTime, secondsBetweenData, TimeErrorMargin);
+        }
+    }
 }
