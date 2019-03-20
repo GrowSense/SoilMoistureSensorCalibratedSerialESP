@@ -34,13 +34,15 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             SimulateSoilMoisture (soilMoisturePercentage);
 
-            var data = WaitForData (1); // Wait for 3 data entries to give the simulator time to stabilise
+            WaitForData (1);
+
+            var dataEntry = WaitForDataEntry ();
 
             Console.WriteLine ("");
             Console.WriteLine ("Checking calibrated value");
             Console.WriteLine ("");
 
-            AssertDataValueIsWithinRange (data [data.Length - 1], "C", soilMoisturePercentage, CalibratedValueMarginOfError);
+            AssertDataValueIsWithinRange (dataEntry, "C", soilMoisturePercentage, CalibratedValueMarginOfError);
 
             Console.WriteLine ("");
             Console.WriteLine ("Checking raw value");
@@ -48,7 +50,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             var expectedRawValue = soilMoisturePercentage * AnalogPinMaxValue / 100;
 
-            AssertDataValueIsWithinRange (data [data.Length - 1], "R", expectedRawValue, RawValueMarginOfError);
+            AssertDataValueIsWithinRange (dataEntry, "R", expectedRawValue, RawValueMarginOfError);
         }
     }
 }
