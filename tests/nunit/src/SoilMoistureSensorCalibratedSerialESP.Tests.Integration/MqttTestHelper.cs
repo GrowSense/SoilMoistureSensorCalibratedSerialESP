@@ -10,288 +10,279 @@ using System.Collections.Generic;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-	public class MqttTestHelper
-	{
-		public string DeviceName;
+    public class MqttTestHelper
+    {
+        public string DeviceName;
 
-		public List<Dictionary<string, string>> Data = new List<Dictionary<string, string>>();
-		public Dictionary<string, string> DataEntry = new Dictionary<string, string>();
+        public List<Dictionary<string, string>> Data = new List<Dictionary<string, string>> ();
+        public Dictionary<string, string> DataEntry = new Dictionary<string, string> ();
 
-		public MqttClient Client;
+        public MqttClient Client;
 
-		public string ExistingStatusMessage;
+        public string ExistingStatusMessage;
 
-		public int TimeoutWaitingForMqttData = 20 * 1000;
+        public int TimeoutWaitingForMqttData = 20 * 1000;
 
-		public TimeoutHelper Timeout = new TimeoutHelper();
+        public TimeoutHelper Timeout = new TimeoutHelper ();
 
-		public MqttTestHelper(string deviceName)
-		{
-			DeviceName = deviceName;
-		}
+        public MqttTestHelper (string deviceName)
+        {
+            DeviceName = deviceName;
+        }
 
-		public MqttTestHelper()
-		{
-		}
+        public MqttTestHelper ()
+        {
+        }
 
-		public void Start()
-		{
-			Console.WriteLine("");
-			Console.WriteLine("Starting MQTT test");
-			Console.WriteLine("");
+        public void Start ()
+        {
+            Console.WriteLine ("");
+            Console.WriteLine ("Starting MQTT test");
+            Console.WriteLine ("");
 
-			DeviceName = GetSecurityValue("mqtt-device-name", "MONITOR_ESP_DEVICE_NAME");
-			var host = GetSecurityValue("mqtt-host", "MQTT_HOST");
-			var user = GetSecurityValue("mqtt-username", "MQTT_USERNAME");
-			var pass = GetSecurityValue("mqtt-password", "MQTT_PASSWORD");
+            DeviceName = GetSecurityValue ("mqtt-device-name", "");
+            var host = GetSecurityValue ("mqtt-host", "MQTT_HOST");
+            var user = GetSecurityValue ("mqtt-username", "MQTT_USERNAME");
+            var pass = GetSecurityValue ("mqtt-password", "MQTT_PASSWORD");
 
-			Assert.IsNotNullOrEmpty(DeviceName, "MONITOR_ESP_DEVICE_NAME environment variable is not set.");
-			Assert.IsNotNullOrEmpty(host, "MQTT_HOST environment variable is not set.");
-			Assert.IsNotNullOrEmpty(user, "MQTT_USERNAME environment variable is not set.");
-			Assert.IsNotNullOrEmpty(pass, "MQTT_PASSWORD environment variable is not set.");
+            Assert.IsNotNullOrEmpty (DeviceName, "Device name is not set.");
+            Assert.IsNotNullOrEmpty (host, "MQTT_HOST environment variable is not set.");
+            Assert.IsNotNullOrEmpty (user, "MQTT_USERNAME environment variable is not set.");
+            Assert.IsNotNullOrEmpty (pass, "MQTT_PASSWORD environment variable is not set.");
 
-			Console.WriteLine("Device name: " + DeviceName);
-			Console.WriteLine("Host: " + host);
-			Console.WriteLine("Username: " + user);
+            Console.WriteLine ("Device name: " + DeviceName);
+            Console.WriteLine ("Host: " + host);
+            Console.WriteLine ("Username: " + user);
 
-			Client = new MqttClient(host);
+            Client = new MqttClient (host);
 
-			var clientId = Guid.NewGuid().ToString();
+            var clientId = Guid.NewGuid ().ToString ().Substring (0, 10);
 
-			Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-			Client.Connect(clientId, user, pass);
+            Client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
+            Client.Connect (clientId, user, pass);
 
-			Client.Subscribe(new string[] { "/" + DeviceName + "/#" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
-		}
+            Client.Subscribe (new string[] { "/" + DeviceName + "/#" }, new byte[] { MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE });
+        }
 
-		public string GetSecurityValue(string key, string environmentVariable)
-		{
-			Console.WriteLine("Retrieving security value: " + key);
+        public string GetSecurityValue (string key, string environmentVariable)
+        {
+            //Console.WriteLine ("Retrieving security value: " + key);
 
-			var value = Environment.GetEnvironmentVariable(environmentVariable);
+            var value = String.Empty;
 
-			if (String.IsNullOrEmpty(value))
-			{
-				var projectDirectory = Path.GetFullPath("../../../..");
+            if (!String.IsNullOrEmpty (environmentVariable))
+                value = Environment.GetEnvironmentVariable (environmentVariable);
 
-				value = File.ReadAllText(Path.Combine(projectDirectory, key + ".security")).Trim();
-			}
+            if (String.IsNullOrEmpty (value)) {
+                var projectDirectory = Path.GetFullPath ("../../../..");
 
-			return value;
-		}
+                value = File.ReadAllText (Path.Combine (projectDirectory, key + ".security")).Trim ();
+            }
 
-		public void End()
-		{
-			PublishSuccess();
-			Thread.Sleep(2000);
-			Client.Disconnect();
+            return value;
+        }
 
-			Console.WriteLine("");
-			Console.WriteLine("End of MQTT test");
-			Console.WriteLine("");
-		}
+        public void End ()
+        {
+            PublishSuccess ();
+            Thread.Sleep (2000);
+            Client.Disconnect ();
 
-		public void WaitForAccess()
-		{
-			Console.WriteLine("Waiting for access (ie. ensuring another test isn't already running)");
+            Console.WriteLine ("");
+            Console.WriteLine ("End of MQTT test");
+            Console.WriteLine ("");
+        }
 
-			var hasAccess = false;
+        public void WaitForAccess ()
+        {
+            Console.WriteLine ("Waiting for access (ie. ensuring another test isn't already running)");
 
-			var maxWaitTime = new TimeSpan(
-				0,
-				0, // minutes
-				10);
-			var startWaitTime = DateTime.Now;
+            var hasAccess = false;
 
-			while (!hasAccess)
-			{
-				WaitForData(1);
+            var maxWaitTime = new TimeSpan (
+                         0,
+                         0, // minutes
+                         10);
+            var startWaitTime = DateTime.Now;
 
-				var currentStatus = ExistingStatusMessage;
-				var testIsReady = (currentStatus != "Testing");
-				Console.WriteLine("Test is ready: " + testIsReady);
+            while (!hasAccess) {
+                WaitForData (1);
 
-				var waitedLongEnough = DateTime.Now.Subtract(startWaitTime) > maxWaitTime;
-				Console.WriteLine("Waited long enough: " + waitedLongEnough);
+                var currentStatus = ExistingStatusMessage;
+                var testIsReady = (currentStatus != "Testing");
+                Console.WriteLine ("Test is ready: " + testIsReady);
 
-				if (testIsReady || waitedLongEnough)
-				{
-					Console.WriteLine("Access gained");
-					hasAccess = true;
-					break;
-				}
+                var waitedLongEnough = DateTime.Now.Subtract (startWaitTime) > maxWaitTime;
+                Console.WriteLine ("Waited long enough: " + waitedLongEnough);
 
-				Console.Write(".");
-				Thread.Sleep(10);
-			}
-		}
+                if (testIsReady || waitedLongEnough) {
+                    Console.WriteLine ("Access gained");
+                    hasAccess = true;
+                    break;
+                }
 
-		public void WaitForData(int numberOfEntries)
-		{
-			Console.WriteLine("Waiting for data...");
-			ResetData();
-			Timeout.Start();
-			while (Data.Count < numberOfEntries)
-			{
-				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
-			}
-		}
+                Console.Write (".");
+                Thread.Sleep (10);
+            }
+        }
 
-		public double WaitUntilData(int numberOfEntries)
-		{
-			Console.WriteLine("Waiting for data...");
-			ResetData();
-			var startTime = DateTime.Now;
-			Timeout.Start();
-			while (Data.Count < numberOfEntries)
-			{
-				Timeout.Check(TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
-			}
-			var totalTimeInSeconds = DateTime.Now.Subtract(startTime).TotalSeconds;
-			return totalTimeInSeconds;
-		}
+        public void WaitForData (int numberOfEntries)
+        {
+            Console.WriteLine ("Waiting for " + numberOfEntries + " of data entries...");
+            ResetData ();
+            Timeout.Start ();
+            while (Data.Count < numberOfEntries) {
+                Timeout.Check (TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
+            }
+        }
 
-		public void CheckDataEntryTimes(int expectedInterval)
-		{
-			Assert.IsTrue(Data.Count >= 2, "More data entries are needed");
+        public double WaitUntilData (int numberOfEntries)
+        {
+            Console.WriteLine ("Waiting until data is detected...");
+            ResetData ();
+            var startTime = DateTime.Now;
+            Timeout.Start ();
+            while (Data.Count < numberOfEntries) {
+                Timeout.Check (TimeoutWaitingForMqttData, "Timed out waiting for MQTT data.");
+            }
+            var totalTimeInSeconds = DateTime.Now.Subtract (startTime).TotalSeconds;
+            return totalTimeInSeconds;
+        }
 
-			var secondLastTime = DateTime.Parse(Data[Data.Count - 2]["Time"]);
-			var lastTime = DateTime.Parse(Data[Data.Count - 1]["Time"]);
+        public void CheckDataEntryTimes (int expectedInterval)
+        {
+            Assert.IsTrue (Data.Count >= 2, "More data entries are needed");
 
-			Console.WriteLine(secondLastTime.ToString());
-			Console.WriteLine(lastTime.ToString());
+            var secondLastTime = DateTime.Parse (Data [Data.Count - 2] ["Time"]);
+            var lastTime = DateTime.Parse (Data [Data.Count - 1] ["Time"]);
 
-			var timeSpan = lastTime.Subtract(secondLastTime);
+            Console.WriteLine (secondLastTime.ToString ());
+            Console.WriteLine (lastTime.ToString ());
 
-			Console.WriteLine("Time difference (seconds): " + timeSpan.TotalSeconds);
+            var timeSpan = lastTime.Subtract (secondLastTime);
 
-			Assert.AreEqual(expectedInterval, timeSpan.TotalSeconds, "Invalid time difference");
-		}
+            Console.WriteLine ("Time difference (seconds): " + timeSpan.TotalSeconds);
 
-		public void SendCommand(string key, int value)
-		{
-			SendCommand(key, value.ToString());
-		}
+            Assert.AreEqual (expectedInterval, timeSpan.TotalSeconds, "Invalid time difference");
+        }
 
-		public void SendCommand(string key, string value)
-		{
-			Console.WriteLine("");
-			Console.WriteLine("Sending command...");
-			Console.WriteLine("Key: " + key);
-			Console.WriteLine("Value: " + value);
-			var inTopic = "/" + DeviceName + "/" + key + "/in";
+        public void SendCommand (string key, int value)
+        {
+            SendCommand (key, value.ToString ());
+        }
 
-			Console.WriteLine("Topic: " + inTopic);
-			Client.Publish(inTopic, Encoding.UTF8.GetBytes(value.ToString()));
-			Console.WriteLine("");
-		}
+        public void SendCommand (string key, string value)
+        {
+            Console.WriteLine ("");
+            Console.WriteLine ("Sending command...");
+            Console.WriteLine ("Key: " + key);
+            Console.WriteLine ("Value: " + value);
+            var inTopic = "/" + DeviceName + "/" + key + "/in";
 
-		public void PublishSuccess()
-		{
-			Console.WriteLine("Publishing success");
-			ClearErrorMessage();
-			PublishStatus(0, "Passed");
-		}
+            Console.WriteLine ("Topic: " + inTopic);
+            Client.Publish (inTopic, Encoding.UTF8.GetBytes (value.ToString ()));
+            Console.WriteLine ("");
+        }
 
-		public void PublishError(string error)
-		{
-			Console.WriteLine("Publishing error: " + error);
-			var errorTopic = "/" + DeviceName + "/Error";
-			Client.Publish(errorTopic, Encoding.UTF8.GetBytes(error),
-				MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
-				true);
-			PublishStatus(1, "Failed");
-		}
+        public void PublishSuccess ()
+        {
+            Console.WriteLine ("Publishing success");
+            ClearErrorMessage ();
+            PublishStatus (0, "Passed");
+        }
 
-		public void ClearErrorMessage()
-		{
-			var errorTopic = "/" + DeviceName + "/Error";
-			Client.Publish(errorTopic, Encoding.UTF8.GetBytes(""));
-		}
+        public void PublishError (string error)
+        {
+            Console.WriteLine ("Publishing error: " + error);
+            var errorTopic = "/" + DeviceName + "/Error";
+            Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
+            PublishStatus (1, "Failed");
+        }
 
-		public void PublishStatus(int status, string message)
-		{
-			PublishStatus(status);
-			PublishStatusMessage(message);
-		}
+        public void ClearErrorMessage ()
+        {
+            var errorTopic = "/" + DeviceName + "/Error";
+            Client.Publish (errorTopic, Encoding.UTF8.GetBytes (""));
+        }
 
-		public void PublishStatus(int status)
-		{
-			var statusTopic = "/" + DeviceName + "/Status";
-			Client.Publish(
-				statusTopic,
-				Encoding.UTF8.GetBytes(status.ToString()),
-				MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE, // QoS level
-				true);
-		}
+        public void PublishStatus (int status, string message)
+        {
+            PublishStatus (status);
+            PublishStatusMessage (message);
+        }
 
-		public void PublishStatusMessage(string message)
-		{
-			Console.WriteLine("Publishing status message: " + message);
-			var statusMessageTopic = "/" + DeviceName + "/StatusMessage";
-			Client.Publish(statusMessageTopic, Encoding.UTF8.GetBytes(message),
-				MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
-				true);
-		}
+        public void PublishStatus (int status)
+        {
+            var statusTopic = "/" + DeviceName + "/Status";
+            Client.Publish (
+                statusTopic,
+                Encoding.UTF8.GetBytes (status.ToString ()),
+                MqttMsgBase.QOS_LEVEL_AT_LEAST_ONCE, // QoS level
+                true);
+        }
 
-		public void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
-		{
-			var topic = e.Topic;
+        public void PublishStatusMessage (string message)
+        {
+            Console.WriteLine ("Publishing status message: " + message);
+            var statusMessageTopic = "/" + DeviceName + "/StatusMessage";
+            Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message),
+                MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+                true);
+        }
 
-			var value = System.Text.Encoding.Default.GetString(e.Message);
+        public void client_MqttMsgPublishReceived (object sender, MqttMsgPublishEventArgs e)
+        {
+            var topic = e.Topic;
 
-			var key = GetTopicKey(topic);
+            var value = System.Text.Encoding.Default.GetString (e.Message);
 
-			DataEntry[key] = value;
+            var key = GetTopicKey (topic);
 
-			if (key == "StatusMessage")
-				ExistingStatusMessage = value;
+            DataEntry [key] = value;
 
-			if (key == "Time" && !IsDuplicateEntry(DataEntry))
-			{
-				Data.Add(DataEntry);
-				DataEntry = new Dictionary<string, string>();
-			}
-		}
+            if (key == "StatusMessage")
+                ExistingStatusMessage = value;
 
-		public bool IsDuplicateEntry(Dictionary<string, string> dataEntry)
-		{
-			foreach (var entry in Data)
-			{
-				if (entry["Time"] == dataEntry["Time"])
-					return true;
-			}
+            if (key == "Time" && !IsDuplicateEntry (DataEntry)) {
+                Data.Add (DataEntry);
+                DataEntry = new Dictionary<string, string> ();
+            }
+        }
 
-			return false;
-		}
+        public bool IsDuplicateEntry (Dictionary<string, string> dataEntry)
+        {
+            foreach (var entry in Data) {
+                if (entry ["Time"] == dataEntry ["Time"])
+                    return true;
+            }
 
-		public void PrintDataEntry(Dictionary<string, string> dataEntry)
-		{
-			if (dataEntry != null)
-			{
-				Console.WriteLine("");
-				Console.WriteLine("----- MQTT Data Start");
-				foreach (var key in dataEntry.Keys)
-				{
-					Console.Write(key + ":" + dataEntry[key] + ";");
-				}
-				Console.WriteLine(";");
-				Console.WriteLine("----- MQTT Data End");
-				Console.WriteLine("");
-			}
-		}
+            return false;
+        }
 
-		public string GetTopicKey(string topic)
-		{
-			var parts = topic.Split('/');
-			var key = parts[2];
+        public void ConsoleWriteDataEntry (Dictionary<string, string> dataEntry)
+        {
+            Console.Write ("$ ");
+            if (dataEntry != null) {
+                foreach (var key in dataEntry.Keys) {
+                    Console.Write (key + ":" + dataEntry [key] + ";");
+                }
+                Console.WriteLine (";");
+            }
+        }
 
-			return key;
-		}
+        public string GetTopicKey (string topic)
+        {
+            var parts = topic.Split ('/');
+            var key = parts [2];
 
-		public void ResetData()
-		{
-			Data = new List<Dictionary<string, string>>();
-		}
-	}
+            return key;
+        }
+
+        public void ResetData ()
+        {
+            Data = new List<Dictionary<string, string>> ();
+        }
+    }
 }

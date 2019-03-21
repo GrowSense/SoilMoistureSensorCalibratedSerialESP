@@ -1,61 +1,62 @@
 ﻿using System;
 using NUnit.Framework;
+
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-	public class MqttOutputTestHelper : GreenSenseMqttHardwareTestHelper
-	{
-		public int ReadInterval = 1;
-		public int SimulatedSoilMoistureSensorValue = -1;
+    public class MqttOutputTestHelper : GreenSenseMqttHardwareTestHelper
+    {
+        public int ReadInterval = 1;
+        public int SimulatedSoilMoistureSensorValue = -1;
 
-		public void TestMqttOutput()
-		{
-			WriteTitleText("Starting MQTT output test");
+        public void TestMqttOutput ()
+        {
+            WriteTitleText ("Starting MQTT output test");
 
-			Console.WriteLine("Read interval: " + ReadInterval);
-			Console.WriteLine("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
+            Console.WriteLine ("Read interval: " + ReadInterval);
+            Console.WriteLine ("Soil moisture sensor value: " + SimulatedSoilMoistureSensorValue);
 
-			ConnectDevices(SimulatedSoilMoistureSensorValue > -1);
+            ConnectDevices (SimulatedSoilMoistureSensorValue > -1);
 
-			EnableMqtt();
+            EnableMqtt ();
 
-			SetDeviceReadInterval(ReadInterval);
+            SetDeviceReadInterval (ReadInterval);
 
-			if (SimulatedSoilMoistureSensorValue > -1)
-				SimulateSoilMoisture(SimulatedSoilMoistureSensorValue);
+            if (SimulatedSoilMoistureSensorValue > -1)
+                SimulateSoilMoisture (SimulatedSoilMoistureSensorValue);
 
-			Console.WriteLine("Waiting for MQTT data...");
+            Console.WriteLine ("Waiting for MQTT data...");
 
-			var numberOfEntriesToWaitFor = 5; // TODO: See if this can be reduced
+            var numberOfEntriesToWaitFor = 5; // TODO: See if this can be reduced
 
-			Mqtt.WaitForData(numberOfEntriesToWaitFor);
+            Mqtt.WaitForData (numberOfEntriesToWaitFor);
 
-			Assert.AreEqual(numberOfEntriesToWaitFor, Mqtt.Data.Count, "Incorrect number of entries returned.");
+            Assert.AreEqual (numberOfEntriesToWaitFor, Mqtt.Data.Count, "Incorrect number of entries returned.");
 
-			var latestEntry = Mqtt.Data[Mqtt.Data.Count - 1];
+            var latestEntry = Mqtt.Data [Mqtt.Data.Count - 1];
 
-			Assert.IsNotNull(latestEntry, "The latest MQTT entry is null.");
+            Assert.IsNotNull (latestEntry, "The latest MQTT entry is null.");
 
-			Mqtt.PrintDataEntry(latestEntry);
+            Mqtt.ConsoleWriteDataEntry (latestEntry);
 
-			Assert.IsTrue(latestEntry.ContainsKey("C"), "The latest MQTT entry doesn't contain a 'C' key/value.");
+            Assert.IsTrue (latestEntry.ContainsKey ("C"), "The latest MQTT entry doesn't contain a 'C' key/value.");
 
-			var valueString = latestEntry["C"];
+            var valueString = latestEntry ["C"];
 
-			Console.WriteLine("Calibrated value string: \"" + valueString + "\"");
+            Console.WriteLine ("Calibrated value string: \"" + valueString + "\"");
 
-			var containsWhitespace = valueString.Trim().Length != valueString.Length;
+            var containsWhitespace = valueString.Trim ().Length != valueString.Length;
 
-			Assert.IsFalse(containsWhitespace, "The calibrated value contains whitespace: \"" + valueString + "\"");
+            Assert.IsFalse (containsWhitespace, "The calibrated value contains whitespace: \"" + valueString + "\"");
 
-			var isDecimal = valueString.Contains(".");
+            var isDecimal = valueString.Contains (".");
 
-			Assert.IsFalse(isDecimal, "The calibrated value contains a decimal point when it shouldn't.");
+            Assert.IsFalse (isDecimal, "The calibrated value contains a decimal point when it shouldn't.");
 
-			Console.WriteLine("MQTT calibrated value string: " + valueString);
+            Console.WriteLine ("MQTT calibrated value string: " + valueString);
 
-			var value = Convert.ToInt32(valueString);
+            var value = Convert.ToInt32 (valueString);
 
-			AssertIsWithinRange("MQTT calibrated soil moisture", SimulatedSoilMoistureSensorValue, value, CalibratedValueMarginOfError);
-		}
-	}
+            AssertIsWithinRange ("MQTT calibrated soil moisture", SimulatedSoilMoistureSensorValue, value, CalibratedValueMarginOfError);
+        }
+    }
 }

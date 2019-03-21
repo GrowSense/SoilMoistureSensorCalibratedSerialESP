@@ -16,4 +16,5 @@ if [ "$DEVICE_NAME" ]; then
   echo "Finished setting MQTT device name"
 else
   echo "Please provide device name as an argument"
+  exit 1
 fi

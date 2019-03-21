@@ -1,12 +1,14 @@
 pipeline {
     agent any
-    triggers {
-       pollSCM('*/10 * * * *')
-    }
     options {
         disableConcurrentBuilds();
     }
     stages {
+        stage('CleanWS') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
@@ -17,7 +19,6 @@ pipeline {
                 sh 'git checkout $BRANCH_NAME'
                 sh 'git pull origin $BRANCH_NAME'
                 shHide( 'sh set-wifi-credentials.sh ${WIFI_NAME} ${WIFI_PASSWORD}' )
-                sh 'sh set-mqtt-device-name.sh ${MONITOR_ESP_DEVICE_NAME}'
                 shHide( 'sh set-mqtt-credentials.sh ${MQTT_HOST} ${MQTT_USERNAME} ${MQTT_PASSWORD}' )
                 sh 'echo "Device Name: ${MONITOR_ESP_DEVICE_NAME}"'
                 sh 'echo "Device Port: ${MONITOR_ESP_PORT}"'
@@ -49,23 +50,30 @@ pipeline {
             steps {
                 sh 'sh inject-security-settings.sh'
             }
-        }                
+        }
+        stage('Generate Device Name') {
+            when { expression { !shouldSkipBuild() } }
+            steps {
+                sh 'bash generate-device-name.sh'
+                sh 'sh inject-device-name.sh'
+            }
+        }
         stage('Build') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh build-all.sh'
+                sh 'sh build-tests.sh'
             }
         }
         stage('Upload') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'sh upload.sh'
+                sh 'sh upload.sh ${MONITOR_ESP_PORT}'
             }
         }
         stage('Upload simulator') {
             when { expression { !shouldSkipBuild() } }
             steps {
-                sh 'echo "Skipping simulator upload to speed up test." #sh upload-simulator.sh'
+                sh 'sh upload-simulator.sh ${MONITOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Test') {
@@ -128,6 +136,13 @@ def shHide(cmd) {
 }
 
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  
  
