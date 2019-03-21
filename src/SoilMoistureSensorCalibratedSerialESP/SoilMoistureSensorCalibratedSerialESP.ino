@@ -25,7 +25,7 @@ NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 #define SERIAL_MODE_CSV 3
 #define SERIAL_MODE_QUERYSTRING 4
 
-#define VERSION "1-0-0-0"
+#define VERSION "1-0-0-1"
 
 int serialMode = SERIAL_MODE_CSV;
 
@@ -47,7 +47,7 @@ PubSubClient client(espClient);
 void setup()
 {
   
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   EEPROM.begin(512);
   

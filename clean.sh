@@ -1,4 +1,3 @@
-# platformio clean command disabled to reduce compile time
-#pio run --target clean
+sh clean-settings.sh && \
+sh inject-version.sh "1-0-0-1"
 
-sh clean-settings.sh
