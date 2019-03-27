@@ -74,7 +74,7 @@ void setupWiFi()
 {
   WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
    
-  Serial.print("WiFi Network:");
+  Serial.print("WiFi Network: ");
   Serial.println(WIFI_NAME);
   Serial.print("Connecting to WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
