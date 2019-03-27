@@ -229,6 +229,19 @@ void loopWiFi()
   client.loop();
 }
 
+void serialPrintDeviceInfo()
+{
+  Serial.println("");
+  Serial.println("Family: GreenSense");
+  Serial.println("Group: monitor");
+  Serial.println("Project: SoilMoistureSensorCalibratedSerialESP");
+  Serial.print("Board: ");
+  Serial.println(BOARD_TYPE);
+  Serial.print("Version: ");
+  Serial.println(VERSION);
+  Serial.println("");
+}
+
 /* Commands */
 void checkCommand()
 {
@@ -257,6 +270,9 @@ void handleCommand(char* msg)
 
   switch (letter)
   {
+    case '#':
+      serialPrintDeviceInfo();
+      break;
     case 'D':
       setDrySoilMoistureCalibrationValue(msg);
       break;
