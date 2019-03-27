@@ -32,9 +32,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             Mqtt.Data.Clear ();
 
-            Console.WriteLine ("Skipping some entries...");
+            Console.WriteLine ("Skipping some data...");
 
-            Mqtt.WaitUntilData (4);
+            Mqtt.WaitUntilData (1);
 
             Console.WriteLine ("Waiting for the next data entry...");
 
