@@ -37,7 +37,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_PORT 1883
 #define MQTT_USERNAME "username"
 #define MQTT_PASSWORD "password"
-#define MQTT_DEVICE_NAME "wifiMonitor1"
+#define MQTT_DEVICE_NAME "wiFiMonitor1"
 
 int totalSubscribeTopics = 4;
 String subscribeTopics[] = {"D", "W", "I", "F"};
@@ -74,7 +74,9 @@ void setupWiFi()
 {
   WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
    
-  Serial.print("Connecting to WiFi..");
+  Serial.print("WiFi Network: ");
+  Serial.println(WIFI_NAME);
+  Serial.print("Connecting to WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
     delay(250);
     Serial.print(".");
@@ -229,6 +231,19 @@ void loopWiFi()
   client.loop();
 }
 
+void serialPrintDeviceInfo()
+{
+  Serial.println("");
+  Serial.println("Family: GreenSense");
+  Serial.println("Group: monitor");
+  Serial.println("Project: SoilMoistureSensorCalibratedSerialESP");
+  Serial.print("Board: ");
+  Serial.println(BOARD_TYPE);
+  Serial.print("Version: ");
+  Serial.println(VERSION);
+  Serial.println("");
+}
+
 /* Commands */
 void checkCommand()
 {
@@ -257,6 +272,9 @@ void handleCommand(char* msg)
 
   switch (letter)
   {
+    case '#':
+      serialPrintDeviceInfo();
+      break;
     case 'D':
       setDrySoilMoistureCalibrationValue(msg);
       break;

@@ -28,9 +28,13 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             AssertIsWithinRange ("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
 
-            Console.WriteLine ("Skipping next data entries...");
+            Console.WriteLine ("Clearing out of date data...");
 
-            Mqtt.WaitUntilData (1);
+            Mqtt.Data.Clear ();
+
+            Console.WriteLine ("Skipping some data...");
+
+            Mqtt.WaitUntilData (2);
 
             Console.WriteLine ("Waiting for the next data entry...");
 
