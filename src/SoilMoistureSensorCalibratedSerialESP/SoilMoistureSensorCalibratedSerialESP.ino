@@ -52,14 +52,8 @@ void setup()
   EEPROM.begin(512);
   
   Serial.println("Starting WiFi soil moisture monitor");
-  Serial.println("");
-  Serial.println("Family: GreenSense");
-  Serial.println("Group: irrigator");
-  Serial.println("Project: SoilMoistureSensorCalibratedPumpESP");
-  Serial.print("Board: ");
-  Serial.println(BOARD_TYPE);
-  Serial.print("Version: ");
-  Serial.println(VERSION);
+  
+  serialPrintDeviceInfo();
 
   setupWiFi();
 
