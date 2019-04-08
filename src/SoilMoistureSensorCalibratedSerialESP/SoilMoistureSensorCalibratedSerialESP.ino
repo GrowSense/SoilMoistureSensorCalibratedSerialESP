@@ -314,7 +314,7 @@ void mqttPublishData()
     publishMqttValue("I", soilMoistureSensorReadingIntervalInSeconds);
     publishMqttValue("D", drySoilMoistureCalibrationValue);
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
-    publishMqttValue("Z", VERSION);
+    publishMqttValue("V", VERSION);
     publishMqttValue("Time", timeClient.getFormattedTime());
     publishMqttPush(soilMoistureLevelCalibrated);
   }
