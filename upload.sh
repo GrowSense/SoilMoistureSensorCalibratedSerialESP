@@ -12,3 +12,5 @@ fi
 echo "Port: $PORT_NAME"
 
 pio run -s --target upload --environment=esp12e --upload-port=$PORT_NAME
+
+echo "Upload complete."

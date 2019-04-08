@@ -402,7 +402,7 @@ void serialPrintData()
       Serial.print("W:");
       Serial.print(wetSoilMoistureCalibrationValue);
       Serial.print(";");
-      Serial.print("Z:");
+      Serial.print("V:");
       Serial.print(VERSION);
       Serial.print(";;");
       Serial.println();
