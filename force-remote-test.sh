@@ -5,6 +5,8 @@ BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 if [ "$BRANCH" = "dev" ]
 then
   echo "Forcing remote test"
+  
+  sh clean.sh
 
   echo " " >> Jenkinsfile.hw
   
