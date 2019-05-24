@@ -11,11 +11,8 @@ echo "Graduating master branch to lts branch"
 # Fetch other branches
 git fetch origin --quiet && \
 
-# Pull the master branch
-git pull origin master
-
-# Merge lts branch into the master branch
-git merge lts --quiet && \
+# Pull the lts branch into the master branch
+git pull origin lts --quiet && \
 
 # Checkout the lts branch
 git checkout lts && \
