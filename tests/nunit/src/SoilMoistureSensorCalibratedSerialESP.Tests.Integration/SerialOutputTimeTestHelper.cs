@@ -18,8 +18,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             ReadFromDeviceAndOutputToConsole ();
 
-            // Skip some data
-            WaitForData (4);
+            // Skip some data before checking the output time
+            WaitForData (5);
 
             // Get the time until the next data line
             var secondsBetweenDataLines = WaitUntilDataLine ();
