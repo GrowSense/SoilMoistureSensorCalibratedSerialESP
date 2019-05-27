@@ -181,7 +181,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
   String msgString = subTopic + valueString;
-  Serial.println("Msg");
+  Serial.print("MQTT Message: ");
   Serial.println(msgString);
 
   char msg[msgString.length()+1];

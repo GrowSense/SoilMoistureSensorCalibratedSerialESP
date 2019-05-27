@@ -366,6 +366,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
                 }
             }
 
+            var waitDuration = DateTime.Now.Subtract (Timeout.TimeoutStart);
+
+            Console.WriteLine ("  Wait duration: " + waitDuration.ToString ());
+
             return dataLine;
         }
 
