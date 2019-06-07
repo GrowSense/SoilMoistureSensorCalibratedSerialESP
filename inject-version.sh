@@ -1,3 +1,4 @@
+echo ""
 echo "Injecting version into sketch..."
 
 VERSION_ARGUMENT=$1
@@ -11,8 +12,14 @@ else
   FULL_VERSION=$VERSION_ARGUMENT
 fi
 
-echo "Version: $FULL_VERSION"
+echo "  Version: $FULL_VERSION"
 
 SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/SoilMoistureSensorCalibratedSerialESP.ino"
 
+echo "  Source file:"
+echo "    $SOURCE_FILE"
+
 sed -i "s/#define VERSION .*/#define VERSION \"$FULL_VERSION\"/" $SOURCE_FILE
+
+echo "Finished injecting version into sketch."
+echo ""
