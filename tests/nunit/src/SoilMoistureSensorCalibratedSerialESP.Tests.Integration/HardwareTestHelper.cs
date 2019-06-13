@@ -163,7 +163,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             Thread.Sleep (DelayAfterConnectingToHardware);
 
-            WaitForText (DataPrefix);
+            WaitForText ("Connected to MQTT");
 
             ReadFromDeviceAndOutputToConsole ();
         }

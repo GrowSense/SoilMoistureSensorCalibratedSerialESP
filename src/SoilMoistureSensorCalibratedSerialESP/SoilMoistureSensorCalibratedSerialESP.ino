@@ -72,6 +72,8 @@ void setupWiFi()
     Serial.println(WIFI_NAME);
     
     WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
+
+    delay(1000);
      
     Serial.println();
 
@@ -81,8 +83,6 @@ void setupWiFi()
 
       setupMqtt();
     }
-    else
-      Serial.println("Failed to connect to WiFi");
   }
 }
 
