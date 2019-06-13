@@ -66,23 +66,24 @@ void setup()
 
 void setupWiFi()
 {
-  WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
-   
-  Serial.print("WiFi Network: ");
-  Serial.println(WIFI_NAME);
-  Serial.print("Connecting to WiFi...");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(250);
-    Serial.print(".");
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    Serial.print("Connecting to WiFi network: ");
+    Serial.println(WIFI_NAME);
+    
+    WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
+     
+    Serial.println();
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      Serial.println("Connected to WiFi");
+
+      setupMqtt();
+    }
+    else
+      Serial.println("Failed to connect to WiFi");
   }
-
-  Serial.println();
-
-  Serial.println("Connected to the WiFi network");
-
-  setupMqtt();
-  
-  Serial.println("Setup complete!");
 }
 
 void setupMqtt()
@@ -91,36 +92,31 @@ void setupMqtt()
 
   client.setCallback(callback);
 
-  while (!client.connected()) {
+  if (WiFi.status() == WL_CONNECTED && !client.connected()) {
     Serial.println("Connecting to MQTT...");
-    Serial.print("Host: ");
+    Serial.print("MQTT Host: ");
     Serial.println(MQTT_HOST);
-    Serial.print("Port: ");
+    Serial.print("MQTT Port: ");
     Serial.println(MQTT_PORT);
-    Serial.print("Device name: ");
+    Serial.print("Device Name: ");
     Serial.println(MQTT_DEVICE_NAME);
     Serial.print("MQTT Username: ");
     Serial.println(MQTT_USERNAME);
  
     if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
- 
-      Serial.println("connected");  
- 
+      Serial.println("Connected to MQTT");  
+
+      setupMqttSubscriptions();
     } else {
- 
-      Serial.print("failed with state ");
+      Serial.print("Failed to connect to MQTT: ");
       Serial.println(client.state());
-      delay(2000);
- 
     }
   }
-
-  setupMqttSubscriptions();
 }
 
 void setupMqttSubscriptions()
 {
-  Serial.println("Setting up subscriptions...");
+  Serial.println("Setting up MQTT subscriptions...");
 
   String baseTopic = "/";
   baseTopic += MQTT_DEVICE_NAME;
@@ -199,6 +195,12 @@ void loop()
   loopNumber++;
 
   serialPrintLoopHeader();
+  
+  // WiFi setup is attempted each loop until connected, then it's skipped
+  setupWiFi();
+  
+  // MQTT setup is attempted each loop until connected, then it's skipped
+  setupMqtt();
   
   timeClient.update();
     
