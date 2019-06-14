@@ -40,7 +40,7 @@ int serialMode = SERIAL_MODE_CSV;
 #define MQTT_DEVICE_NAME "wiFiMonitor1"
 
 int totalSubscribeTopics = 4;
-String subscribeTopics[] = {"D", "W", "I", "F"};
+String subscribeTopics[] = {"D", "W", "I", "F", "Q"};
 
 WiFiClient espClient;
 PubSubClient client(espClient);
