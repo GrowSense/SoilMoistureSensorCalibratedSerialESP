@@ -45,6 +45,13 @@ String subscribeTopics[] = {"D", "W", "I", "F", "Q"};
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+bool isMqttConnected = false;
+bool isWiFiConnected = false;
+bool isWiFiConnecting = false;
+
+long wifiStartConnectingTime = 0;
+long wifiRetryInterval = 10 * 1000;
+
 void setup()
 {
   Serial.begin(9600);
@@ -66,20 +73,37 @@ void setup()
 
 void setupWiFi()
 {
-  if (WiFi.status() != WL_CONNECTED)
+  if (!isWiFiConnected)
   {
-    Serial.print("Connecting to WiFi network: ");
-    Serial.println(WIFI_NAME);
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
+                                  millis() - wifiRetryInterval > wifiStartConnectingTime;
     
-    WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
-
-    delay(1000);
-     
-    Serial.println();
-
-    if (WiFi.status() == WL_CONNECTED)
+      if (isReconnectRetryTime)
+      {
+        Serial.println("Failed to connect to WiFi. Retrying...");
+      }
+    
+      if (!isWiFiConnecting || isReconnectRetryTime)
+      {
+        Serial.print("Connecting to WiFi network: ");
+        Serial.println(WIFI_NAME);
+        
+        WiFi.begin(WIFI_NAME, WIFI_PASSWORD);
+        
+        wifiStartConnectingTime = millis();
+        
+        isWiFiConnecting = true;
+      }
+    }
+    else
     {
       Serial.println("Connected to WiFi");
+
+      isWiFiConnected = true;
+      
+      timeClient.begin();
 
       setupMqtt();
     }
@@ -88,28 +112,33 @@ void setupWiFi()
 
 void setupMqtt()
 {
-  client.setServer(MQTT_HOST, MQTT_PORT);
+  if (isWiFiConnected && !isMqttConnected)
+  {
+    client.setServer(MQTT_HOST, MQTT_PORT);
 
-  client.setCallback(callback);
+    client.setCallback(callback);
 
-  if (WiFi.status() == WL_CONNECTED && !client.connected()) {
-    Serial.println("Connecting to MQTT...");
-    Serial.print("MQTT Host: ");
-    Serial.println(MQTT_HOST);
-    Serial.print("MQTT Port: ");
-    Serial.println(MQTT_PORT);
-    Serial.print("Device Name: ");
-    Serial.println(MQTT_DEVICE_NAME);
-    Serial.print("MQTT Username: ");
-    Serial.println(MQTT_USERNAME);
- 
-    if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
-      Serial.println("Connected to MQTT");  
+    if (!client.connected()) {
+      Serial.println("Connecting to MQTT...");
+      Serial.print("MQTT Host: ");
+      Serial.println(MQTT_HOST);
+      Serial.print("MQTT Port: ");
+      Serial.println(MQTT_PORT);
+      Serial.print("Device Name: ");
+      Serial.println(MQTT_DEVICE_NAME);
+      Serial.print("MQTT Username: ");
+      Serial.println(MQTT_USERNAME);
+   
+      if (client.connect(MQTT_DEVICE_NAME, MQTT_USERNAME, MQTT_PASSWORD )) {
+        Serial.println("Connected to MQTT");  
 
-      setupMqttSubscriptions();
-    } else {
-      Serial.print("Failed to connect to MQTT: ");
-      Serial.println(client.state());
+        isMqttConnected = true;
+
+        setupMqttSubscriptions();
+      } else {
+        Serial.print("Failed to connect to MQTT: ");
+        Serial.println(client.state());
+      }
     }
   }
 }
@@ -224,7 +253,8 @@ void loop()
 
 void loopWiFi()
 {
-  client.loop();
+  if (isWiFiConnected)
+    client.loop();
 }
 
 void serialPrintDeviceInfo()
@@ -307,7 +337,7 @@ void restoreDefaultSettings()
 /* MQTT Publish */
 void mqttPublishData()
 {
-  if (soilMoistureSensorReadingHasBeenTaken)
+  if (isMqttConnected && soilMoistureSensorReadingHasBeenTaken)
   {
     if (isDebugMode)
       Serial.println("Publishing");

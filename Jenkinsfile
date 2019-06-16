@@ -4,7 +4,7 @@ pipeline {
         disableConcurrentBuilds();
     }
     stages {
-        stage('CleanWS') {
+        stage('CleanWSStart') {
             steps {
                 deleteDir()
             }
@@ -44,6 +44,11 @@ pipeline {
                 sh 'sh build-all.sh'
             }
         }
+        stage('CleanWSEnd') {
+            steps {
+                deleteDir()
+            }
+        }
     }
     post {
         success() {
@@ -55,6 +60,7 @@ pipeline {
             )
         }
         failure() {
+          deleteDir()
           emailext (
               subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
               body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>

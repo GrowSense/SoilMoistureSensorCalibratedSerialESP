@@ -2,7 +2,7 @@
 
 BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
-if [ "$BRANCH" = "master" ]
+if [ "$BRANCH" = "lts" ]
 then
   echo "Rolling back the master branch to previous revision"
 
