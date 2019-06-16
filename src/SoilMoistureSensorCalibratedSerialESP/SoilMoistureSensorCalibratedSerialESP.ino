@@ -80,7 +80,7 @@ void setupWiFi()
       bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
                                   millis() - wifiRetryInterval > wifiStartConnectingTime;
     
-      if (isReconnectRetryTime)
+      if (isWiFiConnecting && isReconnectRetryTime)
       {
         Serial.println("Failed to connect to WiFi. Retrying...");
       }
