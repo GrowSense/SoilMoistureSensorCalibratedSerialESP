@@ -67,8 +67,6 @@ void setup()
   setupSoilMoistureSensor();
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
-  
-  timeClient.begin();
 }
 
 void setupWiFi()
@@ -78,7 +76,7 @@ void setupWiFi()
     if (WiFi.status() != WL_CONNECTED)
     {
       bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
-                                  millis() - wifiRetryInterval > wifiStartConnectingTime;
+                                  wifiStartConnectingTime + wifiRetryInterval < millis();
     
       if (isWiFiConnecting && isReconnectRetryTime)
       {
@@ -136,7 +134,7 @@ void setupMqtt()
 
         setupMqttSubscriptions();
       } else {
-        Serial.print("Failed to connect to MQTT: ");
+        Serial.print("Failed to connect to MQTT. State: ");
         Serial.println(client.state());
       }
     }
