@@ -1,27 +1,18 @@
 ﻿using System;
+
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-	public class ReadIntervalCommandTestHelper : GreenSenseHardwareTestHelper
-	{
-		public int ReadInterval = 1;
+    public class ReadIntervalCommandTestHelper : SerialCommandTestHelper
+    {
+        public int ReadingInterval = 3;
 
-		public ReadIntervalCommandTestHelper()
-		{
-		}
+        public void TestSetReadIntervalCommand ()
+        {
+            Letter = "I";
+            Value = ReadingInterval;
+            Label = "reading interval";
 
-		public void TestSetReadIntervalCommand()
-		{
-			WriteTitleText("Starting read interval command test");
-
-			Console.WriteLine("Read interval: " + ReadInterval);
-
-			ConnectDevices(false);
-
-			SetDeviceReadInterval(ReadInterval);
-
-			var dataEntry = WaitForDataEntry();
-
-			AssertDataValueEquals(dataEntry, "I", ReadInterval);
-		}
-	}
+            TestCommand ();
+        }
+    }
 }

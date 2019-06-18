@@ -331,7 +331,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
                 output += ReadLineFromDevice ();
 
                 if (output.Contains (text)) {
-                    Console.WriteLine ("  Found text: " + text);
+                    //Console.WriteLine ("  Found text: " + text);
 
                     containsText = true;
                 } else
@@ -531,13 +531,18 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public bool IsWithinRange (double expectedValue, double actualValue, double allowableMarginOfError)
         {
+            Console.WriteLine ("Checking value is within range...");
+            Console.WriteLine ("  Expected value: " + expectedValue);
+            Console.WriteLine ("  Actual value: " + actualValue);
+            Console.WriteLine ("  Allowable margin of error: " + allowableMarginOfError);
+
             var minAllowableValue = expectedValue - allowableMarginOfError;
             if (minAllowableValue < 0)
                 minAllowableValue = 0;
             var maxAllowableValue = expectedValue + allowableMarginOfError;
 
-            Console.WriteLine ("Checking value '" + actualValue + "' is within range of '" + expectedValue + "'");
-            Console.WriteLine ("  Minimum of '" + minAllowableValue + "' and maximum of '" + maxAllowableValue + "', with '" + allowableMarginOfError + "' as the allowable margin of error");
+            Console.WriteLine ("  Max allowable value: " + maxAllowableValue);
+            Console.WriteLine ("  Min allowable value: " + minAllowableValue);
 
             var isWithinRange = actualValue <= maxAllowableValue &&
                                 actualValue >= minAllowableValue;

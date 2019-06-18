@@ -65,14 +65,13 @@
     <Compile Include="MqttOutputTestFixture.cs" />
     <Compile Include="MqttOutputTestHelper.cs" />
     <Compile Include="TimeoutHelper.cs" />
-    <Compile Include="ReadIntervalEEPROMTestFixture.cs" />
-    <Compile Include="ReadIntervalEEPROMTestHelper.cs" />
-    <Compile Include="CalibrationEEPROMTestFixture.cs" />
-    <Compile Include="CalibrationEEPROMTestHelper.cs" />
     <Compile Include="CalibrateCommandTestFixture.cs" />
     <Compile Include="CalibrateCommandTestHelper.cs" />
     <Compile Include="ReadIntervalCommandTestFixture.cs" />
     <Compile Include="ReadIntervalCommandTestHelper.cs" />
+    <Compile Include="CalibrateToCurrentCommandTestFixture.cs" />
+    <Compile Include="CalibrateToCurrentCommandTestHelper.cs" />
+    <Compile Include="SerialCommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
