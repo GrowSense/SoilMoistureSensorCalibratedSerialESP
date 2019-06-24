@@ -10,6 +10,8 @@
 #define soilMoistureSensorPin A0
 #define soilMoistureSensorPowerPin 12
 
+int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
+
 bool soilMoistureSensorIsOn = true;
 long lastSensorOnTime = 0;
 int delayAfterTurningSoilMoistureSensorOn = 3 * 1000;
@@ -312,6 +314,14 @@ void setupCalibrationValues()
   {
     if (isDebugMode)
       Serial.println("EEPROM calibration values have not been set. Using defaults.");
+      
+    if (soilMoistureSensorType == SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE)
+    {
+      Serial.println("Adjusting calibration values for capacitive sensor");
+      drySoilMoistureCalibrationValue = 570;
+      wetSoilMoistureCalibrationValue = 260;
+    }
+    
     
     //setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
     //setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
@@ -321,6 +331,8 @@ void setupCalibrationValues()
 void setDrySoilMoistureCalibrationValue(char* msg)
 {
   int length = strlen(msg);
+  
+  //Serial.println(length);
 
   if (length == 1)
     setDrySoilMoistureCalibrationValueToCurrent();
@@ -352,9 +364,7 @@ void setDrySoilMoistureCalibrationValue(int newValue)
 
   drySoilMoistureCalibrationValue = newValue;
   
-  EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue); // Must divide by 4 to make it fit in eeprom
-
-  EEPROM.commit();
+  EEPROMWriteLong(drySoilMoistureCalibrationValueAddress, newValue);
 
   setEEPROMIsCalibratedFlag();
 }
@@ -363,6 +373,8 @@ void setWetSoilMoistureCalibrationValue(char* msg)
 {
   int length = strlen(msg);
 
+  //Serial.println(length);
+  
   if (length == 1)
     setWetSoilMoistureCalibrationValueToCurrent();
   else
@@ -495,6 +507,14 @@ void restoreDefaultCalibrationSettings()
 
   drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : ANALOG_MAX);
   wetSoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? ANALOG_MAX : 0);
+  
+  // TODO: Remove or reimplement. Disabled so it doesn't mess with tests.
+  /*if (soilMoistureSensorType == SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE)
+  {
+    Serial.println("Adjusting calibration values for capacitive sensor");
+    drySoilMoistureCalibrationValue = 700;
+    wetSoilMoistureCalibrationValue = 380;
+  }*/
 
   setDrySoilMoistureCalibrationValue(drySoilMoistureCalibrationValue);
   setWetSoilMoistureCalibrationValue(wetSoilMoistureCalibrationValue);
