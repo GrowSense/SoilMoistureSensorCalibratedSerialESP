@@ -22,7 +22,7 @@
 String mqttHost = "garden";
 String mqttUsername = "username";
 String mqttPassword = "password";
-String mqttDeviceName "wiFiMonitor1";
+String mqttDeviceName = "wiFiMonitor1";
 long mqttPort = 1883;
 
 int totalSubscribeTopics = 5;
