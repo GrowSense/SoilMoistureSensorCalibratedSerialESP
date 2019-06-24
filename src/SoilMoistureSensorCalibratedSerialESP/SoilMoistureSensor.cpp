@@ -1,9 +1,10 @@
 #include <Arduino.h>
 #include <EEPROM.h>
 
-#include <duinocom.h>
+#include <duinocom2.h>
 
 #include "Common.h"
+#include "EEPROMHelper.h"
 #include "SoilMoistureSensor.h"
 
 #define soilMoistureSensorPin A0

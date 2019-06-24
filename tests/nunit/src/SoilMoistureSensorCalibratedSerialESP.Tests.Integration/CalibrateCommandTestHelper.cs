@@ -9,7 +9,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void TestCalibrateCommand ()
         {
-            Value = RawSoilMoistureValue;
+            Value = RawSoilMoistureValue.ToString ();
             TestCommand ();
         }
     }

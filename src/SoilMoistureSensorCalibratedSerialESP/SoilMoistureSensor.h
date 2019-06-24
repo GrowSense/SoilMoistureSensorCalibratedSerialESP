@@ -68,4 +68,3 @@ void restoreDefaultSoilMoistureSensorSettings();
 void restoreDefaultSoilMoistureSensorReadingIntervalSettings();
 void restoreDefaultCalibrationSettings();
 #endif
-/* SOILMOISTURESENSOR_H_ */

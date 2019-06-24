@@ -19,6 +19,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public bool CalibrationIsReversedByDefault = true;
 
+        public bool RequiresResetSettings = true;
+
         public GreenSenseHardwareTestHelper ()
         {
         }
@@ -47,17 +49,18 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             Console.WriteLine ("Preparing device for test...");
 
-            ResetDeviceSettings ();
+            if (RequiresResetSettings) {
+                ResetDeviceSettings ();
 
-            SetDeviceReadInterval (1);
+                SetDeviceReadInterval (1);
 
-            SetDryCalibrationValue (AnalogPinMaxValue);
+                SetDryCalibrationValue (AnalogPinMaxValue);
 
-            SetWetCalibrationValue (0);
+                SetWetCalibrationValue (0);
 
-            if (CalibrationIsReversedByDefault)
-                ReverseDeviceCalibration ();
-
+                if (CalibrationIsReversedByDefault)
+                    ReverseDeviceCalibration ();
+            }
             if (consoleWriteDeviceOutput)
                 ReadFromDeviceAndOutputToConsole ();
         }

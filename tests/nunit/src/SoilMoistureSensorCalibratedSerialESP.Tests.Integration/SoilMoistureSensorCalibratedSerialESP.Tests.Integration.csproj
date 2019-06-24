@@ -71,6 +71,8 @@
     <Compile Include="ReadIntervalCommandTestHelper.cs" />
     <Compile Include="CalibrateToCurrentCommandTestFixture.cs" />
     <Compile Include="CalibrateToCurrentCommandTestHelper.cs" />
+    <Compile Include="MqttSettingsCommandTestFixture.cs" />
+    <Compile Include="WiFiSettingsCommandTestFixture.cs" />
     <Compile Include="SerialCommandTestHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

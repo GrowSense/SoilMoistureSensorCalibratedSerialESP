@@ -15,16 +15,23 @@ echo "  MQTT Username: $MQTT_USERNAME"
 echo "  MQTT Password: [hidden]"
 echo "  MQTT Port: $MQTT_PORT"
 
-SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/SoilMoistureSensorCalibratedSerialESP.ino"
+WIFI_SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/WiFi.cpp"
 
-echo "  Source file:"
-echo "    $SOURCE_FILE"
+echo "  WiFi source file:"
+echo "    $WIFI_SOURCE_FILE"
 
-sed -i "s/#define WIFI_NAME .*/#define WIFI_NAME \"$WIFI_NAME\"/" $SOURCE_FILE
-sed -i "s/#define WIFI_PASSWORD .*/#define WIFI_PASSWORD \"$WIFI_PASSWORD\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_HOST .*/#define MQTT_HOST \"$MQTT_HOST\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_USERNAME .*/#define MQTT_USERNAME \"$MQTT_USERNAME\"/" $SOURCE_FILE
-sed -i "s/#define MQTT_PASSWORD .*/#define MQTT_PASSWORD \"$MQTT_PASSWORD\"/" $SOURCE_FILE
+sed -i "s/String wifiNetwork = .*/String wifiNetwork = \"$WIFI_NAME\";/" $WIFI_SOURCE_FILE
+sed -i "s/String wifiPassword = .*/String wifiPassword = \"$WIFI_PASSWORD\";/" $WIFI_SOURCE_FILE
+
+MQTT_SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/MQTT.cpp"
+
+echo "  MQTT Source file:"
+echo "    $MQTT_SOURCE_FILE"
+
+sed -i "s/String mqttHost .*/String mqttHost = \"$MQTT_HOST\";/" $MQTT_SOURCE_FILE
+sed -i "s/String mqttUsername .*/String mqttUsername = \"$MQTT_USERNAME\";/" $MQTT_SOURCE_FILE
+sed -i "s/String mqttPassword .*/String mqttPassword = \"$MQTT_PASSWORD\";/" $MQTT_SOURCE_FILE
+sed -i "s/long mqttPort .*/long mqttPort = $MQTT_PORT;/" $MQTT_SOURCE_FILE
 
 echo "Finished injecting security settings into sketch"
 echo ""

@@ -8,8 +8,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void TestSetReadIntervalCommand ()
         {
-            Letter = "I";
-            Value = ReadingInterval;
+            Key = "I";
+            Value = ReadingInterval.ToString ();
             Label = "reading interval";
 
             TestCommand ();

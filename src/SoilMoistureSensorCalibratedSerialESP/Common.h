@@ -1,6 +1,9 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#define VERSION "1-0-0-157"
+#define BOARD_TYPE "esp"
+
 extern const int ANALOG_MAX;
 
 extern long lastSerialOutputTime; // Milliseconds
@@ -13,13 +16,10 @@ extern int loopNumber;
 void serialPrintLoopHeader();
 void serialPrintLoopFooter();
 
-void EEPROMWriteLong(int address, long value);
-long EEPROMReadLong(int address);
-
 long secondsToMilliseconds(int seconds);
 float millisecondsToSecondsWithDecimal(int milliseconds);
 
-void forceSerialOutput();
+long readLong(char* text, int startPosition, int digitCount);
+int readInt(char* text, int startPosition, int digitCount);
 
 #endif
-/* SOILMOISTURESENSOR_H_ */

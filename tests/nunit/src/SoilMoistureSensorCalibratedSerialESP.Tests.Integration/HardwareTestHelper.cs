@@ -22,7 +22,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public string SimulatorPort;
         public int SimulatorBaudRate = 0;
 
-        public int DelayAfterConnectingToHardware = 1 * 1000;
+        public int DelayAfterConnectingToHardware = 0;
         public int DelayAfterDisconnectingFromHardware = 500;
 
         public string DataPrefix = "D;";
@@ -39,12 +39,15 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public int ResetTriggerPin = 4;
 
-        public string IrrigatorStartText = "Starting WiFi soil moisture monitor";
+        public string DeviceStartText = "Device started...";
+
+        public string TextToWaitForBeforeTest;
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
 
         public HardwareTestHelper ()
         {
+            TextToWaitForBeforeTest = DeviceStartText;
         }
 
         #region Console Output Functions
@@ -98,7 +101,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             Console.WriteLine ("Enabling target hardware device...");
 
-            DeviceClient = new SerialClient (DevicePort, DeviceBaudRate);
+            if (DeviceClient == null) {
+                DeviceClient = new SerialClient (DevicePort, DeviceBaudRate);
+            }
 
             try {
                 DeviceClient.Open ();
@@ -131,7 +136,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             SimulatorIsEnabled = true;
 
-            EnsureSimulatorIsNotResettingDevice ();
+            // Reset the device so it's starting from scratch
+            InitialResetDeviceViaPin ();
 
             Console.WriteLine ("");
         }
@@ -144,7 +150,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void DisconnectDevice ()
         {
-            DeviceClient.Close ();
+            if (DeviceClient != null)
+                DeviceClient.Close ();
         }
 
         public void DisconnectSimulator ()
@@ -159,11 +166,11 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             DisconnectSimulator ();
         }
 
-        public void WaitForDevicesToConnect ()
+        public virtual void WaitForDevicesToConnect ()
         {
             Thread.Sleep (DelayAfterConnectingToHardware);
 
-            WaitForText ("Connected to MQTT");
+            WaitForText (TextToWaitForBeforeTest);
 
             ReadFromDeviceAndOutputToConsole ();
         }
@@ -184,6 +191,18 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         #region Reset Functions
 
+        public virtual void InitialResetDeviceViaPin ()
+        {
+            // Set the reset trigger pin LOW (false) to begin a reset
+            SimulatorClient.DigitalWrite (ResetTriggerPin, false);
+
+            // Give the pin some time at LOW to ensure reset
+            Thread.Sleep (10);
+
+            // Change the reset trigger pin to an INPUT_PULLUP to cancel the reset
+            SimulatorClient.PinMode (ResetTriggerPin, PinMode.INPUT_PULLUP);
+        }
+
         public virtual void ResetDeviceViaPin ()
         {
             // Close the connection to the device
@@ -202,7 +221,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             ConnectDevice ();
 
             // Ensure the irrigator restarted
-            WaitForText (IrrigatorStartText);
+            WaitForText (DeviceStartText);
         }
 
         #endregion
@@ -491,9 +510,14 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void AssertDataValueEquals (Dictionary<string, string> dataEntry, string dataKey, int expectedValue)
         {
+            AssertDataValueEquals (dataEntry, dataKey, expectedValue.ToString ());
+        }
+
+        public void AssertDataValueEquals (Dictionary<string, string> dataEntry, string dataKey, string expectedValue)
+        {
             Assert.IsTrue (dataEntry.ContainsKey (dataKey), "The key '" + dataKey + "' is not found in the data entry.");
 
-            var value = Convert.ToInt32 (dataEntry [dataKey]);
+            var value = dataEntry [dataKey];
 
             Assert.AreEqual (expectedValue, value, "Data value for '" + dataKey + "' key is incorrect: " + value);
 
