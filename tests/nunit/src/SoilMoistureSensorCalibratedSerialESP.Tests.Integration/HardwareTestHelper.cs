@@ -220,7 +220,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             // Re-open the connection to the device
             ConnectDevice ();
 
-            // Ensure the irrigator restarted
+            // Ensure the device restarted
             WaitForText (DeviceStartText);
         }
 
@@ -362,7 +362,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public string WaitForDataLine ()
         {
-            Console.WriteLine ("Waiting for data line");
+            Console.WriteLine ("Waiting for a line of data");
 
             var dataLine = String.Empty;
             var output = String.Empty;

@@ -14,12 +14,12 @@ fi
 
 echo "  Version: $FULL_VERSION"
 
-SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/SoilMoistureSensorCalibratedSerialESP.ino"
+SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/Common.h"
 
 echo "  Source file:"
 echo "    $SOURCE_FILE"
 
-sed -i "s/#define VERSION .*/#define VERSION \"$FULL_VERSION\"/" $SOURCE_FILE
+sed -i "s/#define VERSION .*/#define VERSION \"$FULL_VERSION\"/" $SOURCE_FILE || exit 1
 
 echo "Finished injecting version into sketch."
 echo ""
