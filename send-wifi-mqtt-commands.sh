@@ -26,7 +26,7 @@ echo "  MQTT Host: $MQTT_HOST"
 echo "  MQTT Username: $MQTT_USERNAME"
 echo "  MQTT Password: [hidden]"
 echo "  MQTT Port: $MQTT_PORT"
-if [ $MQTT_DEVICE_NAME]; then
+if [ $MQTT_DEVICE_NAME ]; then
   echo "  MQTT Device name: $MQTT_DEVICE_NAME"
 fi
 echo ""
@@ -48,7 +48,7 @@ echo "    MQTT Password"
 echo "MPass:$MQTT_PASSWORD" >&3
 echo "    MQTT Port"
 echo "MPort:$MQTT_PORT" >&3
-if [ $MQTT_DEVICE_NAME]; then
+if [ $MQTT_DEVICE_NAME ]; then
   echo "    MQTT Device name"
   echo "MDevice:$MQTT_DEVICE_NAME" >&3
 fi
