@@ -358,7 +358,7 @@ void publishMqttValue(char* subTopic, char* value)
   topic += "/";
   topic += subTopic;
 
-  pubSubClient.publish(topic.c_str(), value);
+  pubSubClient.publish(topic.c_str(), value, true);
 
 }
 
@@ -372,7 +372,7 @@ void publishMqttValue(char* subTopic, String value)
   char valueArray[16];
   value.toCharArray(valueArray, 12);
 
-  pubSubClient.publish(topic.c_str(), valueArray);
+  pubSubClient.publish(topic.c_str(), valueArray, true);
 
 }
 
@@ -384,7 +384,7 @@ void publishMqttPush(int soilMoistureValue)
   char valueString[16];
   itoa(soilMoistureValue, valueString, 10);
   
-  pubSubClient.publish(topic.c_str(), valueString);
+  pubSubClient.publish(topic.c_str(), valueString, true);
 
 }
 
