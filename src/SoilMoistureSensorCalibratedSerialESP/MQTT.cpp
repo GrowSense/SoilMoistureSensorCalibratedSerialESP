@@ -35,7 +35,7 @@ bool isMqttConnected = false;
 bool areMqttSettingsLoadedFromEEPROM = false;
 
 long lastMqttConnectionAttemptTime = 0;
-long mqttConnectionAttemptInterval = 30 * 1000;
+long mqttConnectionAttemptInterval = 15 * 1000;
 
 void setupMqtt()
 {
