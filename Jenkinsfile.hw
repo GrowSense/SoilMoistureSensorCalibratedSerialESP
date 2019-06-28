@@ -1,7 +1,7 @@
 pipeline {
     agent any
     options {
-        disableConcurrentBuilds();
+      skipDefaultCheckout true
     }
     stages {
         stage('CleanWSStart') {
@@ -9,11 +9,10 @@ pipeline {
                 deleteDir()
             }
         }
-        stage('Checkout') {
+        stage('Setup') {
             steps {
-                checkout scm
+                shHide( 'git clone --recursive -b $BRANCH_NAME https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git .' )
 
-                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git' )
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'
