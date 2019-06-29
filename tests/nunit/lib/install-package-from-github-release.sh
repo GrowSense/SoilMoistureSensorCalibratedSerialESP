@@ -53,7 +53,9 @@ fi
 if [ ! -f "$PACKAGE_FILE_EXT" ]; then
 
   # Check if the project exists within the GreenSense index
-	[[ $(echo $PWD) =~ "GreenSense/Index" ]] && IS_IN_INDEX=1 || IS_IN_INDEX=0
+  IS_IN_INDEX=0
+	[[ $(echo $PWD) =~ "GreenSense/Index" ]] && IS_IN_INDEX=1 # Standard GreenSense index installation
+	[[ $(echo $PWD) =~ "GreenSense_Index" ]] && IS_IN_INDEX=1 # Jenkins GreenSense index installation
 	
 	if [ "$IS_IN_INDEX" = "1" ]; then
 	  # Get the path to the GreenSense index lib directory
