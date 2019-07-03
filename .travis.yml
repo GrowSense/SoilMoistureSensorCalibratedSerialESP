@@ -1,16 +1,22 @@
-sudo: required
+matrix:
+  include:
+    - language: python
+      python: 2.7
+      before_script:
+        - sh prepare-sketch.sh
+        - sh init-sketch.sh
+      script:
+        - sh increment-version.sh
+        - sh inject-version.sh
+        - sh build-sketch.sh
 
-language: python
+    - language: csharp
+      before_script:
+        - git checkout $TRAVIS_BRANCH
+        - sh prepare-tests.sh
+        - sh init-tests.sh
+      script:
+        - sh increment-version.sh
+        - sh inject-version.sh
+        - sh build-tests.sh
 
-env:
-  - BUILD_TARGET=sketch
-  - BUILD_TARGET=tests
-
-install:
-  - sudo sh prepare-$BUILD_TARGET.sh
-  - sh init-$BUILD_TARGET.sh
-
-script:
-  - sh increment-version.sh
-  - sh inject-version.sh
-  - sh build-$BUILD_TARGET.sh
