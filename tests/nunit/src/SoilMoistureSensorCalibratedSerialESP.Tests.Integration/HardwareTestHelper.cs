@@ -45,9 +45,17 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
 
+        public string WiFiPassword = "";
+
+        public string MqttPassword = "";
+
         public HardwareTestHelper ()
         {
             TextToWaitForBeforeTest = DeviceStartText;
+
+            // TODO: Find a cleaner way to handle file paths
+            WiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
+            MqttPassword = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-password.security")).Trim ();
         }
 
         #region Console Output Functions
@@ -295,10 +303,21 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             if (!String.IsNullOrEmpty (output)) {
                 foreach (var line in output.Trim().Split('\r')) {
                     if (!String.IsNullOrEmpty (line)) {
-                        Console.WriteLine ("> " + line.Trim ());
+                        Console.WriteLine ("> " + CleanSerialOutput (line.Trim ()));
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region Clean Serial Output Functions
+
+        public string CleanSerialOutput (string output)
+        {
+            output = output.Replace (WiFiPassword, "[hidden]");
+            output = output.Replace (MqttPassword, "[hidden]");
+            return output;
         }
 
         #endregion
@@ -396,7 +415,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             Console.WriteLine ("Waiting for data line");
 
-            var dataLine = String.Empty;
             var output = String.Empty;
             var containsData = false;
 
@@ -412,7 +430,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
                 if (IsValidDataLine (lastLine)) {
                     containsData = true;
-                    dataLine = lastLine;
                     timeInSeconds = DateTime.Now.Subtract (startTime).TotalSeconds;
                 } else
                     Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for data (" + TimeoutWaitingForResponse + " seconds)");
