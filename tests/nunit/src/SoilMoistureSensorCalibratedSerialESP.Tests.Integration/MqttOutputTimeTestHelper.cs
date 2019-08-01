@@ -12,27 +12,27 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             Console.WriteLine ("Read interval: " + ReadInterval);
 
-            ConnectDevices (false);
+            ConnectDevices ();
 
             EnableMqtt ();
 
             SetDeviceReadInterval (ReadInterval);
 
-            Console.WriteLine ("Waiting for the first response...");
+            //Console.WriteLine ("Waiting for the first response...");
 
-            var secondsUntilResponse = Mqtt.WaitUntilData (1);
+            //var secondsUntilResponse = Mqtt.WaitUntilData (1);
 
-            Console.WriteLine ("Time to first response: " + secondsUntilResponse + " seconds");
+            //Console.WriteLine ("Time to first response: " + secondsUntilResponse + " seconds");
 
-            var expectedMqttResponseTime = 0.1;
+            //var expectedMqttResponseTime = 0.1;
 
-            AssertIsWithinRange ("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
+            //AssertIsWithinRange ("mqtt response time", expectedMqttResponseTime, secondsUntilResponse, TimeErrorMargin);
 
             Console.WriteLine ("Clearing out of date data...");
 
             Mqtt.Data.Clear ();
 
-            Console.WriteLine ("Skipping some data...");
+            Console.WriteLine ("Skipping some data in case it's out of date...");
 
             Mqtt.WaitUntilData (2);
 
