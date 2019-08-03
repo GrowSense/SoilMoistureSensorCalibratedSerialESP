@@ -300,6 +300,9 @@ void setMqttHost(char* host)
   EEPROMWriteCharsAndSetFlag(MQTT_HOST_EEPROM_FLAG_ADDRESS, MQTT_HOST_EEPROM_ADDRESS, host);
   
   lastMqttConnectionAttemptTime = 0;
+
+  pubSubClient.disconnect();
+  isMqttConnected = false;
 }
 
 void setMqttUsername(char* username)
@@ -312,6 +315,9 @@ void setMqttUsername(char* username)
   EEPROMWriteCharsAndSetFlag(MQTT_USERNAME_EEPROM_FLAG_ADDRESS, MQTT_USERNAME_EEPROM_ADDRESS, username);
   
   lastMqttConnectionAttemptTime = 0;
+  
+  pubSubClient.disconnect();
+  isMqttConnected = false;
 }
 
 void setMqttPassword(char* password)
@@ -324,6 +330,9 @@ void setMqttPassword(char* password)
   EEPROMWriteCharsAndSetFlag(MQTT_PASSWORD_EEPROM_FLAG_ADDRESS, MQTT_PASSWORD_EEPROM_ADDRESS, password);
   
   lastMqttConnectionAttemptTime = 0;
+  
+  pubSubClient.disconnect();
+  isMqttConnected = false;
 }
 
 void setMqttDeviceName(char* deviceName)
@@ -336,6 +345,9 @@ void setMqttDeviceName(char* deviceName)
   EEPROMWriteCharsAndSetFlag(MQTT_DEVICE_NAME_EEPROM_FLAG_ADDRESS, MQTT_DEVICE_NAME_EEPROM_ADDRESS, deviceName);
   
   lastMqttConnectionAttemptTime = 0;
+  
+  pubSubClient.disconnect();
+  isMqttConnected = false;
 }
 
 void setMqttPort(char* port)
@@ -348,6 +360,9 @@ void setMqttPort(char* port)
   EEPROMWriteLongAndSetFlag(MQTT_PORT_EEPROM_FLAG_ADDRESS, MQTT_PORT_EEPROM_ADDRESS, mqttPort);
   
   lastMqttConnectionAttemptTime = 0;
+  
+  pubSubClient.disconnect();
+  isMqttConnected = false;
 }
 
 /* MQTT Publish */
