@@ -67,8 +67,8 @@ void setupMqtt()
       Serial.print("  MQTT username: ");
       Serial.println(mqttUsername);
       Serial.print("  MQTT password: ");
-      //Serial.println("[hidden]");
-      Serial.println(mqttPassword); // Disabled to hide the MQTT password
+      Serial.println("[hidden]");
+      //Serial.println(mqttPassword); // Disabled to hide the MQTT password
       Serial.print("  Device name: ");
       Serial.println(mqttDeviceName);
    
@@ -114,7 +114,8 @@ void setupMqttSubscriptions()
 
     pubSubClient.subscribe(topic.c_str());
   }
-
+  
+  Serial.println("Subscribed to MQTT topics");
   Serial.println();
 }
 
