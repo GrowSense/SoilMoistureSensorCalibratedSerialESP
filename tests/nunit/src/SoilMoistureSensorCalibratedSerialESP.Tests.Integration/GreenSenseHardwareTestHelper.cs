@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
+using System.IO;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
@@ -13,10 +14,15 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         // The margin of error is higher in the ESP8266 version of the test than the arduino version because of the
         // conversion from 5v (of the soil moisture simulator) to 3.3v (of the ESP8266 board) in the test system
-        public int RawValueMarginOfError = 75;
-        public int CalibratedValueMarginOfError = 10;
-        public double TimeErrorMargin = 0.3;
+        public int RawValueMarginOfError = 40;
+        public int CalibratedValueMarginOfError = 4;
+        public double TimeErrorMargin = 0.4;
 
+        // Offset to take into account voltage drop via the simulated soil moisture sensor readings
+        public int ExpectedRawValueOffset = 30;
+        // Offset to take into account voltage drop via the simulated soil moisture sensor readings
+        public int ExpectedCalibratedValueOffset = 2;
+      
         public bool CalibrationIsReversedByDefault = true;
 
         public bool RequiresResetSettings = true;
@@ -48,6 +54,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public virtual void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
         {
             Console.WriteLine ("Preparing device for test...");
+            
+            SetWiFiSettings ();
+
+            SetMqttSettings ();
 
             if (RequiresResetSettings) {
                 ResetDeviceSettings ();
@@ -61,8 +71,12 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
                 if (CalibrationIsReversedByDefault)
                     ReverseDeviceCalibration ();
             }
+
             if (consoleWriteDeviceOutput)
                 ReadFromDeviceAndOutputToConsole ();
+
+            if (!String.IsNullOrEmpty (TextToWaitForBeforeTest))
+                WaitForText (TextToWaitForBeforeTest);
         }
 
         #endregion
@@ -110,6 +124,26 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         #endregion
 
         #region Specific Device Command Functions
+
+        public void SetWiFiSettings ()
+        {
+            var wiFiName = File.ReadAllText (Path.GetFullPath ("../../../../wifi-name.security")).Trim ();
+            SendDeviceCommand ("WName" + wiFiName);
+            var wiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
+            SendDeviceCommand ("WPass" + wiFiPassword);
+        }
+
+        public void SetMqttSettings ()
+        {
+            var mqttHost = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-host.security")).Trim ();
+            SendDeviceCommand ("MHost" + mqttHost);
+            var mqttUsername = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-username.security")).Trim ();
+            SendDeviceCommand ("MUser" + mqttUsername);
+            var mqttPassword = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-password.security")).Trim ();
+            SendDeviceCommand ("MPass" + mqttPassword);
+            var mqttPort = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-port.security")).Trim ();
+            SendDeviceCommand ("MPort" + mqttPort);
+        }
 
         public void ResetDeviceSettings ()
         {
@@ -203,11 +237,46 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         #endregion
 
+        #region Assert Value Functions
+
+        public override void AssertDataValueIsWithinRange (System.Collections.Generic.Dictionary<string, string> dataEntry, string dataKey, int expectedValue, int allowableMarginOfError)
+        {
+            if (dataKey == "C")
+                expectedValue = ApplyOffset (expectedValue, ExpectedCalibratedValueOffset);
+
+            if (dataKey == "R")
+                expectedValue = ApplyOffset (expectedValue, ExpectedRawValueOffset);
+
+            base.AssertDataValueIsWithinRange (dataEntry, dataKey, expectedValue, allowableMarginOfError);
+        }
+
+        #endregion
+
         #region Assert Simulator Pin Functions
 
         public void AssertSoilMoistureSensorPowerPinForDuration (bool expectedValue, int durationInSeconds)
         {
             AssertSimulatorPinForDuration ("soil moisture sensor power", SoilMoistureSimulatorPowerPin, expectedValue, durationInSeconds);
+        }
+
+        #endregion
+
+        #region Apply Offset Functions
+
+        public int ApplyOffset (int value, int offset)
+        {
+            Console.WriteLine ("Applying offset...");
+            Console.WriteLine ("  Value: " + value);
+            Console.WriteLine ("  Offset: " + offset);
+            var newValue = value + offset;
+
+            if (newValue < 0)
+                newValue = 0;
+
+            Console.WriteLine ("  New value: " + newValue);
+            Console.WriteLine ("Finished applying offset.");
+
+            return newValue;
         }
 
         #endregion

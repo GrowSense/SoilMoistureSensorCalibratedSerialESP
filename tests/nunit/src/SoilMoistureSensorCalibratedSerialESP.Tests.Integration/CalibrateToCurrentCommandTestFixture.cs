@@ -11,7 +11,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             using (var helper = new CalibrateToCurrentCommandTestHelper ()) {
                 helper.Label = "dry";
-                helper.Letter = "D";
+                helper.Key = "D";
                 helper.SimulatedSoilMoisturePercentage = 20;
 
                 helper.DevicePort = GetDevicePort ();
@@ -29,7 +29,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             using (var helper = new CalibrateToCurrentCommandTestHelper ()) {
                 helper.Label = "dry";
-                helper.Letter = "D";
+                helper.Key = "D";
                 helper.SimulatedSoilMoisturePercentage = 30;
 
                 helper.DevicePort = GetDevicePort ();
@@ -47,7 +47,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             using (var helper = new CalibrateToCurrentCommandTestHelper ()) {
                 helper.Label = "wet";
-                helper.Letter = "W";
+                helper.Key = "W";
                 helper.SimulatedSoilMoisturePercentage = 80;
 
                 helper.DevicePort = GetDevicePort ();
@@ -65,7 +65,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             using (var helper = new CalibrateToCurrentCommandTestHelper ()) {
                 helper.Label = "wet";
-                helper.Letter = "W";
+                helper.Key = "W";
                 helper.SimulatedSoilMoisturePercentage = 90;
 
                 helper.DevicePort = GetDevicePort ();

@@ -24,7 +24,7 @@ String wifiNetwork = "network";
 String wifiPassword = "password";
 
 long wifiStartConnectingTime = 0;
-long wifiRetryInterval = 30 * 1000;
+long wifiRetryInterval = 15 * 1000;
 
 bool areWiFiSettingsLoadedFromEEPROM = false;
 

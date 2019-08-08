@@ -22,8 +22,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public string SimulatorPort;
         public int SimulatorBaudRate = 0;
 
-        public int DelayAfterConnectingToHardware = 100;
-        public int DelayAfterDisconnectingFromHardware = 100;
+        public int DelayAfterConnectingToHardware = 500;
+        public int DelayAfterDisconnectingFromHardware = 500;
 
         public string DataPrefix = "D;";
         public string DataPostFix = ";;";
@@ -35,11 +35,13 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public bool On = true;
         public bool Off = false;
 
-        public string FullDeviceOutput;
+        public string FullDeviceOutput = "";
 
         public int ResetTriggerPin = 4;
 
         public string DeviceStartText = "Device started...";
+
+        public string TextToWaitForAfterSerialConnect;
 
         public string TextToWaitForBeforeTest;
 
@@ -51,7 +53,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public HardwareTestHelper ()
         {
-            TextToWaitForBeforeTest = DeviceStartText;
+            TextToWaitForAfterSerialConnect = DeviceStartText;
 
             // TODO: Find a cleaner way to handle file paths
             WiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
@@ -178,7 +180,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             Thread.Sleep (DelayAfterConnectingToHardware);
 
-            WaitForText (TextToWaitForBeforeTest);
+            WaitForText (TextToWaitForAfterSerialConnect);
 
             ReadFromDeviceAndOutputToConsole ();
         }
@@ -363,17 +365,19 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             var output = String.Empty;
             var containsText = false;
 
-            Timeout.Start ();
+            if (!FullDeviceOutput.Contains (text)) {
+                Timeout.Start ();
 
-            while (!containsText) {
-                output += ReadLineFromDevice ();
+                while (!containsText) {
+                    output += ReadLineFromDevice ();
 
-                if (output.Contains (text)) {
-                    //Console.WriteLine ("  Found text: " + text);
+                    if (output.Contains (text)) {
+                        //Console.WriteLine ("  Found text: " + text);
 
-                    containsText = true;
-                } else
-                    Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
+                        containsText = true;
+                    } else
+                        Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
+                }
             }
 
             return output;
@@ -542,7 +546,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             Console.WriteLine ("");
         }
 
-        public void AssertDataValueIsWithinRange (Dictionary<string, string> dataEntry, string dataKey, int expectedValue, int allowableMarginOfError)
+        public virtual void AssertDataValueIsWithinRange (Dictionary<string, string> dataEntry, string dataKey, int expectedValue, int allowableMarginOfError)
         {
             var value = Convert.ToInt32 (dataEntry [dataKey]);
 
@@ -563,6 +567,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             var minValue = expectedValue - allowableMarginOfError;
             var maxValue = expectedValue + allowableMarginOfError;
+
+            if (minValue < 0)
+                minValue = 0;
 
             Assert.IsTrue (isWithinRange, "The " + label + " value is outside the specified range: " + actualValue + " (Expected: " + minValue + " - " + maxValue + ")");
 

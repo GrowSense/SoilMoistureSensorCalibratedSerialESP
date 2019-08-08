@@ -1,11 +1,12 @@
 ﻿using System;
+using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
     public class CalibrateToCurrentCommandTestHelper : GreenSenseHardwareTestHelper
     {
         public string Label;
-        public string Letter;
+        public string Key;
         public int SimulatedSoilMoisturePercentage = -1;
         public int RawSoilMoistureValue = 0;
 
@@ -46,7 +47,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void SendCalibrationCommand ()
         {
-            var command = Letter;
+            var command = Key;
 
             // If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
             if (!SimulatorIsEnabled)
@@ -59,11 +60,11 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             var dataEntry = WaitForDataEntry ();
 
-            // If using the soil moisture simulator then the value needs to be within a specified range
-            if (SimulatorIsEnabled)
-                AssertDataValueIsWithinRange (dataEntry, Letter, RawSoilMoistureValue, RawValueMarginOfError);
-            else // Otherwise it needs to be exact
-                AssertDataValueEquals (dataEntry, Letter, RawSoilMoistureValue);
+            Assert.IsTrue (dataEntry.ContainsKey (Key), "Data entry doesn't contain " + Label + " '" + Key + "' key/value.");
+
+            var value = Convert.ToInt32 (dataEntry [Key]);
+
+            AssertIsWithinRange (Label, value, ApplyOffset (RawSoilMoistureValue, ExpectedRawValueOffset), RawValueMarginOfError);
         }
     }
 }
