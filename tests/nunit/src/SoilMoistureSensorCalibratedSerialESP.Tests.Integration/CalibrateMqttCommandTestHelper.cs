@@ -25,10 +25,12 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public void SendMqttCalibrationCommand ()
         {
+            Mqtt.Data.Clear ();
+
             Mqtt.SendCommand (Letter, RawSoilMoistureValue);
 
             // Skip some data
-            WaitForData (5);
+            WaitForData (1);
 
             var dataEntry = WaitForDataEntry ();
 
