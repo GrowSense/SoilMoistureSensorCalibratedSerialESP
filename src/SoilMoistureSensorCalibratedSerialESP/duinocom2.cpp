@@ -37,8 +37,11 @@ bool checkMsgReady()
       //    Serial.println(char(b));
       //}
 
-      msgBuffer[msgPosition] = '\0';
       isMsgReady = true;
+      
+      for (int i = msgPosition; i < MAX_MSG_LENGTH; i++)
+        msgBuffer[i] = '\0';
+        
       msgPosition = 0;
 
       //if (verboseCom)
