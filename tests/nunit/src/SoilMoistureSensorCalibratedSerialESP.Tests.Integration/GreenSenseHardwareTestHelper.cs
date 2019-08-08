@@ -128,7 +128,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public void SetWiFiSettings ()
         {
             var wiFiName = File.ReadAllText (Path.GetFullPath ("../../../../wifi-name.security")).Trim ();
-            SendDeviceCommand ("WName:" + wiFiName);
+            SendDeviceCommand ("WN:" + wiFiName);
             var wiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
             SendDeviceCommand ("WPass:" + wiFiPassword);
         }
