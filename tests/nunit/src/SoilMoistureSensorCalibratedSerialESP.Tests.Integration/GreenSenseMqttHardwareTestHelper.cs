@@ -31,7 +31,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public override void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
         {
-            TextToWaitForBeforeTest = "Connected to MQTT";
+            if (RequireMqttConnection)
+                TextToWaitForBeforeTest = "Subscribed to MQTT topics";
 
             base.PrepareDeviceForTest (consoleWriteDeviceOutput);
 
