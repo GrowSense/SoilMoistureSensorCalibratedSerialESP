@@ -360,7 +360,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public string WaitForText (string text)
         {
-            Console.WriteLine ("Waiting for text: " + text);
+            Console.WriteLine ("Waiting for text: " + CleanSerialOutput (text));
 
             var output = String.Empty;
             var containsText = false;
@@ -376,7 +376,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
                         containsText = true;
                     } else
-                        Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + text);
+                        Timeout.Check (TimeoutWaitingForResponse, "Timed out waiting for text: " + CleanSerialOutput (text));
                 }
             }
 

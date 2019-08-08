@@ -128,21 +128,21 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public void SetWiFiSettings ()
         {
             var wiFiName = File.ReadAllText (Path.GetFullPath ("../../../../wifi-name.security")).Trim ();
-            SendDeviceCommand ("WName" + wiFiName);
+            SendDeviceCommand ("WName:" + wiFiName);
             var wiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
-            SendDeviceCommand ("WPass" + wiFiPassword);
+            SendDeviceCommand ("WPass:" + wiFiPassword);
         }
 
         public void SetMqttSettings ()
         {
             var mqttHost = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-host.security")).Trim ();
-            SendDeviceCommand ("MHost" + mqttHost);
+            SendDeviceCommand ("MHost:" + mqttHost);
             var mqttUsername = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-username.security")).Trim ();
-            SendDeviceCommand ("MUser" + mqttUsername);
+            SendDeviceCommand ("MUser:" + mqttUsername);
             var mqttPassword = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-password.security")).Trim ();
-            SendDeviceCommand ("MPass" + mqttPassword);
+            SendDeviceCommand ("MPass:" + mqttPassword);
             var mqttPort = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-port.security")).Trim ();
-            SendDeviceCommand ("MPort" + mqttPort);
+            SendDeviceCommand ("MPort:" + mqttPort);
         }
 
         public void ResetDeviceSettings ()
