@@ -55,7 +55,6 @@ fi
 
 echo ""
 
-
 exec 3>&-
 
 echo "Finished sending WiFi and MQTT settings to device as serial commands"
