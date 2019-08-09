@@ -58,5 +58,5 @@ void loop()
 
   serialPrintLoopFooter();
 
-  delay(1);
+  delay(10);
 }
