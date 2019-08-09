@@ -1,3 +1,4 @@
+sh build-all.sh && \
 sh clean.sh && \
 git commit -am "$1" && \
 git pull origin dev && \

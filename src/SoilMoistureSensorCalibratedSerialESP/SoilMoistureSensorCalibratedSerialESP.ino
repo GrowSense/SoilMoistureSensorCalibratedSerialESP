@@ -36,7 +36,8 @@ void setup()
 
 void loop()
 {
-  loopNumber++;
+  if (isDebugMode)
+    loopNumber++;
 
   serialPrintLoopHeader();
   
