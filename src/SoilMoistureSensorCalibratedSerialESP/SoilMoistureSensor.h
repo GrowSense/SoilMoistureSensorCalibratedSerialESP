@@ -19,6 +19,7 @@ extern int wetSoilMoistureCalibrationValue;
 extern bool soilMoistureSensorIsOn;
 extern unsigned long lastSensorOnTime;
 extern int delayAfterTurningSensorOn;
+extern bool soilMoistureSensorGetsTurnedOff;
 extern bool soilMoistureSensorReadingHasBeenTaken;
 
 void setupSoilMoistureSensor();

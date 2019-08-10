@@ -15,6 +15,7 @@ int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
 bool soilMoistureSensorIsOn = true;
 unsigned long lastSensorOnTime = 0;
 int delayAfterTurningSoilMoistureSensorOn = 3 * 1000;
+bool soilMoistureSensorGetsTurnedOff = false;
 
 bool soilMoistureSensorReadingHasBeenTaken = false;
 long soilMoistureSensorReadingIntervalInSeconds = 5;
@@ -44,9 +45,10 @@ void setupSoilMoistureSensor()
   setupSoilMoistureSensorReadingInterval();
 
   pinMode(soilMoistureSensorPowerPin, OUTPUT);
+  
+  soilMoistureSensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn;
 
-  // If the interval is less than specified delay then turn the sensor on and leave it on (otherwise it will be turned on each time it's needed)
-  if (secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) <= delayAfterTurningSoilMoistureSensorOn)
+  if (!soilMoistureSensorGetsTurnedOff)
   {
     turnSoilMoistureSensorOn();
   }
@@ -78,25 +80,23 @@ void turnSoilMoistureSensorOff()
 /* Sensor Readings */
 void takeSoilMoistureSensorReading()
 {
-  bool sensorReadingIsDue = lastSoilMoistureSensorReadingTime + secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) < millis()
+  bool sensorReadingIsDue = millis() - lastSoilMoistureSensorReadingTime >= secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds)
     || lastSoilMoistureSensorReadingTime == 0;
 
   if (sensorReadingIsDue)
   {
     if (isDebugMode)
       Serial.println("Sensor reading is due");
-
-    bool sensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn;
   
-    bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && sensorGetsTurnedOff;
+    bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && soilMoistureSensorGetsTurnedOff;
   
-    bool postSensorOnDelayHasPast = lastSensorOnTime + delayAfterTurningSoilMoistureSensorOn < millis();
+    bool postSensorOnDelayHasPast = millis() - lastSensorOnTime > delayAfterTurningSoilMoistureSensorOn;
   
-    bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !sensorGetsTurnedOff);
+    bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !soilMoistureSensorGetsTurnedOff);
 
-    bool soilMoistureSensorIsOnButSettling = soilMoistureSensorIsOn && !postSensorOnDelayHasPast && sensorGetsTurnedOff;
+    bool soilMoistureSensorIsOnButSettling = soilMoistureSensorIsOn && !postSensorOnDelayHasPast && soilMoistureSensorGetsTurnedOff;
 
-    if (isDebugMode)
+/*    if (isDebugMode)
     {
         Serial.print("  Sensor is on: ");
         Serial.println(soilMoistureSensorIsOn);
@@ -106,7 +106,7 @@ void takeSoilMoistureSensorReading()
         Serial.println(" seconds ago");
         
         Serial.print("  Sensor gets turned off: ");
-        Serial.println(sensorGetsTurnedOff);
+        Serial.println(soilMoistureSensorGetsTurnedOff);
         
         Serial.print("  Sensor is off and needs to be turned on: ");
         Serial.println(sensorIsOffAndNeedsToBeTurnedOn);
@@ -130,7 +130,7 @@ void takeSoilMoistureSensorReading()
           Serial.print(millisecondsToSecondsWithDecimal(timeRemainingToSettle));
           Serial.println(" seconds");
         }
-    }
+    }*/
 
     if (sensorIsOffAndNeedsToBeTurnedOn)
     {
@@ -150,7 +150,7 @@ void takeSoilMoistureSensorReading()
       lastSoilMoistureSensorReadingTime = millis();
       
       // Remove the delay (after turning soil moisture sensor on) from the last reading time to get more accurate timing
-      if (sensorGetsTurnedOff)
+      if (soilMoistureSensorGetsTurnedOff)
         lastSoilMoistureSensorReadingTime = lastSoilMoistureSensorReadingTime - delayAfterTurningSoilMoistureSensorOn;
 
       soilMoistureLevelRaw = getAverageSoilMoistureSensorReading();
@@ -165,7 +165,7 @@ void takeSoilMoistureSensorReading()
 
       soilMoistureSensorReadingHasBeenTaken = true;
 
-      if (secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn)
+      if (soilMoistureSensorGetsTurnedOff)
       {
         turnSoilMoistureSensorOff();
       }

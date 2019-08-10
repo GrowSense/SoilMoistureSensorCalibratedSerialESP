@@ -12,7 +12,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             Console.WriteLine ("Read interval: " + ReadInterval);
 
-            ConnectDevices (false);
+            ConnectDevices ();
 
             SetDeviceReadInterval (ReadInterval);
 
