@@ -13,12 +13,12 @@
 int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
 
 bool soilMoistureSensorIsOn = true;
-long lastSensorOnTime = 0;
+unsigned long lastSensorOnTime = 0;
 int delayAfterTurningSoilMoistureSensorOn = 3 * 1000;
 
 bool soilMoistureSensorReadingHasBeenTaken = false;
 long soilMoistureSensorReadingIntervalInSeconds = 5;
-long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
+unsigned long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
