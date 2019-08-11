@@ -10,6 +10,9 @@
 #define soilMoistureSensorPin A0
 #define soilMoistureSensorPowerPin 12
 
+#define SOIL_MOISTURE_SENSOR_TYPE_RESISTIVE 0
+#define SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE 1
+
 int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
 
 bool soilMoistureSensorIsOn = true;
@@ -24,7 +27,7 @@ unsigned long lastSoilMoistureSensorReadingTime = 0; // Milliseconds
 int soilMoistureLevelCalibrated = 0;
 int soilMoistureLevelRaw = 0;
 
-bool reverseSoilMoistureSensor = false;
+bool reverseSoilMoistureSensor = true;
 //int drySoilMoistureCalibrationValue = ANALOG_MAX;
 int drySoilMoistureCalibrationValue = (reverseSoilMoistureSensor ? 0 : ANALOG_MAX);
 //int wetSoilMoistureCalibrationValue = 0;
@@ -46,7 +49,7 @@ void setupSoilMoistureSensor()
 
   pinMode(soilMoistureSensorPowerPin, OUTPUT);
   
-  soilMoistureSensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) > delayAfterTurningSoilMoistureSensorOn;
+  soilMoistureSensorGetsTurnedOff = secondsToMilliseconds(soilMoistureSensorReadingIntervalInSeconds) >= delayAfterTurningSoilMoistureSensorOn;
 
   if (!soilMoistureSensorGetsTurnedOff)
   {
@@ -85,12 +88,12 @@ void takeSoilMoistureSensorReading()
 
   if (sensorReadingIsDue)
   {
-    if (isDebugMode)
-      Serial.println("Sensor reading is due");
+//    if (isDebugMode)
+//      Serial.println("Sensor reading is due");
   
     bool sensorIsOffAndNeedsToBeTurnedOn = !soilMoistureSensorIsOn && soilMoistureSensorGetsTurnedOff;
   
-    bool postSensorOnDelayHasPast = millis() - lastSensorOnTime > delayAfterTurningSoilMoistureSensorOn;
+    bool postSensorOnDelayHasPast = millis() - lastSensorOnTime >= delayAfterTurningSoilMoistureSensorOn;
   
     bool soilMoistureSensorIsOnAndReady = soilMoistureSensorIsOn && (postSensorOnDelayHasPast || !soilMoistureSensorGetsTurnedOff);
 

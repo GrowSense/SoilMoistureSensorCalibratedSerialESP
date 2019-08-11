@@ -27,20 +27,16 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
             Console.WriteLine ("");
 
-            var simulatorIsNeeded = SimulatedSoilMoisturePercentage > -1;
+            ConnectDevices ();
 
-            ConnectDevices (simulatorIsNeeded);
+            SimulateSoilMoisture (SimulatedSoilMoisturePercentage);
 
-            if (SimulatorIsEnabled) {
-                SimulateSoilMoisture (SimulatedSoilMoisturePercentage);
+            // Skip the first X entries to give the value time to stabilise
+            WaitForData (3);
 
-                // Skip the first X entries to give the value time to stabilise
-                WaitForData (2);
+            var dataEntry = WaitForDataEntry ();
 
-                var dataEntry = WaitForDataEntry ();
-
-                AssertDataValueIsWithinRange (dataEntry, "R", RawSoilMoistureValue, RawValueMarginOfError);
-            }
+            AssertDataValueIsWithinRange (dataEntry, "R", RawSoilMoistureValue, RawValueMarginOfError);
 
             SendCalibrationCommand ();
         }
@@ -49,14 +45,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         {
             var command = Key;
 
-            // If the simulator isn't enabled then the raw value is passed as part of the command to specify it directly
-            if (!SimulatorIsEnabled)
-                command = command + RawSoilMoistureValue;
-
             SendDeviceCommand (command);
 
-            // Skip the first X entries to give the value time to stabilise
-            WaitForData (2);
+            // Skip the first entries to give the value time to stabilise
+            WaitForData (3);
 
             var dataEntry = WaitForDataEntry ();
 

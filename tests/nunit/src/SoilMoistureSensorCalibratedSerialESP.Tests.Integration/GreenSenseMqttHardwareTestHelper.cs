@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
@@ -33,8 +34,33 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             if (RequireMqttConnection)
                 TextToWaitForBeforeTest = ConnectedToMqttText;
 
+            SetWiFiSettings ();
+
+            SetMqttSettings ();
+
             base.PrepareDeviceForTest (consoleWriteDeviceOutput);
 
         }
+
+        public void SetWiFiSettings ()
+        {
+            var wiFiName = File.ReadAllText (Path.GetFullPath ("../../../../wifi-name.security")).Trim ();
+            SendDeviceCommand ("WN:" + wiFiName);
+            var wiFiPassword = File.ReadAllText (Path.GetFullPath ("../../../../wifi-password.security")).Trim ();
+            SendDeviceCommand ("WPass:" + wiFiPassword);
+        }
+
+        public void SetMqttSettings ()
+        {
+            var mqttHost = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-host.security")).Trim ();
+            SendDeviceCommand ("MHost:" + mqttHost);
+            var mqttUsername = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-username.security")).Trim ();
+            SendDeviceCommand ("MUser:" + mqttUsername);
+            var mqttPassword = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-password.security")).Trim ();
+            SendDeviceCommand ("MPass:" + mqttPassword);
+            var mqttPort = File.ReadAllText (Path.GetFullPath ("../../../../mqtt-port.security")).Trim ();
+            SendDeviceCommand ("MPort:" + mqttPort);
+        }
+
     }
 }
