@@ -22,17 +22,20 @@ void serialPrintDeviceInfo()
 
 void serialPrintData()
 {
-  bool isTimeToPrintData = lastSerialOutputTime + secondsToMilliseconds(serialOutputIntervalInSeconds) < millis()
+  bool isTimeToPrintData = millis() - lastSerialOutputTime >= secondsToMilliseconds(serialOutputIntervalInSeconds)
       || lastSerialOutputTime == 0;
 
   bool isReadyToPrintData = isTimeToPrintData && soilMoistureSensorReadingHasBeenTaken;
 
   if (isReadyToPrintData)
   {
+
+    lastSerialOutputTime = millis();
+    
     if (isDebugMode)
       Serial.println("Ready to serial print data");
   
-    long numberOfSecondsOnline = millis()/1000;
+    //long numberOfSecondsOnline = millis()/1000;
 
     Serial.print("D;"); // This prefix indicates that the line contains data.
     //Serial.print("T:");
@@ -57,8 +60,6 @@ void serialPrintData()
     Serial.print(VERSION);
     Serial.print(";;");
     Serial.println();
-
-    lastSerialOutputTime = millis();
   }
   else
   {

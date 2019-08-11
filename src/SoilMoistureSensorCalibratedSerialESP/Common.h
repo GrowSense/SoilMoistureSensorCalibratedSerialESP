@@ -6,7 +6,7 @@
 
 extern const int ANALOG_MAX;
 
-extern long lastSerialOutputTime; // Milliseconds
+extern unsigned long lastSerialOutputTime; // Milliseconds
 extern long serialOutputIntervalInSeconds;
 
 extern bool isDebugMode;
@@ -16,7 +16,7 @@ extern long loopNumber;
 void serialPrintLoopHeader();
 void serialPrintLoopFooter();
 
-long secondsToMilliseconds(int seconds);
+unsigned long secondsToMilliseconds(int seconds);
 float millisecondsToSecondsWithDecimal(int milliseconds);
 
 long readLong(char* text, int startPosition, int digitCount);
