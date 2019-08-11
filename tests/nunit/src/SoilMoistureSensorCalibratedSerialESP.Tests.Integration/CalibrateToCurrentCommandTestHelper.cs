@@ -35,7 +35,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
                 SimulateSoilMoisture (SimulatedSoilMoisturePercentage);
 
                 // Skip the first X entries to give the value time to stabilise
-                WaitForData (1);
+                WaitForData (2);
 
                 var dataEntry = WaitForDataEntry ();
 
@@ -56,7 +56,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             SendDeviceCommand (command);
 
             // Skip the first X entries to give the value time to stabilise
-            WaitForData (1);
+            WaitForData (2);
 
             var dataEntry = WaitForDataEntry ();
 
