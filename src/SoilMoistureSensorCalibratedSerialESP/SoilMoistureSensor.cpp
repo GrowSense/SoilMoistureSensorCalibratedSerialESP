@@ -196,9 +196,9 @@ void takeSoilMoistureSensorReading()
   }
 }
 
-double getAverageSoilMoistureSensorReading()
+int getAverageSoilMoistureSensorReading()
 {
-  long readingSum  = 0;
+  long readingSum = 0;
   int totalReadings = 10;
 
   for (int i = 0; i < totalReadings; i++)
@@ -208,12 +208,12 @@ double getAverageSoilMoistureSensorReading()
     readingSum += reading;
   }
 
-  double averageReading = readingSum / totalReadings;
+  int averageReading = readingSum / totalReadings;
 
   return averageReading;
 }
 
-double calculateSoilMoistureLevel(int soilMoistureSensorReading)
+int calculateSoilMoistureLevel(int soilMoistureSensorReading)
 {
   return map(soilMoistureSensorReading, drySoilMoistureCalibrationValue, wetSoilMoistureCalibrationValue, 0, 100);
 }

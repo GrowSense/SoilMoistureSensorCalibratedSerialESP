@@ -34,9 +34,9 @@ void turnSoilMoistureSensorOff();
 
 void takeSoilMoistureSensorReading();
 
-double getAverageSoilMoistureSensorReading();
+int getAverageSoilMoistureSensorReading();
 
-double calculateSoilMoistureLevel(int soilMoistureSensorReading);
+int calculateSoilMoistureLevel(int soilMoistureSensorReading);
 
 void setEEPROMIsCalibratedFlag();
 
