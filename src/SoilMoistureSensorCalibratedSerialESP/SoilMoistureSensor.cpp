@@ -176,7 +176,7 @@ void takeSoilMoistureSensorReading()
   }
   else
   {
-    if (isDebugMode)
+    /*if (isDebugMode)
     {
       Serial.println("Sensor reading is not due");
       
@@ -192,13 +192,13 @@ void takeSoilMoistureSensorReading()
       Serial.print("  Time left until next soil moisture sensor reading: ");
       Serial.print(millisecondsToSecondsWithDecimal(timeLeftUntilNextReading));
       Serial.println(" seconds");
-    }
+    }*/
   }
 }
 
 double getAverageSoilMoistureSensorReading()
 {
-  int readingSum  = 0;
+  long readingSum  = 0;
   int totalReadings = 10;
 
   for (int i = 0; i < totalReadings; i++)

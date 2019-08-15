@@ -10,7 +10,7 @@ long serialOutputIntervalInSeconds = 1;
 
 bool isDebugMode = false;
 
-long loopNumber = 0;
+unsigned long loopNumber = 0;
 
 void serialPrintLoopHeader()
 {
