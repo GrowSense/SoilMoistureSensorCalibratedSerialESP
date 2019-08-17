@@ -32,6 +32,9 @@ bool isWiFiConnectionFailureReported = false;
 
 void setupWiFi()
 {
+  if (WiFi.status() != WL_CONNECTED)
+    isWiFiConnected = false;
+
   if (!isWiFiConnected)
   {
     bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&

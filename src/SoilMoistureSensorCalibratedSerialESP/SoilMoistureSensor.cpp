@@ -206,6 +206,8 @@ int getAverageSoilMoistureSensorReading()
     int reading = analogRead(soilMoistureSensorPin);
 
     readingSum += reading;
+    
+    delay(1);
   }
 
   int averageReading = readingSum / totalReadings;

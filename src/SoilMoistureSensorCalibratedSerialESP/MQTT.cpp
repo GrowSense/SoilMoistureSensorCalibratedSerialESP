@@ -410,7 +410,13 @@ void loopMqtt()
   setupMqtt();
 
   if (isWiFiConnected && isMqttConnected)
-    pubSubClient.loop();
+  {
+    if (!pubSubClient.loop())
+    {
+      Serial.println("MQTT is not connected");
+      isMqttConnected = false;
+    }
+  }
 }
 
 void forceMqttOutput()
