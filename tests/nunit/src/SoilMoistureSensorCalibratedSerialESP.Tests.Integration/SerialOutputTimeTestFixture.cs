@@ -6,10 +6,10 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
     public class SerialOutputTimeTestFixture : BaseTestFixture
     {
         [Test]
-        public void Test_SerialOutputTime_2Seconds ()
+        public void Test_SerialOutputTime_3Seconds ()
         {
             using (var helper = new SerialOutputTimeTestHelper ()) {
-                helper.ReadInterval = 2;
+                helper.ReadInterval = 3;
 
                 helper.DevicePort = GetDevicePort ();
                 helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
