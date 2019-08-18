@@ -30,6 +30,7 @@ String subscribeTopics[] = {"D", "W", "I", "F", "Q"};
 
 PubSubClient pubSubClient(wifiClient);
 
+bool isMqttEnabled = true;
 bool isMqttConnected = false;
 
 bool areMqttSettingsLoadedFromEEPROM = false;
@@ -39,56 +40,59 @@ long mqttConnectionAttemptInterval = 15 * 1000;
 
 void setupMqtt()
 {
-  loadMqttSettingsFromEEPROM();
-
-  bool isTimeToConnectToMqtt = isWiFiConnected && !isMqttConnected
-            && (lastMqttConnectionAttemptTime == 0 || lastMqttConnectionAttemptTime + mqttConnectionAttemptInterval < millis());
-
-  if (isTimeToConnectToMqtt)
+  if (isMqttEnabled)
   {
-    lastMqttConnectionAttemptTime = millis();
-      
-    Serial.println("Setting up MQTT");
-  
-    char hostBuffer[20];
-  
-    mqttHost.toCharArray(hostBuffer, mqttHost.length()+1);
+    loadMqttSettingsFromEEPROM();
+
+    bool isTimeToConnectToMqtt = isWiFiConnected && !isMqttConnected
+              && (lastMqttConnectionAttemptTime == 0 || lastMqttConnectionAttemptTime + mqttConnectionAttemptInterval < millis());
+
+    if (isTimeToConnectToMqtt)
+    {
+      lastMqttConnectionAttemptTime = millis();
+        
+      Serial.println("Setting up MQTT");
     
-    pubSubClient.setServer(hostBuffer, mqttPort);
-
-    pubSubClient.setCallback(mqttCallback);
-
-    if (!pubSubClient.connected()) {
-      Serial.println("Connecting to MQTT...");
-      Serial.print("  MQTT host: ");
-      Serial.println(mqttHost);
-      Serial.print("  MQTT port: ");
-      Serial.println(mqttPort);
-      Serial.print("  MQTT username: ");
-      Serial.println(mqttUsername);
-      Serial.print("  MQTT password: ");
-      Serial.println("[hidden]");
-      //Serial.println(mqttPassword); // Disabled to hide the MQTT password
-      Serial.print("  Device name: ");
-      Serial.println(mqttDeviceName);
-   
-      char deviceNameBuffer[20];
-      char usernameBuffer[20];
-      char passwordBuffer[20];
-      
-      mqttDeviceName.toCharArray(deviceNameBuffer, mqttDeviceName.length()+1);
-      mqttUsername.toCharArray(usernameBuffer, mqttUsername.length()+1);
-      mqttPassword.toCharArray(passwordBuffer, mqttPassword.length()+1);
+      char hostBuffer[20];
     
-      if (pubSubClient.connect(deviceNameBuffer, usernameBuffer, passwordBuffer)) {
-        Serial.println("  Connected to MQTT");  
+      mqttHost.toCharArray(hostBuffer, mqttHost.length()+1);
+      
+      pubSubClient.setServer(hostBuffer, mqttPort);
 
-        isMqttConnected = true;
+      pubSubClient.setCallback(mqttCallback);
 
-        setupMqttSubscriptions();
-      } else {
-        Serial.print("  Failed to connect to MQTT. State: ");
-        Serial.println(pubSubClient.state());
+      if (!pubSubClient.connected()) {
+        Serial.println("Connecting to MQTT...");
+        Serial.print("  MQTT host: ");
+        Serial.println(mqttHost);
+        Serial.print("  MQTT port: ");
+        Serial.println(mqttPort);
+        Serial.print("  MQTT username: ");
+        Serial.println(mqttUsername);
+        Serial.print("  MQTT password: ");
+        Serial.println("[hidden]");
+        //Serial.println(mqttPassword); // Disabled to hide the MQTT password
+        Serial.print("  Device name: ");
+        Serial.println(mqttDeviceName);
+     
+        char deviceNameBuffer[20];
+        char usernameBuffer[20];
+        char passwordBuffer[20];
+        
+        mqttDeviceName.toCharArray(deviceNameBuffer, mqttDeviceName.length()+1);
+        mqttUsername.toCharArray(usernameBuffer, mqttUsername.length()+1);
+        mqttPassword.toCharArray(passwordBuffer, mqttPassword.length()+1);
+      
+        if (pubSubClient.connect(deviceNameBuffer, usernameBuffer, passwordBuffer)) {
+          Serial.println("  Connected to MQTT");  
+
+          isMqttConnected = true;
+
+          setupMqttSubscriptions();
+        } else {
+          Serial.print("  Failed to connect to MQTT. State: ");
+          Serial.println(pubSubClient.state());
+        }
       }
     }
   }
@@ -417,6 +421,16 @@ void loopMqtt()
       isMqttConnected = false;
     }
   }
+}
+
+void disableMqtt()
+{
+  lastMqttConnectionAttemptTime = 0;
+
+  pubSubClient.disconnect();
+  isMqttConnected = false;
+  
+  isMqttEnabled = false;
 }
 
 void forceMqttOutput()

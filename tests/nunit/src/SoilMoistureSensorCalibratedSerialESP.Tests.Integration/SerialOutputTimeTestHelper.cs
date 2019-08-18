@@ -2,7 +2,7 @@
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class SerialOutputTimeTestHelper : GreenSenseHardwareTestHelper
+    public class SerialOutputTimeTestHelper : GreenSenseMqttHardwareTestHelper
     {
         public int ReadInterval = 1;
 
@@ -12,6 +12,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
             Console.WriteLine ("Read interval: " + ReadInterval);
 
+            RequireMqttConnection = false;
+
             ConnectDevices ();
 
             SetDeviceReadInterval (ReadInterval);
@@ -19,7 +21,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             ReadFromDeviceAndOutputToConsole ();
 
             // Skip some data before checking the output time
-            WaitForData (3);
+            WaitForData (2);
 
             // Get the time until the next data line
             var secondsBetweenDataLines = WaitUntilDataLine ();

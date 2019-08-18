@@ -17,6 +17,7 @@ WiFiUDP ntpUDP;
 
 NTPClient timeClient(ntpUDP, NTP_ADDRESS, NTP_OFFSET, NTP_INTERVAL);
 
+bool isWiFiEnabled = true;
 bool isWiFiConnected = false;
 bool isWiFiConnecting = false;
 
@@ -32,66 +33,69 @@ bool isWiFiConnectionFailureReported = false;
 
 void setupWiFi()
 {
-  if (WiFi.status() != WL_CONNECTED)
-    isWiFiConnected = false;
-
-  if (!isWiFiConnected)
+  if (isWiFiEnabled)
   {
-    bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
-                                wifiStartConnectingTime + wifiRetryInterval < millis();
-    
-    bool wifiConnectionFailureReportNeeded = WiFi.status() == WL_CONNECT_FAILED
-                                             && !isReconnectRetryTime
-                                             && !isWiFiConnectionFailureReported;
-        
-    if (wifiConnectionFailureReportNeeded)
-    {
-      Serial.println("Connection to WiFi failed");
-      
+    if (WiFi.status() != WL_CONNECTED)
       isWiFiConnected = false;
-      isWiFiConnectionFailureReported = true;
-    }
-    else if (WiFi.status() == WL_CONNECTED)
-    {
-      Serial.println("Connected to WiFi");
 
-      isWiFiConnected = true;
+    if (!isWiFiConnected)
+    {
+      bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
+                                  wifiStartConnectingTime + wifiRetryInterval < millis();
       
-      timeClient.begin();
-    }
-    else if (WiFi.status() != WL_CONNECTED)
-    {    
-      if (isWiFiConnecting && isReconnectRetryTime)
+      bool wifiConnectionFailureReportNeeded = WiFi.status() == WL_CONNECT_FAILED
+                                               && !isReconnectRetryTime
+                                               && !isWiFiConnectionFailureReported;
+          
+      if (wifiConnectionFailureReportNeeded)
       {
-        Serial.println("Failed to connect to WiFi. Retrying...");
+        Serial.println("Connection to WiFi failed");
+        
+        isWiFiConnected = false;
+        isWiFiConnectionFailureReported = true;
       }
-    
-      if (!isWiFiConnecting || isReconnectRetryTime)
+      else if (WiFi.status() == WL_CONNECTED)
       {
-        Serial.println();
-        Serial.println("Setting up WiFi...");
+        Serial.println("Connected to WiFi");
+
+        isWiFiConnected = true;
         
-        loadWiFiSettingsFromEEPROM();
-        
-        Serial.print("  WiFi network: ");
-        Serial.println(wifiNetwork);
-        Serial.print("  WiFi password: ");
-        Serial.println(wifiPassword);
-        
-        Serial.println("Connecting to WiFi network...");
+        timeClient.begin();
+      }
+      else if (WiFi.status() != WL_CONNECTED)
+      {    
+        if (isWiFiConnecting && isReconnectRetryTime)
+        {
+          Serial.println("Failed to connect to WiFi. Retrying...");
+        }
+      
+        if (!isWiFiConnecting || isReconnectRetryTime)
+        {
+          Serial.println();
+          Serial.println("Setting up WiFi...");
           
-        char networkBuffer[20];
-        char passwordBuffer[20];
-        
-        wifiNetwork.toCharArray(networkBuffer, wifiNetwork.length()+1); 
-        wifiPassword.toCharArray(passwordBuffer, wifiPassword.length()+1);
-         
-        WiFi.begin(networkBuffer, passwordBuffer);
+          loadWiFiSettingsFromEEPROM();
           
-        wifiStartConnectingTime = millis();
+          Serial.print("  WiFi network: ");
+          Serial.println(wifiNetwork);
+          Serial.print("  WiFi password: ");
+          Serial.println(wifiPassword);
           
-        isWiFiConnecting = true;    
-        isWiFiConnectionFailureReported = false;
+          Serial.println("Connecting to WiFi network...");
+            
+          char networkBuffer[20];
+          char passwordBuffer[20];
+          
+          wifiNetwork.toCharArray(networkBuffer, wifiNetwork.length()+1); 
+          wifiPassword.toCharArray(passwordBuffer, wifiPassword.length()+1);
+           
+          WiFi.begin(networkBuffer, passwordBuffer);
+            
+          wifiStartConnectingTime = millis();
+            
+          isWiFiConnecting = true;    
+          isWiFiConnectionFailureReported = false;
+        }
       }
     }
   }
@@ -188,5 +192,17 @@ void loopWiFi()
   setupWiFi();
   if (isWiFiConnected)
     timeClient.update();
+}
+
+void disableWiFi()
+{
+  isWiFiEnabled = false;
+  
+  isWiFiConnected = false;
+  isWiFiConnecting = false;
+  wifiStartConnectingTime = 0;
+  
+  if (WiFi.status() == WL_CONNECTED)
+    WiFi.disconnect();
 }
 

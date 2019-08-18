@@ -15,6 +15,7 @@ extern WiFiUDP ntpUDP;
 
 extern NTPClient timeClient;
 
+extern bool isWiFiEnabled;
 extern bool isWiFiConnected;
 extern bool isWiFiConnecting;
 
@@ -29,5 +30,7 @@ void loadWiFiSettingsFromEEPROM();
 
 void setWiFiNetwork(char* networkName);
 void setWiFiPassword(char* password);
+
+void disableWiFi();
 
 #endif

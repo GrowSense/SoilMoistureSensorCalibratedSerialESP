@@ -2,7 +2,7 @@
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class FullScaleMonitorTestHelper : GreenSenseHardwareTestHelper
+    public class FullScaleMonitorTestHelper : GreenSenseMqttHardwareTestHelper
     {
         public FullScaleMonitorTestHelper ()
         {

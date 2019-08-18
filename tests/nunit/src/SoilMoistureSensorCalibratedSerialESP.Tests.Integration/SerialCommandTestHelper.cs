@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class SerialCommandTestHelper : GreenSenseHardwareTestHelper
+    public class SerialCommandTestHelper : GreenSenseMqttHardwareTestHelper
     {
         public string Key = "";
         public string Value = "0";

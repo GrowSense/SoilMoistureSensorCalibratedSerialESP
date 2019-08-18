@@ -21,6 +21,8 @@ extern long mqttPort;
 
 extern bool areMqttSettingsLoadedFromEEPROM;
 
+extern bool isMqttEnabled;
+
 extern String subscribeTopics[];
 
 void setupMqtt();
@@ -50,5 +52,7 @@ void setMqttPort(char* port);
 void setMqttDeviceName(char* password);
 
 void loadMqttSettingsFromEEPROM();
+
+void disableMqtt();
 
 #endif

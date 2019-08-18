@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class CalibrateToCurrentCommandTestHelper : GreenSenseHardwareTestHelper
+    public class CalibrateToCurrentCommandTestHelper : GreenSenseMqttHardwareTestHelper
     {
         public string Label;
         public string Key;
@@ -17,7 +17,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public void TestCalibrateCommand ()
         {
             WriteTitleText ("Starting calibrate " + Label + " command test");
-
 
             Console.WriteLine ("Simulated soil moisture: " + SimulatedSoilMoisturePercentage + "%");
 

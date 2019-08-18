@@ -29,14 +29,26 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             Mqtt.Start ();
         }
 
+        public void DisableMqtt ()
+        {
+            RequireMqttConnection = false;
+
+            SendDeviceCommand ("!");
+        }
+
         public override void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
         {
-            if (RequireMqttConnection)
+            if (RequireMqttConnection) {
+                Console.WriteLine ("MQTT connection required for test. Setting up WiFi and MQTT.");
                 TextToWaitForBeforeTest = ConnectedToMqttText;
 
-            SetWiFiSettings ();
+                SetWiFiSettings ();
 
-            SetMqttSettings ();
+                SetMqttSettings ();
+            } else {
+                Console.WriteLine ("MQTT connection not required for test. Disabling WiFi and MQTT.");
+                SendDeviceCommand ("!");
+            }
 
             base.PrepareDeviceForTest (consoleWriteDeviceOutput);
 
