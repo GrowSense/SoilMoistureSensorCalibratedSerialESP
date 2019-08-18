@@ -89,32 +89,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         public void WaitForMessageReceived (string message)
         {
             Console.WriteLine ("");
-            Console.WriteLine ("Waiting for message: " + message);
+            Console.WriteLine ("Waiting for message: " + CleanSerialOutput(message));
 
-            var output = String.Empty;
-            var wasMessageReceived = false;
-
-            var startTime = DateTime.Now;
-
-            while (!wasMessageReceived) {
-                output += ReadLineFromDevice ();
-
-                var expectedText = "Received message: " + message;
-                if (output.Contains (expectedText)) {
-                    wasMessageReceived = true;
-
-                    //Console.WriteLine ("  Message was received");
-
-                    //ConsoleWriteSerialOutput (output);
-                }
-
-                var hasTimedOut = DateTime.Now.Subtract (startTime).TotalSeconds > TimeoutWaitingForResponse;
-                if (hasTimedOut && !wasMessageReceived) {
-                    ConsoleWriteSerialOutput (output);
-
-                    Assert.Fail ("Timed out waiting for message received (" + TimeoutWaitingForResponse + " seconds)");
-                }
-            }
+            WaitForText("Received message: " + message);
         }
 
         #endregion
