@@ -29,7 +29,6 @@ void serialPrintData()
 
   if (isReadyToPrintData)
   {
-
     lastSerialOutputTime = millis();
     
     if (isDebugMode)

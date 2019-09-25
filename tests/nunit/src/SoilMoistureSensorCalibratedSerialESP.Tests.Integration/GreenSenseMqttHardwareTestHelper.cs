@@ -29,13 +29,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
             Mqtt.Start ();
         }
 
-        public void DisableMqtt ()
-        {
-            RequireMqttConnection = false;
-
-            SendDeviceCommand ("!");
-        }
-
         public override void PrepareDeviceForTest (bool consoleWriteDeviceOutput)
         {
             if (RequireMqttConnection) {
