@@ -23,7 +23,7 @@ mkdir -p $TEMPORARY_DIR
 
 cd $TEMPORARY_DIR
 
-git clone http://github.com/GreenSense/SoilMoistureSensorCalibratedSerial -b $BRANCH && \
+git clone http://github.com/GrowSense/SoilMoistureSensorCalibratedSerial -b $BRANCH && \
 
 cd SoilMoistureSensorCalibratedSerial && \
 sh init.sh && \

@@ -8,7 +8,7 @@ void serialPrintDeviceInfo()
 {
   Serial.println("");
   Serial.println("-- Start Device Info");
-  Serial.println("Family: GreenSense");
+  Serial.println("Family: GrowSense");
   Serial.println("Group: monitor");
   Serial.println("Project: SoilMoistureSensorCalibratedSerialESP");
   Serial.print("Board: ");

@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class GreenSenseMqttHardwareTestHelper : GreenSenseHardwareTestHelper
+    public class GrowSenseMqttHardwareTestHelper : GrowSenseHardwareTestHelper
     {
         public MqttTestHelper Mqtt;
 
@@ -11,7 +11,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         
         public bool RequireMqttConnection = false;
 
-        public GreenSenseMqttHardwareTestHelper ()
+        public GrowSenseMqttHardwareTestHelper ()
         {
         }
 

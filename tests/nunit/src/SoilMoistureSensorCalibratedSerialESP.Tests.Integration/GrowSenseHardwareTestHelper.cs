@@ -5,7 +5,7 @@ using System.IO;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class GreenSenseHardwareTestHelper : HardwareTestHelper
+    public class GrowSenseHardwareTestHelper : HardwareTestHelper
     {
         public int SoilMoistureSimulatorPin = 9;
         public int SoilMoistureSimulatorPowerPin = 3;
@@ -27,7 +27,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public bool RequiresResetSettings = true;
 
-        public GreenSenseHardwareTestHelper ()
+        public GrowSenseHardwareTestHelper ()
         {
         }
 

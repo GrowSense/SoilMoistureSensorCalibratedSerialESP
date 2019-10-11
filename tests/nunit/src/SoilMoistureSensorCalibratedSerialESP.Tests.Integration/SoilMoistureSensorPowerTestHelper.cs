@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class SoilMoistureSensorPowerTestHelper : GreenSenseMqttHardwareTestHelper
+    public class SoilMoistureSensorPowerTestHelper : GrowSenseMqttHardwareTestHelper
     {
         public int ReadInterval = 1;
 

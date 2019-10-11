@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class CalibrateToCurrentCommandTestHelper : GreenSenseMqttHardwareTestHelper
+    public class CalibrateToCurrentCommandTestHelper : GrowSenseMqttHardwareTestHelper
     {
         public string Label;
         public string Key;

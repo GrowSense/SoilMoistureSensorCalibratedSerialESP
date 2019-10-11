@@ -13,7 +13,7 @@ pipeline {
             steps {
                 checkout scm
                 
-                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GreenSense/SoilMoistureSensorCalibratedSerialESP.git' )
+                shHide( 'git remote set-url origin https://${GHTOKEN}@github.com/GrowSense/SoilMoistureSensorCalibratedSerialESP.git' )
                 sh "git config --add remote.origin.fetch +refs/heads/master:refs/remotes/origin/master"
                 sh "git fetch --no-tags"
                 sh 'git checkout $BRANCH_NAME'

@@ -48,11 +48,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FullScaleMonitorTestFixture.cs" />
     <Compile Include="FullScaleMonitorTestHelper.cs" />
-    <Compile Include="GreenSenseHardwareTestHelper.cs" />
+    <Compile Include="GrowSenseHardwareTestHelper.cs" />
     <Compile Include="HardwareTestHelper.cs" />
     <Compile Include="SoilMoistureSensorPowerTestFixture.cs" />
     <Compile Include="SoilMoistureSensorPowerTestHelper.cs" />
-    <Compile Include="GreenSenseMqttHardwareTestHelper.cs" />
+    <Compile Include="GrowSenseMqttHardwareTestHelper.cs" />
     <Compile Include="MqttTestHelper.cs" />
     <Compile Include="ReadIntervalMqttCommandTestFixture.cs" />
     <Compile Include="ReadIntervalMqttCommandTestHelper.cs" />

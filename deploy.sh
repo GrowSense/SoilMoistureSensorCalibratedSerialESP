@@ -12,7 +12,7 @@ then
 #  sudo apt-get update && sudo apt-get -y install sshpass
 
    sshpass -p "$GARDEN_PASSWORD" ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -o StrictHostKeyChecking=no -l $GARDEN_USER $GARDEN_HOSTNAME "/bin/echo hello"
-#  sshpass -p $GARDEN_PASSWORD ssh -o StrictHostKeyChecking=no -t $GARDEN_USER@$GARDEN_HOSTNAME "bash -c 'cd /home/$GARDEN_USER/workspace/GreenSense/Index/sketches/monitor/SoilMoistureSensorCalibratedSerial && sh pull-build-and-upload.sh'"
+#  sshpass -p $GARDEN_PASSWORD ssh -o StrictHostKeyChecking=no -t $GARDEN_USER@$GARDEN_HOSTNAME "bash -c 'cd /home/$GARDEN_USER/workspace/GrowSense/Index/sketches/monitor/SoilMoistureSensorCalibratedSerial && sh pull-build-and-upload.sh'"
 
 else
   echo "Can't deploy dev branch. Switch to master."

@@ -2,7 +2,7 @@
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class MqttOutputTimeTestHelper : GreenSenseMqttHardwareTestHelper
+    public class MqttOutputTimeTestHelper : GrowSenseMqttHardwareTestHelper
     {
         public int ReadInterval = 1;
 

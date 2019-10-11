@@ -19,7 +19,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public MqttClient Client;
 
-        public GreenSenseHardwareTestHelper Hardware;
+        public GrowSenseHardwareTestHelper Hardware;
 
         public string ExistingStatusMessage;
 
@@ -27,13 +27,13 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 
         public TimeoutHelper Timeout = new TimeoutHelper ();
 
-        public MqttTestHelper (GreenSenseHardwareTestHelper hardware, string deviceName)
+        public MqttTestHelper (GrowSenseHardwareTestHelper hardware, string deviceName)
         {
             DeviceName = deviceName;
             Hardware = hardware;
         }
 
-        public MqttTestHelper (GreenSenseHardwareTestHelper hardware)
+        public MqttTestHelper (GrowSenseHardwareTestHelper hardware)
         {
             Hardware = hardware;
         }
