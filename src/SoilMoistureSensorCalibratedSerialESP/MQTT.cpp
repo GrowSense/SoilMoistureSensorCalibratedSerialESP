@@ -371,8 +371,7 @@ void setMqttPort(char* port)
 /* MQTT Publish */
 void publishMqttValue(char* subTopic, char* value)
 {
-  String topic = "/";
-  topic += mqttDeviceName;
+  String topic = mqttDeviceName;
   topic += "/";
   topic += subTopic;
 
@@ -382,8 +381,7 @@ void publishMqttValue(char* subTopic, char* value)
 
 void publishMqttValue(char* subTopic, String value)
 {
-  String topic = "/";
-  topic += mqttDeviceName;
+  String topic = mqttDeviceName;
   topic += "/";
   topic += subTopic;
   
@@ -396,7 +394,7 @@ void publishMqttValue(char* subTopic, String value)
 
 void publishMqttPush(int soilMoistureValue)
 {
-  String topic = "/push/";
+  String topic = "push/";
   topic += mqttDeviceName;
 
   char valueString[16];
