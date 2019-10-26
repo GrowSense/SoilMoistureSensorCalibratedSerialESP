@@ -143,8 +143,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   Serial.println();
 
-  String prefix = "/";
-  prefix += mqttDeviceName;
+  String prefix = mqttDeviceName;
   prefix += "/";
 
   String postFix = "/in";
