@@ -6,7 +6,7 @@ An ESP8266 WiFi sketch for a calibrated soil moisture sensor which outputs data 
 |    | master | dev |
 | ------------- | ------------- | ------------- |
 | Travis CI Build  | [![Build Status](https://travis-ci.org/GrowSense/SoilMoistureSensorCalibratedSerialESP.svg?branch=master)](https://travis-ci.org/GrowSense/SoilMoistureSensorCalibratedSerialESP)  | [![Build Status](https://travis-ci.org/GrowSense/SoilMoistureSensorCalibratedSerialESP.svg?branch=dev)](https://travis-ci.org/GrowSense/SoilMoistureSensorCalibratedSerialESP)  |
-| Jenkins Hardware Test  | [![Build Status](http://greensense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/master/badge/icon)](http:/greensense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/master/)  | [![Build Status](http://greensense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/dev/badge/icon)](http:/greensense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/dev/)  |
+| Jenkins Hardware Test  | [![Build Status](http://growsense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/master/badge/icon)](http:/growsense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/master/)  | [![Build Status](http://growsense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/dev/badge/icon)](http:/growsense.hopto.org:8080/job/GrowSense/job/SoilMoistureSensorCalibratedSerialESP/job/dev/)  |
 
 ## Clone the Index
 If you intend to use more than one software component from the GrowSense group it is recommended you clone the entire index.

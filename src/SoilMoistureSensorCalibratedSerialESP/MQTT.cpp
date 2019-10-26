@@ -102,8 +102,7 @@ void setupMqttSubscriptions()
 {
   Serial.println("Setting up MQTT subscriptions...");
 
-  String baseTopic = "/";
-  baseTopic += mqttDeviceName;
+  String baseTopic = mqttDeviceName;
   baseTopic += "/";
 
   Serial.print("  Total subscribe topics: ");
