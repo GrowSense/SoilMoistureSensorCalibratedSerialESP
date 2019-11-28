@@ -10,9 +10,6 @@
 #define soilMoistureSensorPin A0
 #define soilMoistureSensorPowerPin 12
 
-#define SOIL_MOISTURE_SENSOR_TYPE_RESISTIVE 0
-#define SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE 1
-
 int soilMoistureSensorType = SOIL_MOISTURE_SENSOR_TYPE_CAPACITIVE;
 
 bool soilMoistureSensorIsOn = true;

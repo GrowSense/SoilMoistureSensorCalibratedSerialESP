@@ -50,7 +50,7 @@ echo "    MQTT Port"
 echo "MPort:$MQTT_PORT;" >&3
 if [ $MQTT_DEVICE_NAME ]; then
   echo "    MQTT Device name"
-  echo "MDevice:$MQTT_DEVICE_NAME;" >&3
+  echo "Name:$MQTT_DEVICE_NAME;" >&3
 fi
 
 echo ""

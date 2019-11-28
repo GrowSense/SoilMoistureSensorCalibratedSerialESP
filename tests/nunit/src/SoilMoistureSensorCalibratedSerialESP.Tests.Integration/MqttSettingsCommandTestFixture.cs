@@ -95,29 +95,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
                 helper.TestCommand ();
             }
         }
-
-        [Test]
-        public void Test_SetMqttDeviceNameCommand ()
-        {
-            using (var helper = new SerialCommandTestHelper ()) {
-                helper.Label = "MQTT device name";
-                helper.Value = "device" + new Random ().Next (100).ToString ();
-                helper.Key = "MDevice";
-                helper.ValueIsOutputAsData = false;
-                helper.ValueIsOutputAsData = false;
-                helper.RequiresResetSettings = false;
-                helper.SeparateKeyValueWithColon = true;
-                helper.CheckExpectedSerialOutput = true;
-
-                helper.DevicePort = GetDevicePort ();
-                helper.DeviceBaudRate = GetDeviceSerialBaudRate ();
-
-                helper.SimulatorPort = GetSimulatorPort ();
-                helper.SimulatorBaudRate = GetSimulatorSerialBaudRate ();
-
-                helper.TestCommand ();
-            }
-        }
     }
 }
 

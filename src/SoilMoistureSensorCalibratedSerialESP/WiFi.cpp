@@ -40,8 +40,7 @@ void setupWiFi()
 
     if (!isWiFiConnected)
     {
-      bool isReconnectRetryTime = wifiStartConnectingTime > 0 &&
-                                  wifiStartConnectingTime + wifiRetryInterval < millis();
+      bool isReconnectRetryTime = wifiStartConnectingTime > 0 && hasDelayElapsed(wifiRetryInterval, wifiStartConnectingTime);
       
       bool wifiConnectionFailureReportNeeded = WiFi.status() == WL_CONNECT_FAILED
                                                && !isReconnectRetryTime

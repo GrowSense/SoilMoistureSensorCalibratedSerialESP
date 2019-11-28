@@ -22,4 +22,6 @@ float millisecondsToSecondsWithDecimal(int milliseconds);
 long readLong(char* text, int startPosition, int digitCount);
 int readInt(char* text, int startPosition, int digitCount);
 
+bool hasDelayElapsed(long interval, unsigned long previousTime);
+
 #endif

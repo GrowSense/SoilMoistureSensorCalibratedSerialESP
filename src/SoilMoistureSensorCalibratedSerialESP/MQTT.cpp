@@ -3,6 +3,7 @@
 #include "WiFi.h"
 #include "MQTT.h"
 #include "EEPROMHelper.h"
+#include "DeviceName.h"
 
 #define MQTT_HOST_EEPROM_FLAG_ADDRESS 140
 #define MQTT_HOST_EEPROM_ADDRESS 141
@@ -16,13 +17,9 @@
 #define MQTT_PORT_EEPROM_FLAG_ADDRESS 200
 #define MQTT_PORT_EEPROM_ADDRESS 201
 
-#define MQTT_DEVICE_NAME_EEPROM_FLAG_ADDRESS 210
-#define MQTT_DEVICE_NAME_EEPROM_ADDRESS 211
-
 String mqttHost = "garden";
 String mqttUsername = "username";
 String mqttPassword = "password";
-String mqttDeviceName = "wiFiMonitor1";
 long mqttPort = 1883;
 
 int totalSubscribeTopics = 5;
@@ -45,7 +42,7 @@ void setupMqtt()
     loadMqttSettingsFromEEPROM();
 
     bool isTimeToConnectToMqtt = isWiFiConnected && !isMqttConnected
-              && (lastMqttConnectionAttemptTime == 0 || lastMqttConnectionAttemptTime + mqttConnectionAttemptInterval < millis());
+              && (lastMqttConnectionAttemptTime == 0 || hasDelayElapsed(mqttConnectionAttemptInterval, lastMqttConnectionAttemptTime));
 
     if (isTimeToConnectToMqtt)
     {
@@ -73,13 +70,13 @@ void setupMqtt()
         Serial.println("[hidden]");
         //Serial.println(mqttPassword); // Disabled to hide the MQTT password
         Serial.print("  Device name: ");
-        Serial.println(mqttDeviceName);
+        Serial.println(deviceName);
      
         char deviceNameBuffer[20];
         char usernameBuffer[20];
         char passwordBuffer[20];
         
-        mqttDeviceName.toCharArray(deviceNameBuffer, mqttDeviceName.length()+1);
+        deviceName.toCharArray(deviceNameBuffer, deviceName.length()+1);
         mqttUsername.toCharArray(usernameBuffer, mqttUsername.length()+1);
         mqttPassword.toCharArray(passwordBuffer, mqttPassword.length()+1);
       
@@ -102,7 +99,7 @@ void setupMqttSubscriptions()
 {
   Serial.println("Setting up MQTT subscriptions...");
 
-  String baseTopic = mqttDeviceName;
+  String baseTopic = deviceName;
   baseTopic += "/";
 
   Serial.print("  Total subscribe topics: ");
@@ -143,7 +140,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   Serial.println();
 
-  String prefix = mqttDeviceName;
+  String prefix = deviceName;
   prefix += "/";
 
   String postFix = "/in";
@@ -261,22 +258,8 @@ void loadMqttSettingsFromEEPROM()
         Serial.println("  MQTT pasword has not been set to EEPROM. Using default.");
     }
     
-    if (isDebugMode)
-      Serial.println("  Reading MQTT device name from EEPROM");
-    if (EEPROMFlagIsSet(MQTT_DEVICE_NAME_EEPROM_FLAG_ADDRESS))
-    {
-      mqttDeviceName = EEPROMReadString(MQTT_DEVICE_NAME_EEPROM_ADDRESS);
-    }
-    else
-    {
-      if (isDebugMode)
-        Serial.println("  MQTT device name has not been set to EEPROM. Using default.");
-    }
-    
     //if (isDebugMode)
     //{
-      Serial.print("  MQTT device name: ");
-      Serial.println(mqttDeviceName);
       Serial.print("  MQTT host: ");
       Serial.println(mqttHost);
       Serial.print("  MQTT username: ");
@@ -338,21 +321,6 @@ void setMqttPassword(char* password)
   isMqttConnected = false;
 }
 
-void setMqttDeviceName(char* deviceName)
-{
-  Serial.print("Setting MQTT device name: ");
-  Serial.println(deviceName);
-  
-  mqttDeviceName = deviceName;
-  
-  EEPROMWriteCharsAndSetFlag(MQTT_DEVICE_NAME_EEPROM_FLAG_ADDRESS, MQTT_DEVICE_NAME_EEPROM_ADDRESS, deviceName);
-  
-  lastMqttConnectionAttemptTime = 0;
-  
-  pubSubClient.disconnect();
-  isMqttConnected = false;
-}
-
 void setMqttPort(char* port)
 {
   Serial.print("Setting MQTT port: ");
@@ -371,7 +339,7 @@ void setMqttPort(char* port)
 /* MQTT Publish */
 void publishMqttValue(char* subTopic, char* value)
 {
-  String topic = mqttDeviceName;
+  String topic = deviceName;
   topic += "/";
   topic += subTopic;
 
@@ -381,7 +349,7 @@ void publishMqttValue(char* subTopic, char* value)
 
 void publishMqttValue(char* subTopic, String value)
 {
-  String topic = mqttDeviceName;
+  String topic = deviceName;
   topic += "/";
   topic += subTopic;
   
@@ -395,7 +363,7 @@ void publishMqttValue(char* subTopic, String value)
 void publishMqttPush(int soilMoistureValue)
 {
   String topic = "push/";
-  topic += mqttDeviceName;
+  topic += deviceName;
 
   char valueString[16];
   itoa(soilMoistureValue, valueString, 10);

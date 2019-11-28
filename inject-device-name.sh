@@ -13,10 +13,10 @@ fi
 
 echo "  Device name: $DEVICE_NAME"
 
-SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/MQTT.cpp"
+SOURCE_FILE="src/SoilMoistureSensorCalibratedSerialESP/DeviceName.cpp"
 
 # Inject the device name into the sketch
-sed -i "s/String mqttDeviceName = .*/String mqttDeviceName = \"$DEVICE_NAME\";/" $SOURCE_FILE
+sed -i "s/String deviceName = .*/String deviceName = \"$DEVICE_NAME\";/" $SOURCE_FILE || exit 1
 
 # Create the device name security file needed for tests to run
 echo $DEVICE_NAME > mqtt-device-name.security

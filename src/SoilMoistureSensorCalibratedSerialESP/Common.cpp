@@ -88,3 +88,8 @@ long readLong(char* text, int startPosition, int digitCount)
   return number;
 }
 
+bool hasDelayElapsed(long interval, unsigned long previousTime)
+{
+  return millis() - previousTime >= interval;
+}
+

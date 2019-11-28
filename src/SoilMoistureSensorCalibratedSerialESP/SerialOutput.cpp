@@ -3,6 +3,7 @@
 
 #include "Common.h"
 #include "SoilMoistureSensor.h"
+#include "DeviceName.h"
 
 void serialPrintDeviceInfo()
 {
@@ -13,6 +14,8 @@ void serialPrintDeviceInfo()
   Serial.println("Project: SoilMoistureSensorCalibratedSerialESP");
   Serial.print("Board: ");
   Serial.println(BOARD_TYPE);
+  Serial.print("Device name: ");
+  Serial.println(deviceName);
   Serial.print("Version: ");
   Serial.println(VERSION);
   Serial.println("ScriptCode: soil-moisture-monitor");

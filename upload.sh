@@ -1,5 +1,7 @@
 PORT_NAME=$1
 
+echo "Uploading ESP soil moisture monitor..."
+
 if [ ! $PORT_NAME ]; then
   PORT_NAME=$MONITOR_ESP_PORT
 fi
