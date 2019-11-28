@@ -13,9 +13,13 @@ if [ ! $SERIAL_PORT ]; then
   exit 1
 fi
 
+if [[ "$SERIAL_PORT" != *"/dev/"* ]]; then
+  SERIAL_PORT="/dev/$SERIAL_PORT"
+fi
+
 echo "  Device name: $DEVICE_NAME"
 echo "  Device port: $SERIAL_PORT"
 
-sh send-serial-command.sh "Name:$DEVICE_NAME" $SERIAL_PORT
+sh send-serial-command.sh "Name:$DEVICE_NAME" $SERIAL_PORT || exit 1
 
 echo "Finished sending device name command"
