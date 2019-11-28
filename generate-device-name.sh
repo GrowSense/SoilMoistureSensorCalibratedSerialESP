@@ -12,5 +12,5 @@ DEVICE_NAME="ESPMonitor$DEVICE_NUMBER"
 
 echo "Generating new device name: $DEVICE_NAME"
 
-echo $DEVICE_NAME > mqtt-device-name.security
+echo $DEVICE_NAME > device-name.security
 

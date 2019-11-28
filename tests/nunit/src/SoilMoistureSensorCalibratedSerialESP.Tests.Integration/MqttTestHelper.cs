@@ -42,7 +42,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
       Console.WriteLine ("Starting MQTT test");
       Console.WriteLine ("");
 
-      DeviceName = GetSecurityValue ("mqtt-device-name", "");
+      DeviceName = GetSecurityValue ("device-name", "");
       var host = GetSecurityValue ("mqtt-host", "MQTT_HOST");
       var user = GetSecurityValue ("mqtt-username", "MQTT_USERNAME");
       var pass = GetSecurityValue ("mqtt-password", "MQTT_PASSWORD");
