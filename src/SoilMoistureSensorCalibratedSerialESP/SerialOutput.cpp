@@ -43,6 +43,8 @@ void serialPrintData()
     //Serial.print("T:");
     //Serial.print(numberOfSecondsOnline);
     //Serial.print(";");
+    Serial.print("Name:");
+    Serial.print(deviceName);
     Serial.print("R:");
     Serial.print(soilMoistureLevelRaw);
     Serial.print(";");

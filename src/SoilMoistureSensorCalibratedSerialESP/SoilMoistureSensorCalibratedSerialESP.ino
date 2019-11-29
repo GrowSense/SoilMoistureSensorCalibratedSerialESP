@@ -11,6 +11,7 @@
 #include "Commands.h"
 #include "SoilMoistureSensor.h"
 #include "SerialOutput.h"
+#include "DeviceName.h"
 
 void setup()
 {
@@ -19,6 +20,8 @@ void setup()
   EEPROM.begin(512);
     
   Serial.println("Starting WiFi soil moisture monitor");
+  
+  loadDeviceNameFromEEPROM();
   
   serialPrintDeviceInfo();
 
