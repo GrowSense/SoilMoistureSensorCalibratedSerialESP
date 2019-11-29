@@ -287,8 +287,7 @@ void setMqttHost(char* host)
   
   lastMqttConnectionAttemptTime = 0;
 
-  mqttClient.disconnect();
-  isMqttConnected = false;
+  disconnectMqtt();
 }
 
 void setMqttUsername(char* username)
@@ -302,8 +301,7 @@ void setMqttUsername(char* username)
   
   lastMqttConnectionAttemptTime = 0;
   
-  mqttClient.disconnect();
-  isMqttConnected = false;
+  disconnectMqtt();
 }
 
 void setMqttPassword(char* password)
@@ -317,8 +315,7 @@ void setMqttPassword(char* password)
   
   lastMqttConnectionAttemptTime = 0;
   
-  mqttClient.disconnect();
-  isMqttConnected = false;
+  disconnectMqtt();
 }
 
 void setMqttPort(char* port)
@@ -332,8 +329,7 @@ void setMqttPort(char* port)
   
   lastMqttConnectionAttemptTime = 0;
   
-  mqttClient.disconnect();
-  isMqttConnected = false;
+  disconnectMqtt();
 }
 
 /* MQTT Publish */
