@@ -17,7 +17,7 @@ if [[ "$SERIAL_PORT" != *"/dev/"* ]]; then
   SERIAL_PORT="/dev/$SERIAL_PORT"
 fi
 
-echo "  Command: $COMMAND"
+echo "  Command: '$COMMAND'"
 echo "  Device port: $SERIAL_PORT"
 
 exec 3<> $SERIAL_PORT
@@ -25,6 +25,23 @@ exec 3<> $SERIAL_PORT
 sleep 2
 
 echo "$COMMAND" >&3
+
+sleep 1
+
+RESULT=$(cat <&3)
+
+echo ""
+echo "-------------------- Device Output --------------------"
+echo ""
+echo "${RESULT}"
+echo ""
+echo "-------------------------------------------------------"
+echo ""
+
+if [[ "$RESULT" != *"$COMMAND"* ]]; then
+  echo "  Error: Device didn't receive command."
+  exit 1
+fi
 
 exec 3>&-
 
