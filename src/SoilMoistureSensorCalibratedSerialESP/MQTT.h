@@ -7,7 +7,7 @@
 #include "SoilMoistureSensor.h"
 #include "Commands.h"
 
-extern PubSubClient client;
+extern PubSubClient mqttClient;
 
 extern String mqttHost;
 extern String mqttUsername;
@@ -17,6 +17,7 @@ extern long mqttPort;
 extern bool areMqttSettingsLoadedFromEEPROM;
 
 extern bool isMqttEnabled;
+extern bool isMqttConnected;
 
 extern String subscribeTopics[];
 
@@ -48,5 +49,7 @@ void setMqttPort(char* port);
 void loadMqttSettingsFromEEPROM();
 
 void disableMqtt();
+
+void disconnectMqtt();
 
 #endif
