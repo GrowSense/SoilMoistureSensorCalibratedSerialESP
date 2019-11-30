@@ -45,6 +45,7 @@ void serialPrintData()
     //Serial.print(";");
     Serial.print("Name:");
     Serial.print(deviceName);
+    Serial.print(";");
     Serial.print("R:");
     Serial.print(soilMoistureLevelRaw);
     Serial.print(";");
