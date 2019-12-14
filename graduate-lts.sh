@@ -2,7 +2,7 @@
 
 BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
-echo "Graduating master branch to lts branch..."
+echo "Graduating rc branch to lts branch..."
 
 sh clean.sh || exit 1
 
@@ -11,12 +11,12 @@ echo "  Fetching from origin..."
 git fetch origin || exit 1
 
 if [ "$BRANCH" = "dev" ];  then
-  echo "  Currently in dev branch. Checking out master branch..."
-  git checkout master || exit 1
+  echo "  Currently in dev branch. Checking out rc branch..."
+  git checkout rc || exit 1
 fi
 
 echo ""
-echo "  Merging the lts branch into the master branch..."
+echo "  Merging the lts branch into the rc branch..."
 git merge -X ours origin/lts || exit 1
 
 echo ""
@@ -24,8 +24,8 @@ echo "  Checking out the lts branch..."
 git checkout lts || exit 1
 
 echo ""
-echo "  Merging the master branch into the lts branch..."
-git merge -X theirs origin/master || exit 1
+echo "  Merging the rc branch into the lts branch..."
+git merge -X theirs origin/rc || exit 1
 
 echo ""
 echo "  Pushing the updated lts branch to origin..."
@@ -36,4 +36,4 @@ echo "  Checking out the $BRANCH branch again..."
 git checkout $BRANCH || exit 1
 
 echo ""
-echo "The 'master' branch has been graduated to the 'lts' branch"
+echo "The 'rc' branch has been graduated to the 'lts' branch"
