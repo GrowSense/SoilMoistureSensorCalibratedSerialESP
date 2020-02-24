@@ -74,6 +74,7 @@ pipeline {
             when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh upload.sh ${MONITOR_ESP_PORT}'
+                sh 'sleep 1'
                 sh 'sh send-wifi-mqtt-commands.sh $(cat device-name.security) ${MONITOR_ESP_PORT}'
             }
         }

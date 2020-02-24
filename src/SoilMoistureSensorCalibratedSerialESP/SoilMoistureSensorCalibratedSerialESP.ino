@@ -19,6 +19,8 @@ void setup()
 
   EEPROM.begin(512);
 
+  delay(200);
+
   Serial.println("Starting WiFi soil moisture monitor");
 
   checkCommand();
