@@ -68,7 +68,7 @@ pipeline {
             steps {
                 sh 'sh upload-simulator.sh ${MONITOR_ESP_SIMULATOR_PORT}'
                 sh 'echo "Ensuring the simulator isn\'t resetting the target device..."'
-                sh 'sh send-serial-command.sh "M4:2" ${MONITOR_ESP_SIMULATOR_PORT}'
+                sh 'bash send-serial-command.sh "M4:2" ${MONITOR_ESP_SIMULATOR_PORT}'
             }
         }
         stage('Upload') {
