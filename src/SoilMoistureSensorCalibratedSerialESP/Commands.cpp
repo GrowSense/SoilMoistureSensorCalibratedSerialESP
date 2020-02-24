@@ -12,10 +12,10 @@ void checkCommand()
     Serial.println("Checking incoming serial commands");
   }*/
 
-  if (checkMsgReady())
+  while (checkMsgReady())
   {
     char* msg = getMsg();
-       
+
     handleCommand(msg);
   }
 }
@@ -25,7 +25,7 @@ void handleCommand(char* msg)
   if (isDebugMode)
   {
     Serial.println("");
-    Serial.println("Handling command...");  
+    Serial.println("Handling command...");
   }
 
   Serial.print("Received message: ");
@@ -34,15 +34,15 @@ void handleCommand(char* msg)
   if (isKeyValue(msg))
   {
     Serial.println("  Is key value");
-    
+
     char* key = getKey(msg);
-    
+
     Serial.print("  Key: \"");
     Serial.print(key);
     Serial.println("\"");
-    
+
     char* value = getValue(msg);
-    
+
     Serial.print("  Value: \"");
     Serial.print(value);
     Serial.println("\"");
@@ -88,7 +88,7 @@ void handleCommand(char* msg)
       if (isDebugMode)
         Serial.println("  Device name");
       setDeviceName(value);
-      
+
       // Disconnected MQTT and forcee it to reconnect
       disconnectMqtt();
     }
@@ -127,10 +127,10 @@ void handleCommand(char* msg)
         break;
     }
   }
-  
+
   forceSerialOutput();
   forceMqttOutput();
-  
+
   if (isDebugMode)
   {
     Serial.println("");
@@ -142,7 +142,7 @@ void restoreDefaultSettings()
   Serial.println("Restoring default settings");
 
   restoreDefaultSoilMoistureSensorSettings();
-  
+
   EEPROMReset();
 }
 

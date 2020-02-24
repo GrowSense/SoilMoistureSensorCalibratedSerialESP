@@ -1,7 +1,7 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#define VERSION "1-0-0-1"
+#define VERSION "1-0-3-8"
 #define BOARD_TYPE "esp"
 
 extern const int ANALOG_MAX;
