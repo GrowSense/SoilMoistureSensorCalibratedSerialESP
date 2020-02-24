@@ -1,6 +1,12 @@
-SERIAL_PORT=$1
+DEVICE_NAME=$1
+SERIAL_PORT=$2
 
 echo "Sending WiFi and MQTT settings to device as serial commands..."
+
+if [ ! $DEVICE_NAME ]; then
+  echo "Please provide a device name as an argument."
+  exit 1
+fi
 
 if [ ! $SERIAL_PORT ]; then
   echo "Please provide a serial port as an argument."
@@ -15,6 +21,8 @@ MQTT_USERNAME=$(cat mqtt-username.security)
 MQTT_PASSWORD=$(cat mqtt-password.security)
 MQTT_PORT=$(cat mqtt-port.security)
 
+echo "  Device Name: $DEVICE_NAME"
+echo ""
 echo "  WiFi Network: $WIFI_NAME"
 echo "  WiFi Password: [hidden]"
 echo ""
@@ -23,27 +31,25 @@ echo "  MQTT Username: $MQTT_USERNAME"
 echo "  MQTT Password: [hidden]"
 echo "  MQTT Port: $MQTT_PORT"
 echo ""
-echo "  Device port: $SERIAL_PORT"
+echo "  Serial port: $SERIAL_PORT"
 echo ""
 
-exec 3<> $SERIAL_PORT
-
-echo "  Sending..."
-echo "    WiFi Network"
-echo "WN:$WIFI_NAME;" >&3
-echo "    WiFi Password"
-echo "WPass:$WIFI_PASSWORD;" >&3
-echo "    MQTT Host"
-echo "MHost:$MQTT_HOST;" >&3
-echo "    MQTT Username"
-echo "MUser:$MQTT_USERNAME;" >&3
-echo "    MQTT Password"
-echo "MPass:$MQTT_PASSWORD;" >&3
-echo "    MQTT Port"
-echo "MPort:$MQTT_PORT;" >&3
+COMMAND="WN:$WIFI_NAME"
+COMMAND="$COMMAND;WPass:$WIFI_PASSWORD"
+COMMAND="$COMMAND;MHost:$MQTT_HOST"
+COMMAND="$COMMAND;MUser:$MQTT_USERNAME"
+COMMAND="$COMMAND;MPass:$MQTT_PASSWORD"
+COMMAND="$COMMAND;MPort:$MQTT_PORT"
+COMMAND="$COMMAND;Name:$DEVICE_NAME"
+COMMAND="$COMMAND;"
 
 echo ""
+echo "  Full command:"
+echo "    $COMMAND"
+echo ""
 
-exec 3>&-
+stty -F $SERIAL_PORT 9600 cs8 -cstopb
+sleep 0.1
+echo "$COMMAND" > $SERIAL_PORT
 
 echo "Finished sending WiFi and MQTT settings to device as serial commands"

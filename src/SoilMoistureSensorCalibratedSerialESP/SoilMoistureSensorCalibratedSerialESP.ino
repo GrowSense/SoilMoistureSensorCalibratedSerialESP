@@ -18,24 +18,24 @@ void setup()
   Serial.begin(9600);
 
   EEPROM.begin(512);
-    
+
   Serial.println("Starting WiFi soil moisture monitor");
-  
+
+  checkCommand();
+
   loadDeviceNameFromEEPROM();
-  
+
   serialPrintDeviceInfo();
 
   Serial.println("Device started...");
-  
+
   //setupWiFi();
-  
+
   //setupMqtt();
 
   setupSoilMoistureSensor();
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
-  
-  delay(200);
 }
 
 
@@ -45,17 +45,17 @@ void loop()
     loopNumber++;
 
   serialPrintLoopHeader();
-  
+
   checkCommand();
-  
+
   loopWiFi();
-  
+
   loopMqtt();
 
   takeSoilMoistureSensorReading();
 
   serialPrintData();
-  
+
   mqttPublishData();
 
   // Reset flag for this loop
