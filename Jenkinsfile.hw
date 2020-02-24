@@ -54,7 +54,6 @@ pipeline {
             when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'bash generate-device-name.sh'
-                sh 'sh inject-device-name.sh'
             }
         }
         stage('Build') {
@@ -75,7 +74,7 @@ pipeline {
             when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh upload.sh ${MONITOR_ESP_PORT}'
-                sh 'sh send-wifi-mqtt-commands.sh ${MONITOR_ESP_PORT}'
+                sh 'sh send-wifi-mqtt-commands.sh $(cat device-name.security) ${MONITOR_ESP_PORT}'
             }
         }
         stage('Test') {
@@ -102,13 +101,13 @@ pipeline {
             steps {
                 sh 'sh increment-version.sh'
             }
-        } 
+        }
         stage('Push Version') {
             when { expression { !shouldSkipBuild() } }
             steps {
                 sh 'sh push-version.sh'
             }
-        } 
+        }
         stage('CleanWSEnd') {
             steps {
                 deleteDir()
