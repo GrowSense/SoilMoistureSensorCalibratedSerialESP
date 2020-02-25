@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-  [TestFixture(Category="Integration")]
+  [TestFixture (Category = "Integration")]
   public class DeviceNameCommandTestFixture : BaseTestFixture
   {
     [Test]
@@ -13,8 +13,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         helper.Label = "Device name";
         helper.Value = "device" + new Random ().Next (100).ToString ();
         helper.Key = "Name";
-        helper.ValueIsOutputAsData = false;
-        helper.ValueIsOutputAsData = false;
+        helper.ValueIsOutputAsData = true;
         helper.RequiresResetSettings = false;
         helper.SeparateKeyValueWithColon = true;
         helper.CheckExpectedSerialOutput = true;

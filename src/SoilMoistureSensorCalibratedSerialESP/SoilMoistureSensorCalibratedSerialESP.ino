@@ -29,8 +29,6 @@ void setup()
 
   serialPrintDeviceInfo();
 
-  Serial.println("Device started...");
-
   //setupWiFi();
 
   //setupMqtt();
@@ -38,6 +36,8 @@ void setup()
   setupSoilMoistureSensor();
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
+
+  Serial.println("Device started...");
 }
 
 
