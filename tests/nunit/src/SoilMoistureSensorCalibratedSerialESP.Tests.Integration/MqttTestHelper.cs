@@ -102,9 +102,9 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
       var hasAccess = false;
 
       var maxWaitTime = new TimeSpan (
-        0,
-        0, // minutes
-        10);
+                          0,
+                          0, // minutes
+                          10);
       var startWaitTime = DateTime.Now;
 
       while (!hasAccess) {
@@ -182,7 +182,7 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
       var inTopic = DeviceName + "/" + key + "/in";
 
       Console.WriteLine ("Topic: " + inTopic);
-      Client.Publish (inTopic, Encoding.UTF8.GetBytes (value.ToString ()));
+      Client.Publish (inTopic, Encoding.UTF8.GetBytes (value.ToString ()), 0, true);
       Console.WriteLine ("");
 
       Hardware.WaitForMessageReceived (key + value);
@@ -200,8 +200,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
       Console.WriteLine ("Publishing error: " + error);
       var errorTopic = DeviceName + "/Error";
       Client.Publish (errorTopic, Encoding.UTF8.GetBytes (error),
-                      MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
-                      true);
+        MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+        true);
       PublishStatus (1, "Failed");
     }
 
@@ -232,8 +232,8 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
       Console.WriteLine ("Publishing status message: " + message);
       var statusMessageTopic = DeviceName + "/StatusMessage";
       Client.Publish (statusMessageTopic, Encoding.UTF8.GetBytes (message),
-                      MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
-                      true);
+        MqttMsgBase.QOS_LEVEL_EXACTLY_ONCE, // QoS level
+        true);
     }
 
     public void client_MqttMsgPublishReceived (object sender, MqttMsgPublishEventArgs e)

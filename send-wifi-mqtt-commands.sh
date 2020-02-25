@@ -21,6 +21,8 @@ MQTT_USERNAME=$(cat mqtt-username.security)
 MQTT_PASSWORD=$(cat mqtt-password.security)
 MQTT_PORT=$(cat mqtt-port.security)
 
+echo "$DEVICE_NAME" > device-name.security
+
 echo "  Device Name: $DEVICE_NAME"
 echo ""
 echo "  WiFi Network: $WIFI_NAME"

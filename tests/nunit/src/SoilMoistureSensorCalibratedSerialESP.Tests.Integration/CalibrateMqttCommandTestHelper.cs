@@ -3,38 +3,38 @@ using System.Threading;
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class CalibrateMqttCommandTestHelper : GrowSenseMqttHardwareTestHelper
+  public class CalibrateMqttCommandTestHelper : GrowSenseMqttHardwareTestHelper
+  {
+    public string Label;
+    public string Key;
+    public int RawSoilMoistureValue = 0;
+
+    public void TestCalibrateCommand ()
     {
-        public string Label;
-        public string Key;
-        public int RawSoilMoistureValue = 0;
+      WriteTitleText ("Starting calibrate " + Label + " command test");
 
-        public void TestCalibrateCommand ()
-        {
-            WriteTitleText ("Starting calibrate " + Label + " command test");
+      Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
+      Console.WriteLine ("");
 
-            Console.WriteLine ("Raw soil moisture value: " + RawSoilMoistureValue);
-            Console.WriteLine ("");
+      EnableMqtt ();
 
-            EnableMqtt ();
+      ConnectDevices ();
 
-            ConnectDevices ();
-
-            SendMqttCalibrationCommand ();
-        }
-
-        public void SendMqttCalibrationCommand ()
-        {
-            Mqtt.Data.Clear ();
-
-            Mqtt.SendCommand (Key, RawSoilMoistureValue);
-
-            // Skip some data
-            WaitForData (1);
-
-            var dataEntry = WaitForDataEntry ();
-
-            AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
-        }
+      SendMqttCalibrationCommand ();
     }
+
+    public void SendMqttCalibrationCommand ()
+    {
+      Mqtt.Data.Clear ();
+
+      Mqtt.SendCommand (Key, RawSoilMoistureValue);
+
+      // Skip some data
+      WaitForData (1);
+
+      var dataEntry = WaitForDataEntry ();
+
+      AssertDataValueEquals (dataEntry, Key, RawSoilMoistureValue);
+    }
+  }
 }
