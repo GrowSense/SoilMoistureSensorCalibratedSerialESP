@@ -21,9 +21,9 @@ bool checkMsgReady()
     byte b = Serial.read();
 
     // The end of a message
-    if ((b == ';'
-      || b == '\n'
-      || b == '\r')
+    if ((byte(b) == ';'
+      || byte(b) == '\n'
+      || byte(b) == '\r')
       && msgPosition > 0
       )
     {
@@ -38,10 +38,9 @@ bool checkMsgReady()
       //}
 
       isMsgReady = true;
-      
-      for (int i = msgPosition; i < MAX_MSG_LENGTH; i++)
-        msgBuffer[i] = '\0';
-        
+
+      msgBuffer[msgPosition+1] = '\0';
+
       msgPosition = 0;
 
       //if (verboseCom)
@@ -90,6 +89,8 @@ char* getMsg()
   if (verboseCom)
    printMsg(msgBuffer);
 
+  msgPosition = 0;
+
   return msgBuffer;
 }
 
@@ -114,7 +115,7 @@ void printMsg(char msg[MAX_MSG_LENGTH])
 
 void clearMsg(char msgBuffer[MAX_MSG_LENGTH])
 {
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < MAX_MSG_LENGTH; i++)
   {
     msgBuffer[i] = '\0';
   }

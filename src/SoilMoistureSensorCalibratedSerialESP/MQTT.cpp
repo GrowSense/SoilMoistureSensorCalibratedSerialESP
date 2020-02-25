@@ -119,6 +119,21 @@ void setupMqttSubscriptions()
   Serial.println();
 }
 
+void loopMqtt()
+{
+  // MQTT setup is attempted each loop until connected, then it's skipped
+  setupMqtt();
+
+  if (isWiFiConnected && isMqttConnected)
+  {
+    if (!mqttClient.loop())
+    {
+      Serial.println("MQTT is not connected");
+      isMqttConnected = false;
+    }
+  }
+}
+
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
  
   if (isDebugMode)
@@ -285,8 +300,6 @@ void setMqttHost(char* host)
   
   EEPROMWriteCharsAndSetFlag(MQTT_HOST_EEPROM_FLAG_ADDRESS, MQTT_HOST_EEPROM_ADDRESS, host);
   
-  lastMqttConnectionAttemptTime = 0;
-
   disconnectMqtt();
 }
 
@@ -299,8 +312,6 @@ void setMqttUsername(char* username)
   
   EEPROMWriteCharsAndSetFlag(MQTT_USERNAME_EEPROM_FLAG_ADDRESS, MQTT_USERNAME_EEPROM_ADDRESS, username);
   
-  lastMqttConnectionAttemptTime = 0;
-  
   disconnectMqtt();
 }
 
@@ -312,9 +323,7 @@ void setMqttPassword(char* password)
   mqttPassword = password;
   
   EEPROMWriteCharsAndSetFlag(MQTT_PASSWORD_EEPROM_FLAG_ADDRESS, MQTT_PASSWORD_EEPROM_ADDRESS, password);
-  
-  lastMqttConnectionAttemptTime = 0;
-  
+    
   disconnectMqtt();
 }
 
@@ -326,8 +335,6 @@ void setMqttPort(char* port)
   mqttPort = readLong(port, 0, strlen(port));
   
   EEPROMWriteLongAndSetFlag(MQTT_PORT_EEPROM_FLAG_ADDRESS, MQTT_PORT_EEPROM_ADDRESS, mqttPort);
-  
-  lastMqttConnectionAttemptTime = 0;
   
   disconnectMqtt();
 }
@@ -368,21 +375,6 @@ void publishMqttPush(int soilMoistureValue)
 
 }
 
-void loopMqtt()
-{
-  // MQTT setup is attempted each loop until connected, then it's skipped
-  setupMqtt();
-
-  if (isWiFiConnected && isMqttConnected)
-  {
-    if (!mqttClient.loop())
-    {
-      Serial.println("MQTT is not connected");
-      isMqttConnected = false;
-    }
-  }
-}
-
 void disableMqtt()
 {
   lastMqttConnectionAttemptTime = 0;
@@ -400,6 +392,8 @@ void forceMqttOutput()
 
 void disconnectMqtt()
 {
+  Serial.println("Disconnecting from MQTT...");
+  lastMqttConnectionAttemptTime = 0;
   mqttClient.disconnect();
   isMqttConnected = false;
 }
