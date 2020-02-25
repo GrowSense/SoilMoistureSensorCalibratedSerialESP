@@ -2,39 +2,39 @@
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class MqttOutputTimeTestHelper : GrowSenseMqttHardwareTestHelper
+  public class MqttOutputTimeTestHelper : GrowSenseMqttHardwareTestHelper
+  {
+    public int ReadInterval = 1;
+
+    public void TestMqttOutputTime ()
     {
-        public int ReadInterval = 1;
+      WriteTitleText ("Starting MQTT output time test");
 
-        public void TestMqttOutputTime ()
-        {
-            WriteTitleText ("Starting MQTT output time test");
+      Console.WriteLine ("Read interval: " + ReadInterval);
 
-            Console.WriteLine ("Read interval: " + ReadInterval);
+      RequireMqttConnection = true;
 
-            RequireMqttConnection = true;
+      ConnectDevices ();
 
-            ConnectDevices ();
+      SetDeviceReadInterval (ReadInterval);
 
-            SetDeviceReadInterval (ReadInterval);
+      EnableMqtt ();
 
-            EnableMqtt ();
+      Mqtt.Data.Clear ();
 
-            Mqtt.Data.Clear ();
+      Console.WriteLine ("Skipping next data entries in case they're out of date...");
 
-            Console.WriteLine ("Skipping next data entries in case they're out of date...");
+      Mqtt.WaitUntilData (4);
 
-            Mqtt.WaitUntilData (3);
+      Console.WriteLine ("Waiting for the next data entry...");
 
-            Console.WriteLine ("Waiting for the next data entry...");
+      var secondsBetweenData = Mqtt.WaitUntilData (1);
 
-            var secondsBetweenData = Mqtt.WaitUntilData (1);
+      Console.WriteLine ("Time between data entries: " + secondsBetweenData + " seconds");
 
-            Console.WriteLine ("Time between data entries: " + secondsBetweenData + " seconds");
+      var expectedMqttOutputTime = ReadInterval;
 
-            var expectedMqttOutputTime = ReadInterval;
-
-            AssertIsWithinRange ("mqtt output time", expectedMqttOutputTime, secondsBetweenData, TimeErrorMargin);
-        }
+      AssertIsWithinRange ("mqtt output time", expectedMqttOutputTime, secondsBetweenData, TimeErrorMargin);
     }
+  }
 }

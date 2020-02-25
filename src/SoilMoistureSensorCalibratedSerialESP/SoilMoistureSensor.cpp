@@ -205,7 +205,7 @@ int getAverageSoilMoistureSensorReading()
 
     readingSum += reading;
     
-    delay(1);
+//    delay(1);
   }
 
   int averageReading = readingSum / totalReadings;
