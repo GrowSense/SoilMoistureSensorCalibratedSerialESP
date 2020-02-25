@@ -37,6 +37,8 @@ void setup()
 
   serialOutputIntervalInSeconds = soilMoistureSensorReadingIntervalInSeconds;
 
+  delay(200);
+
   Serial.println("Device started...");
 }
 

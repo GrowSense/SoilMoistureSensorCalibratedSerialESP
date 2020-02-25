@@ -2,35 +2,35 @@
 
 namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
 {
-    public class SerialOutputTimeTestHelper : GrowSenseMqttHardwareTestHelper
+  public class SerialOutputTimeTestHelper : GrowSenseMqttHardwareTestHelper
+  {
+    public int ReadInterval = 1;
+
+    public void TestSerialOutputTime ()
     {
-        public int ReadInterval = 1;
+      WriteTitleText ("Starting serial output time test");
 
-        public void TestSerialOutputTime ()
-        {
-            WriteTitleText ("Starting serial output time test");
+      Console.WriteLine ("Read interval: " + ReadInterval);
 
-            Console.WriteLine ("Read interval: " + ReadInterval);
+      RequireMqttConnection = false;
 
-            RequireMqttConnection = false;
+      ConnectDevices ();
 
-            ConnectDevices ();
+      SetDeviceReadInterval (ReadInterval);
 
-            SetDeviceReadInterval (ReadInterval);
+      ReadFromDeviceAndOutputToConsole ();
 
-            ReadFromDeviceAndOutputToConsole ();
+      // Skip some data before checking the output time
+      WaitForData (3);
 
-            // Skip some data before checking the output time
-            WaitForData (3);
+      // Get the time until the next data line
+      var secondsBetweenDataLines = WaitUntilDataLine ();
 
-            // Get the time until the next data line
-            var secondsBetweenDataLines = WaitUntilDataLine ();
+      var expectedTimeBetweenDataLines = ReadInterval;
 
-            var expectedTimeBetweenDataLines = ReadInterval;
+      Console.WriteLine ("Time between data lines: " + secondsBetweenDataLines + " seconds");
 
-            Console.WriteLine ("Time between data lines: " + secondsBetweenDataLines + " seconds");
-
-            AssertIsWithinRange ("serial output time", expectedTimeBetweenDataLines, secondsBetweenDataLines, TimeErrorMargin);
-        }
+      AssertIsWithinRange ("serial output time", expectedTimeBetweenDataLines, secondsBetweenDataLines, TimeErrorMargin);
     }
+  }
 }
