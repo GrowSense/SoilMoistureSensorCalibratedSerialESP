@@ -39,7 +39,7 @@ bool checkMsgReady()
 
       isMsgReady = true;
 
-      msgBuffer[msgPosition+1] = '\0';
+      msgBuffer[msgPosition] = '\0';
 
       msgPosition = 0;
 
@@ -88,8 +88,6 @@ char* getMsg()
 
   if (verboseCom)
    printMsg(msgBuffer);
-
-  msgPosition = 0;
 
   return msgBuffer;
 }

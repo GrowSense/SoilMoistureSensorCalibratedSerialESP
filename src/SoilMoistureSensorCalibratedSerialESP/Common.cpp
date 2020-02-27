@@ -6,7 +6,7 @@
 const int ANALOG_MAX = 1024;
 
 unsigned long lastSerialOutputTime = 0;
-long serialOutputIntervalInSeconds = 1;
+long serialOutputIntervalInSeconds = 3;
 
 bool isDebugMode = false;
 

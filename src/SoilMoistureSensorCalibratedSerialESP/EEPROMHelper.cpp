@@ -76,7 +76,7 @@ String EEPROMReadString(int address)
     
   int i = 0;
   char k;
-  char output[10];
+  char output[20];
   k=EEPROM.read(address);
   while(k != '\0' && i<500)   //Read until null character
   {    
