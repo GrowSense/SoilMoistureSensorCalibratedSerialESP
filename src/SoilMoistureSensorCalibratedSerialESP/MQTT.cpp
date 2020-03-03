@@ -47,13 +47,13 @@ void setupMqtt()
     if (isTimeToConnectToMqtt)
     {
       lastMqttConnectionAttemptTime = millis();
-        
+
       Serial.println("Setting up MQTT");
-    
+
       char hostBuffer[20];
-    
+
       mqttHost.toCharArray(hostBuffer, mqttHost.length()+1);
-      
+
       mqttClient.setServer(hostBuffer, mqttPort);
 
       mqttClient.setCallback(mqttCallback);
@@ -71,17 +71,17 @@ void setupMqtt()
         //Serial.println(mqttPassword); // Disabled to hide the MQTT password
         Serial.print("  Device name: ");
         Serial.println(deviceName);
-     
+
         char deviceNameBuffer[20];
         char usernameBuffer[20];
         char passwordBuffer[20];
-        
+
         deviceName.toCharArray(deviceNameBuffer, deviceName.length()+1);
         mqttUsername.toCharArray(usernameBuffer, mqttUsername.length()+1);
         mqttPassword.toCharArray(passwordBuffer, mqttPassword.length()+1);
-      
+
         if (mqttClient.connect(deviceNameBuffer, usernameBuffer, passwordBuffer)) {
-          Serial.println("  Connected to MQTT");  
+          Serial.println("  Connected to MQTT");
 
           isMqttConnected = true;
 
@@ -104,7 +104,7 @@ void setupMqttSubscriptions()
 
   Serial.print("  Total subscribe topics: ");
   Serial.println(totalSubscribeTopics);
-  
+
   for (int i = 0; i < totalSubscribeTopics; i++)
   {
     String topic = baseTopic + subscribeTopics[i] + "/in";
@@ -114,7 +114,7 @@ void setupMqttSubscriptions()
 
     mqttClient.subscribe(topic.c_str());
   }
-  
+
   Serial.println("Subscribed to MQTT topics");
   Serial.println();
 }
@@ -135,7 +135,7 @@ void loopMqtt()
 }
 
 void mqttCallback(char* topic, byte* payload, unsigned int length) {
- 
+
   if (isDebugMode)
   {
     Serial.print("Message arrived in topic: ");
@@ -144,11 +144,11 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
   String valueString = "";
 
-  if (isDebugMode) 
+  if (isDebugMode)
     Serial.print("Message:");
 
   for (int i = 0; i < length; i++) {
-    valueString += (char)payload[i]; 
+    valueString += (char)payload[i];
     if (isDebugMode)
       Serial.print((char)payload[i]);
   }
@@ -182,10 +182,10 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   msgString.toCharArray(msg, msgString.length()+1);
   handleCommand(msg);
 
- 
+
   Serial.println();
   Serial.println("---");
- 
+
 }
 
 /* MQTT Publish */
@@ -202,6 +202,7 @@ void mqttPublishData()
     publishMqttValue("W", wetSoilMoistureCalibrationValue);
     publishMqttValue("V", VERSION);
     publishMqttValue("Time", timeClient.getFormattedTime());
+    publishMqttValue("StatusMessage", "Online");
     publishMqttPush(soilMoistureLevelCalibrated);
   }
 }
@@ -221,10 +222,10 @@ void loadMqttSettingsFromEEPROM()
   if (!areMqttSettingsLoadedFromEEPROM)
   {
     Serial.println("Loading MQTT settings from EEPROM...");
-    
+
     if (isDebugMode)
       Serial.println("  Reading MQTT host from EEPROM");
-    
+
     if (EEPROMFlagIsSet(MQTT_HOST_EEPROM_FLAG_ADDRESS))
     {
       mqttHost = EEPROMReadString(MQTT_HOST_EEPROM_ADDRESS);
@@ -236,7 +237,7 @@ void loadMqttSettingsFromEEPROM()
       //if (isDebugMode)
         Serial.println("  MQTT host has not been set to EEPROM. Using default.");
     }
-    
+
     if (isDebugMode)
       Serial.println("  Reading MQTT username from EEPROM");
     if (EEPROMFlagIsSet(MQTT_USERNAME_EEPROM_FLAG_ADDRESS))
@@ -248,7 +249,7 @@ void loadMqttSettingsFromEEPROM()
       //if (isDebugMode)
         Serial.println("  MQTT username has not been set to EEPROM. Using default.");
     }
-    
+
     if (isDebugMode)
       Serial.println("  Reading MQTT password from EEPROM");
     if (EEPROMFlagIsSet(MQTT_PASSWORD_EEPROM_FLAG_ADDRESS))
@@ -260,7 +261,7 @@ void loadMqttSettingsFromEEPROM()
       //if (isDebugMode)
         Serial.println("  MQTT password has not been set to EEPROM. Using default.");
     }
-    
+
     if (isDebugMode)
       Serial.println("  Reading MQTT port from EEPROM");
     if (EEPROMFlagIsSet(MQTT_PORT_EEPROM_FLAG_ADDRESS))
@@ -272,7 +273,7 @@ void loadMqttSettingsFromEEPROM()
       //if (isDebugMode)
         Serial.println("  MQTT pasword has not been set to EEPROM. Using default.");
     }
-    
+
     //if (isDebugMode)
     //{
       Serial.print("  MQTT host: ");
@@ -286,7 +287,7 @@ void loadMqttSettingsFromEEPROM()
       Serial.println("Finished loading MQTT settings from EEPROM");
       Serial.println();
     //}
-    
+
     areMqttSettingsLoadedFromEEPROM = true;
   }
 }
@@ -295,11 +296,11 @@ void setMqttHost(char* host)
 {
   Serial.print("Setting MQTT host: ");
   Serial.println(host);
-  
+
   mqttHost = host;
-  
+
   EEPROMWriteCharsAndSetFlag(MQTT_HOST_EEPROM_FLAG_ADDRESS, MQTT_HOST_EEPROM_ADDRESS, host);
-  
+
   disconnectMqtt();
 }
 
@@ -307,11 +308,11 @@ void setMqttUsername(char* username)
 {
   Serial.print("Setting MQTT username: ");
   Serial.println(username);
-  
+
   mqttUsername = username;
-  
+
   EEPROMWriteCharsAndSetFlag(MQTT_USERNAME_EEPROM_FLAG_ADDRESS, MQTT_USERNAME_EEPROM_ADDRESS, username);
-  
+
   disconnectMqtt();
 }
 
@@ -319,11 +320,11 @@ void setMqttPassword(char* password)
 {
   Serial.print("Setting MQTT password: ");
   Serial.println(password);
-  
+
   mqttPassword = password;
-  
+
   EEPROMWriteCharsAndSetFlag(MQTT_PASSWORD_EEPROM_FLAG_ADDRESS, MQTT_PASSWORD_EEPROM_ADDRESS, password);
-    
+
   disconnectMqtt();
 }
 
@@ -331,11 +332,11 @@ void setMqttPort(char* port)
 {
   Serial.print("Setting MQTT port: ");
   Serial.println(port);
-  
+
   mqttPort = readLong(port, 0, strlen(port));
-  
+
   EEPROMWriteLongAndSetFlag(MQTT_PORT_EEPROM_FLAG_ADDRESS, MQTT_PORT_EEPROM_ADDRESS, mqttPort);
-  
+
   disconnectMqtt();
 }
 
@@ -355,7 +356,7 @@ void publishMqttValue(char* subTopic, String value)
   String topic = deviceName;
   topic += "/";
   topic += subTopic;
-  
+
   char valueArray[16];
   value.toCharArray(valueArray, 12);
 
@@ -370,7 +371,7 @@ void publishMqttPush(int soilMoistureValue)
 
   char valueString[16];
   itoa(soilMoistureValue, valueString, 10);
-  
+
   mqttClient.publish(topic.c_str(), valueString, true);
 
 }
@@ -381,7 +382,7 @@ void disableMqtt()
 
   mqttClient.disconnect();
   isMqttConnected = false;
-  
+
   isMqttEnabled = false;
 }
 
