@@ -39,7 +39,6 @@ namespace SoilMoistureSensorCalibratedSerialESP.Tests.Integration
         // Get the time until the next data line
         var secondsBetweenDataLines = WaitUntilDataLine();
 
-
         Console.WriteLine("Time between data lines: " + secondsBetweenDataLines + " seconds");
 
         var isWithinRange = IsWithinRange(expectedTimeBetweenDataLines, secondsBetweenDataLines, TimeErrorMargin);
